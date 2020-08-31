@@ -418,59 +418,6 @@ def give_result(res):
         print('Result :\n')
         print(res)
 
-#todo: rm this now
-def use_class(name: str, f, mode_b=False, alf_b=False, key1_b=False, key2_b=False): #Todo: rewrite this (with the new class form, and the ability to choose between console / gui).
-    """Use the class."""
-    print('\n' + name)
-    if mode_b:
-        if key1_b:
-            mode = int(inp_lst('Mode (encrypt : 0 ; decrypt : 1) : ', ('0', '1')))
-        else:
-            mode = int(inp_lst('Mode (encode : 0 ; decode : 1) : ', ('0', '1')))
-    if alf_b:
-        alf = cl_inp('Alphabet (let empty to use normal) : ')
-        if alf == "":
-            alf = 'abcdefghijklmnopqrstuvwxyz'
-    text = ask_text()
-    if key1_b:
-        if key2_b:
-            key1 = cl_inp('Key 1 : ')
-            key2 = cl_inp('Key 2 : ')
-        else:
-            if f == fleissner.fleissner:
-                key1 = []
-                size = int(input("Size of the side of grid : "))
-                print('1 for whole else 0\nExample of a line : 0010')
-                for i in range(size):
-                    key1.append(list(input('Line ' + str(i) + ' : ')))
-                give_result(f(text, key1, mode, size, alf))
-                return 0
-            else:
-                key1 = cl_inp('Key : ')
-    if mode_b and alf_b and key1_b:
-        if key2_b:
-            res = f(text, key1, key2, mode, alf)
-        else:
-            res = f(text, key1, mode, alf)
-    elif mode_b and alf_b:
-        res = f(text, mode, alf)
-    elif mode_b and key1_b:
-        if key2_b:
-            res = f(text, key1, key2, mode)
-        else:
-            res = f(text, key1, mode)
-    elif key1_b and alf_b:
-        res = f(text, key1, alf)
-    elif key1_b:
-        res = f(text, key1)
-    elif mode_b:
-        res = f(text, mode)
-    elif alf_b:
-        res = f(text, alf)
-    else:
-        res = f(text)
-    give_result(res)
-
 
 ciph_types = { # Used in make_ciph
     'verbose, interface': (
@@ -2201,7 +2148,7 @@ class MonoSub(BaseCipher):
         return key
     
     
-    def break_(self, txt, n=10**4, alea=False): #todo: test the good working of this method.
+    def break_(self, txt, n=10**4, alea=False):
         """
         Try to get the decryption of 'txt' without the key.
         
@@ -3589,44 +3536,6 @@ def freqana_str(txt, wprocess=False, n=1, prec=1):
     
     return ret
     
-
-class freqana: #todo: rm this ; change everything using it.
-    def freqana(M, wprocess=False, n=1):
-        if wprocess:
-            M = msgform(M, 'min')
-        D = {}
-        M +='x' * ((n - len(M) % n) % n)
-        
-        for k in range(len(M) // n):
-            c = M[n*k:n*k+n]
-            if c in D:
-                D[c] += 1
-            else:
-                D[c] = 1
-        L = sorted(D.items(), key=lambda t: t[1])
-        L.reverse()
-        return L, len(M)
-    def use(t="", inter=True):
-        print('\nFrequency analysis')
-        if inter:
-            t = ask_text()
-            p = inp_lst('Word processing (y/n) ? ', ('yes', 'y', 'oui', 'o', 'Yes', 'Oui', 'n', 'no', 'non', 'Non', 'No'))
-            if p in ('yes', 'y', 'oui', 'o', 'Yes', 'Oui'):
-                p = True
-            else:
-                p = False
-        else:
-            p = True
-        L, lt = freqana.freqana(t, p)
-        # Processing of list
-        res = ""
-        for k in L:
-            res += str(k[0]) + ' : ' + str(k[1]) + ' --> ' + str(round(k[1] / lt, 4) * 100) + ' %\n'
-        res += '\n' + str(lt) + ' characters analyzed'
-        if inter:
-            give_result(res)
-        else:
-            print(res)
 
 
 class Ic:
