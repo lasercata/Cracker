@@ -71,7 +71,7 @@ For the console UI, run `./Cracker_console.py` in the root of the project, or `c
 ## Authors
 
 * **Lasercata** - [Lasercata](https://github.com/lasercata)
-* **Elerias** - [Elerias](https://github.com/Elerias)
+* **Elerias** - [Elerias](about:blank)
 
 
 ## License
