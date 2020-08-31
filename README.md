@@ -67,6 +67,8 @@ For the graphical UI, run `./Cracker_gui.py` in the root of the project, or `cra
 
 For the console UI, run `./Cracker_console.py` in the root of the project, or `crackerc` anywhere if you added the aliases.
 
+The password is `swiss_knife`
+
 
 ## Authors
 
