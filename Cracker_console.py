@@ -712,8 +712,6 @@ about the password you entered, like its entropy.
 
         msg += '\n\nVersions :{}'.format(indent(modules_ver))
 
-        #todo: add the versions
-
         print(msg)
         pause()
 
@@ -826,7 +824,7 @@ about the password you entered, like its entropy.
     def use():
         '''Use this function to launch the console app'''
 
-        app = CrackerConsole() #todo: begin with locked app.
+        app = CrackerConsole()
         app.lock()
 
         while app.menu_on:

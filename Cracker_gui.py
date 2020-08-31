@@ -224,8 +224,6 @@ class DoubleInput(QWidget):
 class CrackerGui(QMainWindow):
     '''Class defining Cracker's graphical user interface using PyQt5'''
 
-    #todo: remove all the useless "self" !
-
     def __init__(self, parent=None):
         '''Create the window'''
 
@@ -638,8 +636,6 @@ class CrackerGui(QMainWindow):
                 key_label.setText('Key :')
                 self.cipher_nb_key.setMinimum(-2 **16)
 
-            #todo: change the gen keys button link, or improve the gen window.
-
 
         #------path bar
         tab_cipher_lay.addWidget(self.create_path_bar(tab=2, mn_size=610), 0, 0, 1, -1)#, alignment=Qt.AlignTop)
@@ -724,7 +720,7 @@ class CrackerGui(QMainWindow):
         #-Alphabets' box
         self.cipher_opt_alf = QComboBox()
         self.cipher_opt_alf.setEditable(True)
-        self.cipher_opt_alf.addItem('-- Select an alphabet --') #todo: add alfs
+        self.cipher_opt_alf.addItem('-- Select an alphabet --')
         self.cipher_opt_alf.insertSeparator(1)
         self.cipher_opt_alf.addItems(['abcdefghijklmnopqrstuvwxyz', 'abcdefghiklmnopqrstuvwxyz'])
         keys_lay.addWidget(self.cipher_opt_alf, 0, 5)
@@ -894,7 +890,7 @@ class CrackerGui(QMainWindow):
 
         self.wrdlst_dir_opt = QComboBox()
         self.lst_wrdlst_opt['Select a location ...'] = self.wrdlst_dir_opt
-        self.wrdlst_dir_opt.addItem('-- Previous locations --') #todo: add ~/.Cracker if not live mode
+        self.wrdlst_dir_opt.addItem('-- Previous locations --')
         self.wrdlst_dir_opt.insertSeparator(1)
         save_lay.addWidget(self.wrdlst_dir_opt)
 
