@@ -1,0 +1,23 @@
+2019.12.31
+Cracker v1.5.0 <-- Cracker v1.4.1
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+Improvements (from 1.4.1) :
+    -This list ;
+    -This list is print in the admin mode ;
+    -ver_wdlst_gen_6 is now correct (v6.2.2) ;
+    -hasher v5 is used (a lot smaller and uses all available hashes) ;
+    -color v2.0 is used, it is smaller (uses a dict) ;
+    -The input prompt ends now by '\\n>' (and no more by '\\n>>>') ;
+    -When an error occur in a function, it now print the error. (cf to use_menu()) ;
+    -Adding function space from b_cvrt_all : space(1234567, 3) -> '1 234 567' ;
+    -Adding wlth and walf functions from P@ssw0rd_Test0r to improve open_w :
+    => open_w show now the alphabets and their lenth ;
+    => It also show all the differents characters present in the wordlist ;
+    -Replacement of the menu by a function to save hundreds of lines ;
+    -Improving hash_crack : it can now show every x% the progression ;
+    -Some smalls corrections (bugs and other) ;
+    -Adding ascii art (auth_ascii, cracker, cracker_logo).
+
+**************
+
+By lasercata

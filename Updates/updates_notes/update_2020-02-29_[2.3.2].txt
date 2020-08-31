@@ -1,0 +1,15 @@
+2020.02.29
+Cracker v2.3.2 <-- v2.3.1
+-------------------------
+
+prima v2.4 <-- v2.3
+Improvements :
+- Small corrections
+- Upgrading of trial division :
+test for 9999999999900000000001 :
+2.3 --> 30 s
+2.4 --> 25 s
+
+-------------------------
+
+By Elerias

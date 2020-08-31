@@ -1,0 +1,236 @@
+Last update : 12.05.2020
+
+
+
+
+
+
+
+                   CONVENTION FOR THE DEVELOPERS OF CRACKER                   
+                                     (CDC)
+
+
+
+
+
+
+
+
+                                TABLE OF CONTENTS
+
+
+1.    INTRODUCTION ...........................................................
+
+2.    LANGUAGE CONVENTIONS ...................................................
+
+  2.1 Code ...................................................................
+  2.2 Annotations ............................................................
+  2.3 Communication with user ................................................
+  2.4 Documents ..............................................................
+
+3.    STYLE CONVENTIONS ......................................................
+
+  3.1 Names ..................................................................
+  3.2 Whitespaces ............................................................
+  3.3 Indentations ...........................................................
+  3.4 Blank lines ............................................................
+  3.5 Single and double quote ................................................
+  3.6 Docstrings .............................................................
+  3.7 Annotations ............................................................
+  3.8 Imports ................................................................
+  3.9 Modules ................................................................
+
+4.    USING OF CRACKER FUNCTIONS .............................................
+
+5.    DOCUMENTS ABOUT CRACKER ................................................
+
+  5.1 Updates ................................................................
+  5.2 History ................................................................
+  5.3 Version ................................................................
+  5.4 Versions_modules .......................................................
+  5.5 CDC ....................................................................
+
+
+
+
+
+
+1.    INTRODUCTION
+
+
+
+2.    LANGUAGE CONVENTIONS
+
+  2.1 Code
+
+The language of the code is English. All the name of variables, functions,
+classes or other objects, the documentation and the description of functions
+and modules should be written in English.
+
+  2.2 Annotations
+
+Annotations can be written in English or in French because all the developers
+speak french.
+
+  2.3 Communication with user
+
+All the outputs in the program should be written in English. 
+The program should take English and French inputs.
+After a closed question, Cracker should take the following answers : y, Y,
+yes, Yes, YES, n, N, no, No, NO, non, Non, NON.
+Examples :
+Text from file ? (y/n) yes
+Text from file ? (y/n) Non
+
+  2.4 Documents
+
+The documents should be written in English. French is however acceptable
+because all the developers speak french.
+
+
+3.    STYLE CONVENTIONS
+
+  3.1 Names
+
+Names of objets have to be short.
+In Cracker, some variables have the same functions in different modules. They
+should have the same name :
+- "t", "txt" or "text" represents the text that the program use. It is often
+asked to the user ;
+- "ret" represents the text returned to the user ;
+- "t" or "t" + number represents a time ;
+- "alf', "alph" or "alphabet" represents an alphabet ;
+- "f", "fn", "filename" or "f_name" represents the name of a file ;
+- "f_ext" represents the extension of the file ;
+- "w", "wrd" or "word" represents a word ;
+- "D", "d", "dico" or "dct" represents a dictionnary ;
+- "l", "lth" or "lenth" or "length" represents a length ;
+- "n" represents an integer ;
+- "p" represents a prime number ;
+- "d" or "div" represents a divisor ;
+- "L" or "lst" represents a list ;
+- "r" or "rest" represents the rest of a euclidean division ;
+- "M" or "msg" represents a plain message ;
+- "C" represents a encrypted message ;
+- "key" or "k" represents a key ;
+- "p" or "primality" represents the primality ;
+- "x" represents a preimage in a function ;
+- "y" represents an image in a function ;
+- "f" or "func" represents a function ;
+- "window" or "w" represent a window (a Tk()).
+
+  3.2 Whitespaces
+
+Before and after the equal symbol (=), the test symbols (== != > >= < <=) and
+';', one whitespace should be placed.
+Good examples :
+a = 8 ; b = 7
+c = 2
+if a == 8:
+    print(a)
+Bad examples :
+a  =  8; b= 7
+c=2
+if a==8:
+    print(a)
+
+Before and after an operator (+ - * / // % **), one whitespace should but if
+there is a proritary operation.
+Good examples :
+a = 2 + 4 + 18
+b = a*2 + 4 + 18/3
+c = a * (b+3**2)
+c = a % (b + 3**2)
+Bad examples :
+a = 2+4+18
+b = a * 2 + 4 + 18 / 3
+c = a*(b + 3 ** 2)
+c = a % (b+3 ** 2)
+
+After ':' and ',', one whitespace should be placed. But not before.
+Good examples :
+if a == 2:
+    d = {'a': 14, 23: 'test'}
+    L = [1, 'hello', 42]
+Bad examples :
+if a == 2 :
+    d = {'a' : 14, 23:'test'}
+    L = [1 , 'hello',42]
+
+For other symbols ( ( ) { } [ ] ' " .)  , no whitespace should be placed.
+Good examples :
+L = [3, 90, 'bonjour', (4, 2)]
+a = 2 * (4+2)
+b = f(2)
+Bad examples :
+L = [ 3, 90, 'bonjour', ( 4, 2 ) ]
+a = 2 * ( 4+2 )
+b = f ( 2 )
+
+  3.3 Indentations
+
+Four spaces, automatic indentations and tabulations can be used to indent.
+
+  3.4 Blank lines
+
+  3.5 Single and double quotes
+
+For lists, tuples and dictionnaries, single quotes are prefered to lighten the
+code. Triple quotes are strongly discouraged.
+Good examples :
+d = {'b': 8, '23': 'hello'}
+L = [7, 'afternoon', ('monday', 'wednesday')]
+Bad example :
+d = {"b": 8, "23": "hello"}
+Very bad example :
+L = [7, '''afternoon''', ("""monday""", """wednesday""")]
+
+To frame a word, single quotes are also recommended.
+Good example :
+a = 'hello'
+Bad example :
+a = """hello"""
+
+To define an empty character string, 2 double quotes are prefered.
+Good example :
+a = ""
+Rather not :
+a = ''
+Absolutely not :
+a = """"""
+
+  3.6 Docstrings
+
+(I prefered triple double quotes but I know you use single, so I didn't write
+nothing.)
+
+If the description line measures one line, the 2 docstrings are on the same
+line, else they have to be on the same column.
+
+Good examples :
+def f(x):
+    """Return the square of x."""
+    return x ** 2
+
+
+def g(x):
+    """Return the inverse of x.
+    x : a number different of 0
+    """
+    
+    return 1 / x
+
+Bad examples :
+def f(x):
+    """Return the square of x.
+    """
+    return x ** 2
+
+
+def g(x):
+    """Return the inverse of x.
+    x : a number different of 0"""
+    
+    return 1 / x
+
+  3.7 Annotations

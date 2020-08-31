@@ -1,0 +1,438 @@
+2020.05.05 - 2020.08.31
+Cracker v3.0.0 <-- v2.4.0
+---------------------------------
+General improvements (from 2.4.0) :
+    - Resseting the password to the old ;
+    - Continuation of the CDC and writing it in LaTeX ;
+    - Re-writting the GUI using the external module PyQt5 ;
+    - Re-wrtting main parts of the console ;
+    - Designing a the new Cracker's logo (icon + ascii art) ;
+    
+    - Upturning almost every module, and re-writting some of them ;
+    - A lot of new scripts ;
+    
+    - Adding the ciphers Kris, AES, RSA
+    
+    - New tree organisation and new program organisation ;
+    
+    - Changing the tabs to :
+        Home, Crack, Cipher, Wordlists, Prima, Base convert, P@ssw0rd_Test0r, Settings (in GUI) ;
+        Quit, Lock, Crack, Cipher, Wordlist, Prima, Base convert, P@ssw0rd_Test0r, Change dir, change colors, about (in console) ;
+
+        
+        .Home :
+            .Cracker's new logo (icon + ascii art in png (modified with Gimp)) ;
+            .Button About which open an other tab window, showing informations on the program ;
+            .Button Lock ;
+            .Button Quit ;
+
+            
+        .Crack :
+            .Tab which allow to crack text encrypted with any algorithm present in Cracker (Crypta + hashes) ;
+            
+            .The algorithm can be 'Unknow' : in this case, the program try to determine which cipher was used, make a list of the possible algorithms, and try the selected method with all the algorithms in the list ;
+            
+            .There is four crack methods (available depending on the cipher) :
+                .Brute-force : try every combinason possible on the cipher (asks for a length and an alphabet) ;
+                .Dictionary attack : use a wordlist to crack the text ;
+                .Advanced brute-force : Seven steps which try to crack the text ;
+                .Code break : Better option if the cipher is broken (Vignere).
+
+
+        .Ciphers :
+            .Tab which allow the user to encrypt and decrypt some text with a lot of ciphers (from Crypta, AES, RSA, KRIS, hashes.) ;
+            
+            .Button Generate keys : generate keys for the most ciphers ;
+            .Others buttons : allow the user to manage its RSA keys ;
+
+
+        .Wordlists :
+            .Tab which allow the user to generate a wordlist, and to check the content of one ;
+            
+            .Generate takes five arguments :
+                .Words' length ;
+                .Alphabet ;
+                .Filename ;
+                .Encoding ;
+                .Location.
+                
+            .Analyze wordlist allow the user to see advenced informations about a wordlist, and check the head / bottom lines of it ;
+
+
+        .Prima :
+            .Tab which allow the user to check the primarity of a number. It use a TextEditor object for the number.
+
+
+        .Base convert :
+            .Tab which allow the user to convert a number from any base in [1 ; len(alf)] to any base in the same set ;
+            .It use BaseConvert (cf to the b_cvrt's update part), which can now convert from and to any base, if b in len(alf) ;
+            .The alphabet can be choosen from the user interface ;
+            
+            .Numbers are selected with QSpinBox widgets ;
+            .The number to convert is shown in its base (selected with the second entry) ;
+            .If the number can't be entered in the QSpinBox (i.g. if encoded using the IEEE754 standard, or bigger than 2**31-1), there is a QLineEntry.
+
+
+        .P@ssw0rd_Test0r :
+            .Tab which allow the user to test its password's strenth. The return is now in a QTextEdit, and no more in a popup ;
+            .The check button "Show password" work now dynamicly ;
+    
+------
+
+
+
+Creating script "Cracker_gui.py" v1.0 :
+    .This script define the graphical interface with PyQt5.
+    
+    - Creation of the class 'CrackerGui' which inherits from the QMainWindow widget :
+        .Creation of the function '__init__' which create the window, and call the functions which create the tabs ;
+        .Creation of the function 'create_home' which create the home tab ;
+        .Creation of the function 'create_crack' ;
+        .Creation of the function 'create_ciphers' ;
+        .Creation of the function 'create_wordlists' ;
+        .Creation of the function 'create_prima' ;
+        .Creation of the function 'create_b_cvrt' ;
+        .Creation of the function 'create_pwd_strth' ;
+        .Creation of the function 'create_settings' ;
+        
+        .Creation of the function 'create_path_bar' which return a QWidget containing a path bar ;
+
+    
+    - Creation of the class AboutCracker which create a Tab window containing informations about this program ;
+    - Creations of five classes which define five windows allowing the user to manage its RSA keys ;
+    - Creation of six classes which allow to use the tab with the modules.
+---
+
+
+Creating script "Cracker_console.py" v1.0 :
+    .This script define the menu console interface.
+    
+    - Creation of the class 'CrackerConsole' which define the menus ;
+    - Creation of the function which allow to use the modules.
+---
+
+
+Creating script "lock_gui.py" (v3.3) in modules/base/gui :
+    .This script ask for the Cracker's password using PyQt5's graphical interface.
+    
+    - Don't need to press the button, just press enter in the text field.
+---
+
+
+Creating script "TextEditor.py" (v1.1) in modules/base/gui :
+    .Contain the class "TextEditor" which create a TextEditor object, usable like a PyQt5 widget, allowing the user to interact with the program by entering text (from keyboard of a file).
+---
+
+
+Creating script "GuiStyle.py" (v1.0) in modules/base/gui :
+    .Contain the class "GuiStyle" which allow to use a specific style.
+---
+
+
+Creating the script "progress_bars.py" (v1.0) in modules/base :
+    - Creating the class ConsoleProgessBar which allow to make progess bars in console mode ;
+    - Creating the class GuiProgressBar which create a PyQt5 QWidget (can be used in popup) containing a progress bar.
+    
+    .Both classes have the same methods :
+        - 'set(self, i, n)', which set the progress bar to i/n ;
+        - 'load(self, i=None, k=1, ret=False)' which show an annimation when it is impossible to get the progression (undeterminated).
+---
+
+
+Creating the script "BaseCipher.py" (v1.0) in modules/ciphers :
+    - Creating the class "BaseCipher" which is a mother class for the ciphers class (AES, RSA, Crypta's ciphers) :
+        .'__init__' initate 3 progress bars according to the selected interface (to encrypt, decrypt and break)
+---
+
+
+crypta v3.0 <-- v2.9 :
+    Improvements (from 2.9) :
+    - New ciphers :
+        * Autoclave cipher
+        * Gronsfeld cipher
+        * Tritheme cipher
+        * UBCHI cipher
+        * ABC cipher
+        * Beaufort cipher
+        * Porta cipher
+        * Albam, Achbi and Avgad codes
+        * Fleissner cipher
+        
+    - Simplification of reverse_code
+    - ver_plain_text works now for the french thanks to the list of all the tetragrams in french generated
+    - prob_plain_text gives the possibility to the program to know if a text is "more french" than another. Therefore, the Hill-climbing can be used with a bank of famous books.
+
+    - Corrections :
+        * inverse
+        * affine.crack
+        * scytale.crack
+        * caesar.crack
+        * reverse_code.crack
+        * atbash.crack
+        
+    - Beginning of function crack
+    - Sort of the ciphers
+    
+    - New crack functions :
+        * morse.crack
+        * tritheme.crack
+        * columnar_transposition.crack
+        * UBCHI.crack
+        * monosub.crack with the Hill-climbing method
+        * albam, achbi and avgad crack
+        
+    - Adding test of Friedman
+    - Adding Assist_cryptanalysis to help for the cryptanalysis of simple substitution
+    
+--- By Elerias
+
+crypta v3.1 <-- v3.0 :
+    - Re-writing the ciphers' classes :
+        .They inherits from the mother class 'BaseCipher' ;
+        .Defining the built-in method '__init__' which define the cipher (interface, alf, key, ...) ;
+        .Defining two methods 'encrypt(self, txt)' and 'decrypt(self, txt)', which encrypt and decrypt 'txt' ;
+        .If possible, adding the method 'break_(self, txt)' to get the clear 'txt' without the key (if there is a key), or
+        adding the method 'brute_force(self, txt)', which return a list or a dict containing the possibles decryptions ;
+        .If there is the method 'break_' or 'brute_force', adding the method 'meaning(self, txt)', which get the result of
+        the previous quoted method, and try to say if the result, or a result in the list, makes sens ;
+        .Adding the method 'gen_key' for ciphers which have a key. It generate a key for the cipher.
+    
+    - The ciphers which use an alphabet have now the argument 'ignore', a boolean which indicates what to do if a character of the text to encrypt (or decrypt) is not in the alphabet :
+        .If True, the character is ignored and will not appear in the result, even if decrypted ;
+        .If False, the character will be added, but it will not be encrypted. This can be usefull with the space which is not in alf_az.
+    
+    - Ciphers improved :
+        * ReverseCode :
+            .Can now reverse only the words, or the whole string (ex : 'test this' -> 'tset siht' or 'siht tset')
+        
+        * Vigenère cipher :
+            .It is now possible to break some text (i.e. to decrypt it without the key).
+    
+    - Improving freqana :
+        .Creating the class 'FreqAna' ;
+        .Creating the function 'freqana_str' which give the result of FreqAna in a string.
+    
+    - Adding the function 'get_ciph', which return the cipher with the arguments and keywords arguments given ;
+    - Adding a function 'make_ciph' which do the same, but which takes more precise arguments ;
+    - Improving the function msgform : using now a dict instead of two string vars to replace 'œ' by 'oe', and not only by 'o'.
+---
+
+
+hasher v3.4 <-- v3.3 :
+    - Removing the hash_crack part and the menu, because hash_crack is now in Crack, and hasher is in the Cipher menu ;
+    - Inversing the order of the two arguments in the function hasher : hasher(txt, h) (more intutive) ;
+    
+    - Adding the class Hasher which follow the Crypta's ciphers' classes ;
+    - Creating the function 'SecHash' which hash a text in a way that it is longer to brute-force.
+---
+
+
+Adding the script RSA.py (v3.0 <-- v2.0) in modules/ciphers/kris :
+    - Now using the Cracker's progress bars ;
+    - Spliting the RSA class into two classes :
+        .RSA, which manage the encryption ;
+        .RsaKeys, which manage the RSA keys ;
+    
+    - Adding the class 'RsaSign' which allow to sign messages with RSA ;
+    
+    - MsgForm class :
+        .Defining the '__init__' method ;
+        .The text is no more converted in bytes in 'encode' (to solve the encodings errors) ;
+        .'encode' method now group numbers by 4, no more by 3 (to allow to encrypt characters until chr(9999)) ;
+---
+
+
+Adding the script KRIS.py (v1.1 <-- v1.0) in modules/ciphers/kris :
+    - Definig the builtin method "__init__" to initiate self
+---
+
+
+AES v2.0,1 <-- 2.0 :
+    .The cipher is now a C library !
+    
+    - Adding the Linux dll.
+---
+
+
+pwd_testor v1.0,1 <-- v1.0 :
+    - Small bux corrections :
+        .If number of four digits not in [1900 ; 2100] was passed ;
+        .If the password was in the top weakest list ;
+    
+    - Changing the filename from "pass_test" to "pwd_testor" ;
+    - Applying the CDC ;
+    
+    - Simplification of wlth : it use a set to remove the duplicates (a lot faster than a for loop) ;
+    - Improvement of the function walf (now return (alf_lth, alfs)).
+---
+
+
+b_cvrt v3.0 <-- v2.1,2 :
+    - Using now by default a 62 character alphabet (0-1, a-z, A-Z) ;
+    - "b_cvrt" function can now convert from any base, using any alphabet (was not the case because int(x, b) was used) ;
+    - Creating the class "BaseConvert" and set the converts funtions in attributes :
+        .b_cvrt(n, nb, b) -> BaseConvert(n, nb, alf).convert(b)
+        
+    - Moving the function "use_b_cvrt" to BaseConvert.convert(self, b, NEG=False) ;
+    - Removing the "IEEE754" argument in convert ; to convert using the IEEE754 std, the base should now be 'ieee754' ;
+    - Removing inverse and replacing it by 'text to be reversed'[::-1] ;
+    - Removing the useless function "b_cvrt_lth" ;
+    - Removing function "mtse_add" and replacing calls by "n_add(mantisse, 23, 'right')" ;
+    - Simplification and improvement of n_add ;
+    - Simplification of exp_add.
+---
+
+
+base_functions v2.3,1 <-- 2.3 :
+    - Adding class FileInfo, which deals with files' sizes and dates ;
+    - Correcting set_prompt : it now works if there is a "'" in the list (e.g. : "test's test") ;
+    - Improving date (check date_) ;
+    - Importing datetime as dt ;
+    - Adding others usefull functions.
+---
+
+
+wordlist_generator v7.0 <-- 6.4 :
+    - Creating the class 'WordlistGenerator', which allow to generate wordlists ;
+    
+    - Renaming the alphabets variables (alf_a_z -> alf_az) ;
+    - Changing the alphabets variables type : set them from tuple to str ;
+---
+
+
+wordlist_analyser v3.0 <-- open_wordlist v2.0 :
+    - Creating the class 'WordlistAnalyser' which deals with wordlists analysis :
+        .method 'ana' : analyse the wordlist, and return size, dates, and others informations ;
+        .method '__str__' : return informations in a readable format.
+---
+
+
+matrix :
+    - Adding tests to verify if the list in __init__ can be matrixed, raise a ValueError else.
+---
+
+
+CDC :
+    - Creating a new directory "CDC" which contain the CDC ;
+    - Transcripting the whole text into LaTeX ;
+    
+    - Improving some parts (3.5, 3.6)
+    - Writing the part 5 (Documents about Cracker).
+---
+
+
+Note that the parser UI is not available in this version. It may be re-added in a next version, but it should be totaly re-organised or even re-wrote. The last full compatible version was the 2.2.0.
+
+
+Tree :
+    
+    Cracker_v3.0.0
+    |
+    |   Cracker_gui.py
+    |   Cracker_console.py
+    |
+    |   version.txt
+    |   modules_versions.txt
+    |
+    |   README.md
+    |   LICENCE
+    |
+    |
+    |---+ archives
+    |   |   Cracker_archives.7z
+    |
+    |
+    |---+ CDC
+    |   |   CDC.pdf
+    |   |   CDC.tex
+    |   \   CDC.txt (not updated)
+    |
+    |
+    |---+ Data
+    |   |
+    |   |   interface
+    |   |---+ Crack
+    |   |   |   quad_f.7z        ---         Unzip this
+    |   |
+    |   |---+ RSA_keys
+    |   |   |---+ RSA_pbk__elerias
+    |   |   \---+ RSA_pbk__lasercata_3072
+    |   |
+    |   \---+ Wordlists
+    |       |   wordlists.7z            ---         Unzip this
+    |
+    |
+    |---+ modules
+    |   |---+ b_cvrt
+    |   |   |   b_cvrt.py
+    |   |
+    |   |---+ base
+    |   |   |   base_functions.py
+    |   |   |   glb.py
+    |   |   |   ini.py
+    |   |   |   matrix.py
+    |   |   |   progress_bars.py
+    |   |   |
+    |   |   |---+ console
+    |   |   |   |   color.py
+    |   |   |
+    |   |   \---+ gui
+    |   |       |   GuiStyle.py
+    |   |       |   lock_gui.py
+    |   |       |   Popup.py
+    |   |       \   TextEditor.py
+    |   |
+    |   |---+ ciphers
+    |   |   |---+ crypta
+    |   |   |   |   crypta.py
+    |   |   |
+    |   |   |---+ kris
+    |   |   |   |   KRIS.py
+    |   |   |   |   AES.py
+    |   |   |   |   RSA.py
+    |   |   |   |
+    |   |   |   \---+ AES_library
+    |   |   |       |   AES_unix.dll
+    |   |   |       |   AES_win.dll
+    |   |   |       |   AES.c
+    |   |   |       \   AES.h
+    |   |   |
+    |   |   \---+ Hashes
+    |   |       |   hasher.py
+    |   |
+    |   |---+ crack
+    |   |   |   crack.py
+    |   |
+    |   |---+ prima
+    |   |   |   prima.py
+    |   |   \   Prima_obsolete_calculation_functions.txt
+    |   |
+    |   |---+ password_testor
+    |   |   |   pwd_testor.py
+    |   |
+    |   \---+ wordlists
+    |       |   wordlist_generator.py
+    |       \   wordlist_analazor.py
+    |
+    |
+    |---+ Style
+    |   |   Cracker_ascii_logo.png
+    |   |   Cracker_icon.ico
+    |   |   lasercata_logo_fly_curve.png
+    |   |
+    |   \---+ Style_sheets
+    |       |   default_cracker_style.css
+    |
+    |
+    \---+ Updates
+        |   history.txt
+        |   TODO.txt
+        |
+        \---+ updates_notes
+            |   update_2019-23-31_[1.5.0].txt
+            |   ...
+            |   update_2020-08-xx_[3.0.0].txt
+
+---------------------------------
+
+By Lasercata

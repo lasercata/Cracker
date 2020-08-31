@@ -1,0 +1,4 @@
+Please note that you will have to compile two times the CDC.tex file to have the table of content, because LaTeX need to know what there is in the file to make it.
+
+PS : I recomand you to use the pdflatex command.
+PPS : If you don't know LaTeX, I recomand you this course (in french) on OpenClassrooms : https://openclassrooms.com/fr/courses/1617396-redigez-des-documents-de-qualite-avec-latex

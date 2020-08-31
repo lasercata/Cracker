@@ -1,0 +1,124 @@
+/*---------Path bar */
+QGroupBox#path_grp {
+    border: 1px solid rgba(255, 69, 0, 0.5) /*#963b1b*/;
+    border-radius: 3px;
+}
+
+
+QLineEdit#path_entry:hover {
+    border: 1px solid #0f0;
+    border-radius: 3px;
+}
+QLineEdit#path_entry:focus {
+    border: 1px solid #0b0;
+    border-radius: 3px;
+}
+
+
+QPushButton#path_bt:hover {
+    color: #0f0;
+    border: 1px solid #0b0;
+    border-radius: 3px;
+}
+QPushButton#path_bt:focus {
+    color: #000;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #0a0, stop: 1 #0d0);
+    border: 1px solid #0b0;
+    border-radius: 3px;
+}
+
+
+/*------Home */
+QPushButton#bt_info {
+    color: #0ee ;
+}
+
+QPushButton#bt_info:hover {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #088, stop: 1 #0ff);
+    color: #000;
+    border: 1px solid #0ee;
+    border-radius: 3px;
+}
+
+QPushButton#bt_info:focus {
+    background-color: #0ee;
+    color: #000;
+    border: 1px solid #0ee;
+    border-radius: 3px;
+}
+
+
+QPushButton#bt_lock {
+    color: orange;
+}
+
+QPushButton#bt_lock:hover {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #a50, stop: 1 orange);
+    color: #000;
+    border: 1px solid orange;
+    border-radius: 3px;
+}
+
+QPushButton#bt_lock:focus {
+    background-color: orange;
+    color: #000;
+    border: 1px solid orange;
+    border-radius: 3px;
+}
+
+
+QPushButton#bt_quit {
+    color: #f00;
+}
+
+QPushButton#bt_quit:hover {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #800, stop: 1 #f00);
+    color: #000;
+    border: 1px solid #f00;
+    border-radius: 3px;
+}
+
+QPushButton#bt_quit:focus {
+    background-color: #f00;
+    color: #000;
+    border: 1px solid #f00;
+    border-radius: 3px;
+}
+
+/*---------Main objects */
+QPushButton#main_obj {
+    color: #ff4500;
+}
+QPushButton#main_obj:hover {
+    border: 1px solid #ff4500;
+    border-radius: 3px;
+}
+QPushButton#main_obj:focus {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #aa2500, stop: 1 #ff4500);
+    color: #000;
+    border: 1px solid #ff4500;
+    border-radius: 3px;
+}
+
+#main_obj:disabled {
+    color: grey;
+}
+
+
+/*------Seconds objects */
+QComboBox#sec_obj, QLineEdit#sec_obj {
+    color: #0ee;
+}
+QComboBox#sec_obj:hover, QLineEdit#sec_obj:hover {
+    color: #0fffff;
+}
+QComboBox#sec_obj:disabled, QLineEdit#sec_obj:disabled {
+    color: gray;
+}
+
+
+/*---------others */
+#orange_border_hover:hover {
+    border: 1px solid #ff4500;
+    border-radius: 3px;
+}

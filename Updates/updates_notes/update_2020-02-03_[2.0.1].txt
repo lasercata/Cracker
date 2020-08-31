@@ -1,0 +1,22 @@
+2020.02.03
+Cracker v2.0.1 <-- v2.0.0
+-------------------------
+
+crypta v2.1 <-- v2.0
+Improvements :
+- English translation of the code :
+    * Communication with the user
+    * Commentaries
+    * format_message -> msgform
+    * cesar -> caesar
+- English corrections :
+    * code -> cipher
+    * cipher -> encrypt
+    * decipher -> decrypt
+- Small visual and fonction appeal corrections
+- Upgrading of the menu (using a dict instead of conditions)
+- Upgrading of the user interface for cryptanalysis functions
+
+--------------------------
+
+By Elerias

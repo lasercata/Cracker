@@ -1,0 +1,22 @@
+2020.02.04
+Cracker v2.0.2 <-- v2.0.1
+-------------------------
+
+prima v2.1 <-- v2.0
+Improvements :
+- Partial english translation of the code :
+	* Variables
+	* Functions
+	* Doc of functions
+	* Communication with user (use but not with use_tkinter)
+- Add of the Pollard's rho algorithm (factorization algorithm)
+**************
+crypta v2.2 <-- v2.1
+Improvements :
+- Small corrections
+- Adding of functions of board transpositions
+- Adding of scytale cipher
+
+-------------------------
+
+By Elerias

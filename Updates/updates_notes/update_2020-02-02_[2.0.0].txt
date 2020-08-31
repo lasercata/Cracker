@@ -1,0 +1,28 @@
+2020.02.02
+Cracker v2.0.0 <-- v1.5.2
+-------------------------
+
+Improvements (from 1.5.2) :
+    - Small visual corrections :
+        * Applying of PEP convention
+        * Deleting of commentary above the fonctions
+        * Deleting of some blanks lines
+    - Creating of Cracker repertory including in another files big fonctions :
+        * Creating and upgrading of wordlist_generator module
+        * Creating of color module
+        * Creating of hasher module
+        * Creating of base_fonction module
+    - Joining to Cracker the module prima including :
+        * pgcd, expmod, exponent fonctions
+        * Probabilistic primality algorithmes (Fermat and Miller-Rabin)
+        * Decomposition in primary factors algorithmes (sucessive divisions and algorithme p - 1 of Pollard)
+        * console using fonction
+        * tkinter using fonction
+    - Joining to Cracker the module crypta including :
+        * crypthographic fonctions (atbash, cesar, affine, vigenere, hill, monoalphabetic substitution)
+        * cryptanalysis fonctions (ic, frequence analysis, kasiki test)
+        * using fonction
+    - Password changed because I did not know it. You will easily find it.
+
+------------------------
+By Elerias

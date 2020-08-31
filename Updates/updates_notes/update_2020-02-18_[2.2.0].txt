@@ -1,0 +1,250 @@
+2020.02.06-18
+Cracker v2.2.0 <-- v2.1.0
+-------------------------
+
+General improvements :
+	- New tree file :
+		* New folder "modules" ;
+		* Each module is in a folder ;
+		* Basic function are in folder named "base" ;
+		* There is a tree shem of this at the end of this update note ;
+
+	- New menu with sub menus in menu console mode ;
+	- Adding new modules to the parser console mode ;
+
+	- New modules : Base convert (b_cvrt) and P@ssw0rd Test0r (pass_test) ;
+	- Upturning almost every modules ;
+
+	- Adding #!/bin/python3 at the top of each module (to run them with Linux) ;
+	- Remplacing the """ of the docstrings by ''' ;
+	- Adding a try block to import modules, if some files were moved ;
+	- Adding TODO in updates, which content the to do things in nexts versions.
+
+**************
+
+
+
+crackerp v3.0 <-- cracker_parser v2.0 :
+	- Renaming to crackerp.py beacause it's faster to type in terminal (python3 crackerp.py [options]) ;
+	- Changing short option hash_crack to -hc (c -> hc) ;
+	- Adding the new modules to this launcher ;
+	- Adding function op_f which try to read a file and raise a parser error if file don't exists ;
+	- Adding common option --file_out (-fo) which write result in a file ;
+	-Adding function write_f which write result in a file. If file exists, append the text.
+	- Changing lock place in locked function : you don't need anymore to type password if arguments are missing ;
+	- Adding the command 'bash' if the OS is Linux, to keep the program open ;
+
+	- New options :
+		* Adding -c --crypta option with [-atb | -ca | -aff | -ms | -v | -hl | -s | -ct] [-k KEY] [-k2 KEY2] [-m {0,1}] [-mx MATRIX] sub options ;
+		* Adding -p --prima option with [-n NUMBER] and optional [-pb] options (But there is not 6 option ; there is trial division and Fermat test with small divisions if -pb is typed.) ;
+		* Adding -f --freq_ana option (works with -txt xor -fn, and optionnaly -fo) ;
+		* Adding -bc --base_convert option with [-n NUMBER] [-nb NUMBER_BASE] [-b RETURN_BASE] needed options and [-neg] ;
+		* Adding -pwd --pass_test (P@ssw0rd_Test0r) ;
+
+	- Adding -fo --file_out option to write result in a file.
+
+**************
+
+
+cracker_console_functions v1.1 <-- v1.0 :
+	- Adding four spaces before the options ;
+	- Removing wlth and walf because they are defined in P@ssw0rd_Test0r ;
+	- Adding a var named "cracker_version" set to the actual cracker version (2.2.0) ;
+	- Adding a try block to import modules, if some files were moved.
+
+**************
+
+
+base_functions v2.2 <-- v2.1 :
+	- Adding function date
+
+**************
+
+
+color v2.2 <-- v2.1 :
+	- Removing the line redifining the lambda col because on Linux module ctypes has not attribute windll and raise an error ;
+	- Setting four spaces when show actual colors in function c_color ;
+	- Adding function inp_lst in the module because I got an error if I try to import it (maybe because the module is already imported in cracker_console_functions and when importing color it also import it but it is already imported) ;
+	- Setting c_output to yellow if OS is Windows, blue if OS is Linux.
+
+**************
+
+
+Crypta v2.4 <-- v2.3 :
+	- Improving the menu (seting color and use the same pattern as others sub menus) ;
+	- Using now the color ;
+	- Improving the cipher's questions ;
+	- Adding get_txt function which ask for the text and can read it from a file or from inline input ;
+	- Changing var 'version' to ver because version is set somewhere to '1.0' ;
+	- Adding function p_use in class freqana to use it in parser console mode.
+
+**************
+
+
+Prima v2.3 <-- v2.2 :
+	- Improving the menu (seting color and use the same pattern as others sub menus) ;
+	- Adding function parser_use to use Prima in parser console mode.
+
+**************
+
+
+hasher v3.3 <-- v3.2 :
+	- Remplacing the verbose option by a progress bar ;
+	- Use now algorithms_available list to print input and to check answer ;
+	- Asking now for the hash just after it's type, and the wordlist 's name first (in menu console mode) ;
+	- Adding a menu (to use hasher functions in menu console mode) ;
+	- Adding a function use_hash_crack to use it in console menu mode, removing input question in hash_crack to use it in parser console mode.
+
+**************
+
+
+wordlist_generator v6.4 <-- v6.3 :
+	- Removing the verbose option ;
+	- Adding a progress bar ;
+	- Using color module to color questions, bar, and others ;
+	- Adding a function use_wrdlst_gen to use wordlist_generator_6 ;
+	- Adding a function use cointaining a menu, to use wordlist_generator_6 and open_w (imported) in menu console mode.
+
+**************
+
+open_w v2.0 <-- 1.0 :
+	- open_w takes now one argument : file_name. Can now be used in parser console mode ;
+	- Adding function use_open_w to use open_w in menu console mode.
+
+**************
+
+
+
+--------------
+notes :
+	.This version of Cracker was developed half on Linux (Parrot OS Sec (KDE version)), half on Windows 10. I realy recommend you to try Parrot, which is a very nice distribution (same and even more tools that Kali, but made to be an usual OS, you also have the Home version if you don't need security tools). I personaly use this OS in persistent mode, on an 8 GB usb key, and I boot everytime when I program at CDI (or in NSI) (This is NOT illegl : I don't try to crack the system or damage it, I just use a more adapted programmation environment).
+
+	.I don't use prima in gui mode because I think it's better if everything is in the same window,
+	but I will definitely integrate it in the gui launcher (when I'll do it)
+
+	.My idea with the gui launcher is to have a menu bar (same as the files' proprieties menu on Windows or Linux) at the bottom, each menu corresponding to a function (hasher, wordlists, Prima, Crypta, P@ssw0rd_Test0r, Base convert, ...). And when you open it, there is the ascii art's cracker logo, just after typing the password.
+
+
+
+--------------
+tree /f /a (windows command prompt) :
+
+|   crackerp.py
+|   cracker_launcher.py
+|   version.txt
+|   versions_modules.txt
+|
++---archives
+|   |   color_v2.1.py
+|   |   Crackerp2.py
+|   |   cracker_console_functions_v1.0.py
+|   |   cracker_launcher_v10.py
+|   |   cracker_parser_v2.0.py
+|   |   Cracker_v200.py
+|   |   crypta_v2.3.py
+|   |   hasher_v3.2.py
+|   |   prima_v2.2.py
+|   |   wordlist_generator_v6.3.py
+|   |
+|   \---__pycache__
+|           Crackerp2.cpython-37.pyc
+|
++---modules
+|   +---base
+|   |   |   base_functions.py
+|   |   |   color.py
+|   |   |   cracker_console_functions.py
+|   |   |   matrix.py
+|   |   |
+|   |   \---__pycache__
+|   |           base_functions.cpython-37.pyc
+|   |           color.cpython-37.pyc
+|   |           cracker_console_functions.cpython-37.pyc
+|   |           matrix.cpython-37.pyc
+|   |
+|   +---b_cvrt
+|   |   |   b_cvrt.py
+|   |   |
+|   |   \---__pycache__
+|   |           b_cvrt.cpython-37.pyc
+|   |
+|   +---crypta
+|   |   |   crypta.py
+|   |   |
+|   |   \---__pycache__
+|   |           crypta.cpython-37.pyc
+|   |
+|   +---hash
+|   |   |   hasher.py
+|   |   |
+|   |   \---__pycache__
+|   |           hasher.cpython-37.pyc
+|   |
+|   +---passwords
+|   |   |   pass_test.py
+|   |   |
+|   |   \---__pycache__
+|   |           pass_test.cpython-37.pyc
+|   |
+|   +---prima
+|   |   |   prima.py
+|   |   |
+|   |   \---__pycache__
+|   |           prima.cpython-37.pyc
+|   |
+|   \---wordlists
+|       |   open_wordlist.py
+|       |   wordlist_generator.py
+|       |
+|       \---__pycache__
+|               open_w.cpython-37.pyc
+|               open_wordlist.cpython-37.pyc
+|               wordlist_generator.cpython-37.pyc
+|
++---updates
+|   |   history.txt
+|   |   TODO
+|   |
+|   \---updates_notes
+|           update_20191231.txt
+|           update_20200101.txt
+|           update_20200111.txt
+|           update_20200202.txt
+|           update_20200203.txt
+|           update_20200204.txt
+|           update_20200205.txt
+|           update_20200206.txt
+|
+\---__pycache__
+        bases_fonctions.cpython-37.pyc
+        base_fonctions.cpython-34.pyc
+        base_fonctions.cpython-37.pyc
+        base_functions.cpython-36.pyc
+        base_functions.cpython-37.pyc
+        color.cpython-34.pyc
+        color.cpython-36.pyc
+        color.cpython-37.pyc
+        cracker_console.cpython-37.pyc
+        cracker_console_functions.cpython-36.pyc
+        cracker_console_functions.cpython-37.pyc
+        cracker_launcher.cpython-37.pyc
+        crypta.cpython-34.pyc
+        crypta.cpython-36.pyc
+        crypta.cpython-37.pyc
+        hasher.cpython-34.pyc
+        hasher.cpython-36.pyc
+        hasher.cpython-37.pyc
+        matrix.cpython-34.pyc
+        matrix.cpython-36.pyc
+        matrix.cpython-37.pyc
+        prima.cpython-34.pyc
+        prima.cpython-36.pyc
+        prima.cpython-37.pyc
+        wordlist_generator.cpython-34.pyc
+        wordlist_generator.cpython-36.pyc
+        wordlist_generator.cpython-37.pyc
+
+
+------------------------
+
+By lasercata

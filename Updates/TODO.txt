@@ -1,0 +1,282 @@
+To do :
+    - Apply the CDC on every module ;
+
+    - Add a file named "__main__.py" or "Cracker.py" which ask for the mode (console, GUI) with a checkbox "save this choice" which save in a file in ~/.Cracker (value can be gui, console, or none) and which check this file at startup, + live mode ;
+    - Add an option to pass from gui to console and vice versa + modify the file in the GUI settings ;
+    -IF it is the first time launching not in live (portable) mode, copy the folders Style, Wordlists to ~/.Cracker + ask to also save the modules ;
+
+    - Change the headers' var in every modules (ex : auth --> hasher__auth) ;
+    
+    - move all .py from / to /modules[/launchers] (just let Cracker.py) (/ is main Cracker dir, not root) ;
+    
+    
+    # - When giving the prog, put the folder 'Live' in the main dir, with the folder Wordlists cointaining 7z wrdlst ;
+    # - Add an installation script which unzip the wrdlst, and copy all the folder Live to ~/.Cracker if wanted and if mode='home'.
+    # - In Settings tab : be able to launch this script. We could launch by default in live mode, and then pass in home mode with the setting tab, or a popup ask for it when launching, for the first launch (save a file in 'Live' or/and '~/.Cracker' which says if it has been be launched) ;
+
+    - When giving the code, purpose a smaller project, without 'Archive', and others useless things for the working of the software ;
+    
+    
+	- Search why the progress bar isn't printed in hash_crack console ;
+	- Continue the CDC ;
+
+	- Add a function for each cipher's class who can break the cipher ;
+
+    - In crack : if the cipher chosen is known to keep same lth e and d, and if basic brute-froce is chosen, chk wrdlst, and alert user if lth is not the same (avoid loose time), but let him do if he want ;
+    
+    - Add var __all__ in every module ;
+    
+    # - In the imports : try to search in ~/.Cracker/modules if not found and if not in live mode ;
+    
+    - Change 'launcher' term to 'User interface' ('UI') ;
+    
+    
+    - be able to crack a list of encrypted/hashed words ;
+    
+	- Add a password-based key derivation function (PBKDF2) ? ;
+
+	- Add french translation (in GUI) ;
+	
+	- Use personalised fonts in Gui (cf tp zozor in NSI) ? ;
+	
+	- A function which check if the version in the file are good (read from headers var in modules), and which can save new versions ;
+	
+	- Be able to change password in Settings ;
+	
+	- With the dark fusion theme, be able to see when a widget is desactivated ;
+	
+	- When the user launch Cracker for the first time, ask for a password to protect its session ?
+	
+	- Insert a PyQt5 disclamer somewhere ;
+	- A README file ? search what is it and what put in it ;
+	- Add files :
+        .README ;
+        .LICENCE (the GNU v3 ?) ;
+        .Disclamer about using functions.
+	
+	
+	- Add an option 'space result' in b_cvrt UI (to be able to not space it, to copy it) ;
+	
+	- Recommand Pyzo editor + #todo: syntax
+	
+	- Python syntax : replace
+	
+	   ```python
+	   ret = ''
+	   for k in lst:
+           ret += k
+	   ```
+	   by
+	   
+	   ```python
+	   ret = ''.join(lst)
+	   ```
+	
+    
+    - Parser Todo :
+        .add a needed option which will be the tab ;
+        .eg. :
+            .crackerp cipher -c KRIS -msg test -key "Elerias" ;
+            .crackerp crack -md 0 -wrdlst w4az -fn hashes.txt -c sha512 ;
+            .crackerp pwd_testor -p azertyuiop OR cracherp pwd_testor ;
+
+
+New tree : 
+    
+    Cracker_v3.0.0
+    |
+    |   Cracker_gui.py
+    |   Cracker_console.py
+    |
+    |   version.txt
+    |   modules_versions.txt
+    |
+    |   README.md ? --- todo
+    |   LICENCE.redame ? --- todo
+    |
+    |
+    |---+ archives
+    |   |   Cracker_archives.7z
+    |
+    |
+    |---+ CDC
+    |   |   CDC.pdf
+    |   |   CDC.tex
+    |   \   CDC.txt (not updated)
+    |
+    |
+    |---+ Data
+    |   |
+    |   |   interface
+    |   |---+ Crack
+    |   |   |   quad_f.7z        ---         Unzip this
+    |   |
+    |   |---+ RSA_keys
+    |   |   |---+ RSA_pbk__elerias
+    |   |   \---+ RSA_pbk__lasercata_3072
+    |   |
+    |   \---+ Wordlists
+    |       |   wordlists.7z            ---         Unzip this
+    |
+    |
+    |---+ modules
+    |   |---+ b_cvrt
+    |   |   |   b_cvrt.py
+    |   |
+    |   |---+ base
+    |   |   |   base_functions.py
+    |   |   |   glb.py
+    |   |   |   ini.py
+    |   |   |   matrix.py
+    |   |   |   progress_bars.py
+    |   |   |
+    |   |   |---+ console
+    |   |   |   |   color.py
+    |   |   |
+    |   |   \---+ gui
+    |   |       |   GuiStyle.py
+    |   |       |   lock_gui.py
+    |   |       |   Popup.py
+    |   |       \   TextEditor.py
+    |   |
+    |   |---+ ciphers
+    |   |   |---+ crypta
+    |   |   |   |   crypta.py
+    |   |   |
+    |   |   |---+ kris
+    |   |   |   |   KRIS.py
+    |   |   |   |   AES.py
+    |   |   |   |   RSA.py
+    |   |   |   |
+    |   |   |   \---+ AES_library
+    |   |   |       |   AES_unix.dll
+    |   |   |       |   AES_win.dll
+    |   |   |       |   AES.c
+    |   |   |       \   AES.h
+    |   |   |
+    |   |   \---+ Hashes
+    |   |       |   hasher.py
+    |   |
+    |   |---+ crack
+    |   |   |   crack.py
+    |   |
+    |   |---+ prima
+    |   |   |   prima.py
+    |   |   \   Prima_obsolete_calculation_functions.txt
+    |   |
+    |   |---+ password_testor
+    |   |   |   pwd_testor.py
+    |   |
+    |   \---+ wordlists
+    |       |   wordlist_generator.py
+    |       \   wordlist_analazor.py
+    |
+    |
+    |---+ Style
+    |   |   Cracker_ascii_logo.png
+    |   |   Cracker_icon.ico
+    |   |   lasercata_logo_fly_curve.png
+    |   |
+    |   \---+ Style_sheets
+    |       |   default_cracker_style.css
+    |
+    |
+    \---+ Updates
+        |   history.txt
+        |   TODO.txt
+        |
+        \---+ updates_notes
+            |   update_2019-23-31_[1.5.0].txt
+            |   ...
+            |   update_2020-08-xx_[3.0.0].txt
+    
+    
+
+
+_______________________________________________________________________________________________________
+done :
+    --- v3.0.0
+    - Rewrite the whole GUI with PyQt5 ;
+    - Add CryptoSys (KRIS) ;
+    - use .css for the styles (with obj id) ;
+    
+    - Write the CDC with LateX ; --- done
+    - Allow the user to choose its alf in b_cvrt ! ;
+    
+    - Improve Hash_crack_2 (by Elerias) (maybe change it to crack (-> not only hashes)) ;
+    
+    - Add dir ~/.Cracker, but not obviously, add a live mode ;
+    
+    - Add function to crack Crypta's ciphers by brute force ;
+    - Add an option which test to crack an unknown piece of text : Good idea ! ;
+    --> def crack(wrdlst_txt, wrdlst_keys, txt, func, *args) ;
+    --> Add a function which try to determine which cipher is used ; ---------- Done ;
+    
+    - In Crack tab : purpose to gen wrdlst while try to break some text ; ---------------------------- Done ;
+
+    - In Crack tab : change crack options to [brute-force, dictionnary/wordlist, advanced_brute-force, code_broken] ;
+    - In Crack tab : when brute-force selected, hide wordlist selection and replace it by a QSpinBox and a QComboBox (lth, alf) ; ----- Done ;
+    
+    - Rename CryptoSys to CFP (Cipher For Privacy) or CPLP (ĉifro por la privateca) or Cipherack (random name) --- or KRIS (KRIptoSistemo) ! - or KRISS ?
+    
+    - Change the 'use' functions to 'console_use' or 'menu', OR put them in the console script (in classes like with GUI) ;
+    
+    - wordlist_analazer :
+        .check the date --- time.gmtime(os.path.getmtime(path)) ;
+        .don't chk lth only at line 1, but the shortest and longest lines ;
+    
+    
+    - Change | to ―― or —— or — (in title bar) ;
+    
+    ---
+
+
+---------------------------------
+	- Add a try block in the import part (put the dir "modules" back !!!) ------------------------- done
+	- menu console mode : Version of crypta print 1.0 but module is 2.4 !!! -------done
+	-fn_xor_txt for hc ---------------------------------------------------------done
+
+	add log files (option) where we can write result -------------------------------done
+	add option open from a file (like lst of hashes)-------------------------------done
+
+	- Add option -fo --file_out which write result in a file (crypta and hsh) --------------done
+	-b --base_convert --------------------------------------done
+	add options : -c --crypta [-caesar | - ...] ------------done
+	-p --prima --------------------------------------------done
+	if --text is None, --file_name should not be None, and invardly (in crypta, to open from a file) -------------done
+	option 4/6 doesn't work (n referenced before assignement) --------------------done
+
+	change option c to hc (hash_crack) ---------------------done
+	-pwd --password_testor ---------------------------------done
+
+	- wordlist generator doesn't work correctly in parser (alf is bad) ---done
+	-do open_w with arguments and use_open to use in parser --------------done
+
+
+
+mettre les modules dans des dossiers :
+
+Cracker
+    | Cracker_launcher.py
+    | Cracker_parser.py
+    |
+    |---+ modules
+        |
+        |---+ wordlists
+        |	|wordlist_generator
+        |	|open_w
+        |
+        |---+ hasher
+        |	|hasher
+        |	|hash_crack
+        |
+        |---+ P@ssw0rd_Test0r
+        |	|pass_test_functions
+        |	|pass_test
+
+...
+
+nouveau module : P@ssw0rd_Test0r
+
+	- Do the gui launcher
+	.My idea with the gui launcher is to have a menu bar (same as the files' proprieties menu on Windows or Linux) at the bottom, each menu corresponding to a function (hasher, wordlists, Prima, Crypta, P@ssw0rd_Test0r, Base convert, ...). And when you open it, there is the ascii art's cracker logo, just after typing the password.

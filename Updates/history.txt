@@ -1,0 +1,155 @@
+Cracker v3.0.0         2020.08.31
+---------------------------------
+Improvements (from 2.4.0) :
+    - Resseting the password to the old ;
+    - Continuation of the CDC and writing it in LaTeX ;
+    - Re-writting the GUI using the external module PyQt5 ;
+    - Re-wrtting main parts of the console ;
+    - Designing a the new Cracker's logo (icon + ascii art) ;
+    
+    - Upturning almost every module, and re-writting some of them ;
+    - A lot of new scripts ;
+    
+    - Adding the ciphers KRIS, AES, RSA
+    
+    - New tree organisation and new program organisation ;
+    
+    - Changing the parts to :
+        Home, Crack, Cipher, Wordlists, Prima, Base convert, P@ssw0rd_Test0r, Settings (in GUI) ;
+        Quit, Lock, Crack, Cipher, Wordlist, Prima, Base convert, P@ssw0rd_Test0r, Change dir, Change colors, About (in console) ;
+
+*************
+
+
+Cracker v2.4.0         2020.05.02
+---------------------------------
+Improvements (from 2.3.2) :
+    - Small bug corrections
+    - Adding a lot of functions in prima
+    - Joining AES with crypta but not in cracker_gui_launcher
+    - Update of cracker_gui_launcher
+
+*************
+
+Cracker v2.3.1         2020.02.25
+----------------------------------
+Improvements (from 2.2.0) :
+    - Creating of cracker_gui_launcher
+    - Adding of hash_crack_2 which cracks a hash with a wordlist and other brute force method
+    - Adding new ciphers in crypta
+
+**************
+
+Cracker v2.2.0          2020.02.18
+----------------------------------
+Improvements (from 2.1.0) :
+	- New tree file :
+		* New folder "modules" ;
+		* Each module is in a folder ;
+		* Basic function are in folder named "base" ;
+		* There is a tree shem of this at the end of this update note ;
+
+	- New menu with sub menus in menu console mode ;
+	- Adding new modules to the parser console mode ;
+
+	- New modules : Base convert (b_cvrt) and P@ssw0rd Test0r (pass_test) ;
+	- Upturning almost every modules (check update_20200218.txt) ;
+
+	- Adding #!/bin/python3 at the top of each module (to run them with Linux) ;
+	- Remplacing the """ of the docstrings by ''' ;
+	- Adding a try block to import modules, if some files were moved ;
+	- Adding TODO in updates, which content the to do things in nexts versions.
+
+**************
+
+
+
+Cracker v2.1.0          2020.02.05
+----------------------------------
+Improvements (from 2.0.0) :
+    - Improving prima
+    - Improving crypta
+    - Joining of the module cracker_parser
+    - Separating functions of cracker_launcher into the module cracker_console_function
+
+**************
+
+
+
+Cracker v2.0.0          2020.02.02
+----------------------------------
+Improvements (from 1.5.2) :
+    - Small visual corrections :
+        * Applying of PEP convention
+        * Deleting of commentary above the fonctions
+        * Deleting of some blanks lines
+    - Creating of Cracker repertory including in another files big fonctions :
+        * Creating and upgrading of wordlist_generator module
+        * Creating of color module
+        * Creating of hasher module
+        * Creating of base_fonction module
+    - Joining to Cracker the module prima including :
+        * pgcd, expmod, exponent fonctions
+        * Probabilistic primality algorithmes (Fermat and Miller-Rabin)
+        * Decomposition in primary factors algorithmes (sucessive divisions and algorithme p - 1 of Pollard)
+        * console using fonction
+        * tkinter using fonction
+    - Joining to Cracker the module crypta including :
+        * crypthographic fonctions (atbash, caesar, affine, vigenere, hill, monoalphabetic substitution)
+        * cryptanalysis fonctions (ic, frequence analysis, kasiki test)
+        * using fonction
+    - Password changed because I did not know it. You will easily find it.
+
+**************
+
+
+
+Cracker v1.5.2            2020.01.11
+------------------------------------
+Improvements (from 1.5.1) :
+    Now compatible with Linux !!!
+
+    - Upgraging the color function : the prog can now run on Linux ;
+    - Adding function cls which clear screen (win and linux) ;
+    - Adding the konsole to the admin mode (to run cmd in Parrot os) ;
+    - Seting the password in sha512 hash to deserve more platforms (like win32) ;
+    - Correcting lock : the max tries are now correct (no more max_ + 1).
+
+**************
+
+
+
+Cracker v1.5.1            2020.01.01
+------------------------------------
+Improvements (from 1.5.0) :
+    - Creating the function set_prompt which return a string enumeration from a list ;
+    - hash_crack now show the time you waste if you didn't find the password ;
+    - open_w and hash_crack show how many time did they spend to open and read a wordlist ;
+    - hash_crack use random.shuffle to randomize the order of the wordlist to find the password faster ;
+    - Addind an option to the menu which show this and other informations ;
+    - Adding color var c_ascii, set to 'orange', used to print ascii art.
+
+**************
+
+
+
+Cracker v1.5.0            2019.12.31
+------------------------------------
+Improvements (from 1.4.1) :
+    - This list ;
+    - This list is print in the admin mode ;
+    - ver_wdlst_gen_6 is now correct (v6.2.2) ;
+    - hasher v5 is used (a lot smaller and uses all available hashes) ;
+    - color v2.0 is used, it is smaller (uses a dict) ;
+    - The input prompt ends now by '\\n>' (and no more by '\\n>>>') ;
+    - When an error occur in a function, it now print the error. (cf to use_menu()) ;
+    - Adding function space from b_cvrt_all : space(1234567, 3) -> '1 234 567' ;
+    - Adding wlth and walf functions from P@ssw0rd_Test0r to improve open_w :
+    => open_w show now the alphabets and their lenth ;
+    => It also show all the differents characters present in the wordlist ;
+    - Replacement of the menu by a function to save hundreds of lines ;
+    - Improving hash_crack : it can now show every x% the progression ;
+    - Some smalls corrections (bugs and other) ;
+    - Adding ascii art (auth_ascii, cracker, cracker_logo).
+
+**************

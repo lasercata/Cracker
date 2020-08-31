@@ -1,0 +1,14 @@
+2020.01.01
+Cracker v1.5.1 <-- Cracker v1.5.0
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+Improvements (from 1.5.0) :
+    -Creating the function set_prompt which return a string enumeration from a list ;
+    -hash_crack now show the time you waste if you didn't find the password ;
+    -open_w and hash_crack show how many time did they spend to open and read a wordlist ;
+    -hash_crack use random.shuffle to randomize the order of the wordlist to find the password faster ;
+    -Addind an option to the menu which show this and other informations ;
+    -Adding color var c_ascii, set to 'orange', used to print ascii art.
+
+**************
+
+By lasercata

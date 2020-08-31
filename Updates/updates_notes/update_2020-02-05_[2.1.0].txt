@@ -1,0 +1,30 @@
+2020.02.05
+Cracker v2.1.0 <-- v2.0.2
+-------------------------
+
+General improvements :
+- base_fonctions --> base_functions (like you have written ... It is better english !)
+- Adding a file whose name is versions_modules.txt for version of all the modules
+- Moving of cracker_launcher of all the functions into a new module : cracker_console_functions
+- Adding of cracker_parser
+**************
+
+prima v2.2 <-- v2.1
+Improvements :
+- Translation in english of use_tkinter function
+- Adding in use_tkinter of Pollard's rho algorithm
+- Adding in use and use_tkinter Fermat's factorization
+- Small corrections
+**************
+
+crypta v2.3 <-- v2.2
+Improvements :
+- Creating of the generation of cipher alphabet with a key word
+- Creating of a function generating a transposition key with a key word
+- Creating of the algorithm of columnar transposition cipher
+- Adding to the menu of scytale cipher and columnar transposition cipher
+**************
+
+------------------------
+
+By Elerias

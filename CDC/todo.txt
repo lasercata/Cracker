@@ -1,0 +1,29 @@
+replace the \texttt{} by 
+
+\usepackage{moreverb}
+
+\begin{verbatimtab}[4]
+def f(x):
+	return 1 / x
+\end{verbatimtab}
+
+
+OR
+
+\usepackage{listings}
+\lstset{ %
+language=nom_du_langage,        % choix du langage
+basicstyle=\footnotesize,       % taille de la police du code
+numbers=left,                   % placer le numéro de chaque ligne à gauche (left) 
+numbers=right,                  % placer le numéro de chaque ligne à droite (right)
+numberstyle=\normalsize,        % taille de la police des numéros
+numbersep=7pt,                  % distance entre le code et sa numérotation
+backgroundcolor=\color{white},  % couleur du fond 
+% Possibilité d'utilisation du package color
+}
+
+\begin{document}
+\begin{lstlisting}
+def f(x):
+    return 1 / x
+\end{lstlisting}

@@ -1,0 +1,41 @@
+2020.02.19-10
+Cracker v2.2.1 <-- v2.2.0
+-------------------------
+
+General improvements :
+- Adding of a beginning of the Convention for the Developers of Cracker (CDC)
+
+**************
+
+crypta v2.5 <-- v2.4
+Improvements :
+- Adding of reading and opening of files :
+    * The entry can be issued of a file
+    * The result can be saved in a file 
+**************
+
+matrix v1.1 <-- v1.0
+Improvements :
+- English translation of the code
+- Moving of the function det inside the Matrix class
+- Applying of pep convention
+- Small corrections
+**************
+
+------------------------
+
+Planned improvements (to 22.02.2020) :
+- Continuing of CDC
+- Code Rail Fence in Crypta
+- Joining to Cracker "yy", a programm of data compression
+- Beginning of "cracker_gui_launcher.py"
+- Joining to Cracker crack_function, which finds the preimage of an image of a function (like hash_crack) but more efficiently with big wordlists and brute force.
+
+-------------------------
+
+Note :
+- Small problem with hill cipher
+
+-------------------------
+
+By Elerias

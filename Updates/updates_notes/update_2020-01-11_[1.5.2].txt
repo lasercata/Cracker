@@ -1,0 +1,16 @@
+2020.01.11
+Cracker v1.5.2 <-- Cracker v1.5.1
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+Improvements (from 1.5.1) :
+    Now compatible with Linux !!!
+
+    -Upgraging the color function : the prog can now run on Linux ;
+    -Adding function cls which clear screen (win and linux) ;
+    -Adding the konsole to the admin mode (to run cmd in Parrot os) ;
+    -Seting the password in sha512 hash to deserve more platforms (like win32) ;
+
+    -Correcting lock : the max tries are now correct (no more max_ + 1).
+
+**************
+
+By lasercata

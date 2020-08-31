@@ -1,0 +1,443 @@
+\documentclass[a4paper,10pt]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[textheight=730pt, textwidth=480pt]{geometry} % http://ctan.org/pkg/geometry
+\usepackage{framed}
+%\usepackage{bookman}
+
+%-make the table of content clickable
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks,
+	citecolor=black,
+	filecolor=black,
+	linkcolor=black,
+	urlcolor=black
+}
+
+%-page style
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+%-include pictures
+\usepackage{graphicx}
+
+\setlength{\headheight}{18pt}
+\setlength{\footskip}{50pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE, RO]{\textit{\today}}
+\fancyhead[RE, LO]{\large{\textit{\emph{\jobname}}}}
+
+\fancyfoot[LO, RE]{\textit{Page \thepage / \pageref{LastPage}}}
+
+
+\title{
+    \huge CONVENTION FOR THE DEVELOPERS OF CRACKER
+    \\
+    \LARGE (CDC)
+}
+%\author{By \emph{Elerias}}
+\author{
+    \includegraphics[scale=0.55]{../Style/Cracker_ascii_logo.png}
+    \\ \\ \\ \\
+    \LARGE{\fontfamily{pzc}\selectfont Elerias, Lasercata}
+}
+
+\begin{document}
+ \maketitle
+ \tableofcontents
+ \includegraphics[scale=0.55]{../Style/Cracker_ascii_logo.png}
+ 
+ \chapter{Introduction}
+  To do.
+ 
+ \chapter{Language Conventions}
+  \section{Code}
+   The language of the code is English. All the name of variables, functions,
+  classes or other objects, the documentation and the description of functions
+  and modules should be written in English.
+  
+  \section{Annotations}
+   Annotations can be written in English or in French because all the developers
+  speak french, but the English is prefered for a more consistent code.
+
+  
+  \section{Communication with user}
+   All the outputs in the program should be written in English. The program should take English and French inputs. After a closed question, Cracker should take the following answers :
+   \begin{itemize}
+   \item[$-$] y ;
+   \item[$-$] Y ;
+   \item[$-$] yes ;
+   \item[$-$] Yes ;
+   \item[$-$] YES ;
+   \item[$-$] n ;
+   \item[$-$] N ;
+   \item[$-$] no ;
+   \item[$-$] No ;
+   \item[$-$] NO ;
+   \item[$-$] non ;
+   \item[$-$] Non ;
+   \item[$-$] NON.
+   \end{itemize}
+   
+   \noindent Examples :
+   \par \setlength{\leftskip}{10pt} Text from file ? (y/n) yes
+   \par \setlength{\leftskip}{10pt} Text from file ? (y/n) Non
+  
+  \section{Documents}
+   The documents should be written in English. French is however acceptable because all the developers speak french.
+   
+ \chapter{Style Conventions}
+  \section{Names}
+   Names of objets have to be short. \\
+   In Cracker, some variables have the same functions in different modules. They should have the same name :
+   
+   \begin{itemize}
+   \item ``\texttt{t}", ``\texttt{txt}" or ``\texttt{text}" represents the text that the program use. It is often asked to the user ;
+   \item "\texttt{ret}" represents the text returned to the user ;
+   \item ``\texttt{t}" or ``\texttt{t\_}" + number represents a time ;
+   \item ``\texttt{alf}", ``\texttt{alph}" or ``\texttt{alphabet}" represents an alphabet ;
+   \item ``\texttt{f}", ``\texttt{fn}", ``\texttt{filename}" or ``\texttt{f\_name}" represents the name of a file ;
+   \item ``\texttt{f\_ext}" represents the extension of the file ;
+   \item ``\texttt{w}", ``\texttt{wrd}" or ``\texttt{word}" represents a word ;
+   \item ``\texttt{wrdlst}" or ``\texttt{wrdlt}" represent a wordlist ;
+   \item ``\texttt{D}", ``\texttt{d}", ``\texttt{dico}" or ``\texttt{dct}" represents a dictionnary ;
+   \item ``\texttt{l}", ``\texttt{lth}" or ``\texttt{lenth}" or ``\texttt{length}" represents a length ;
+   \item ``\texttt{n}" represents an integer ;
+   \item ``\texttt{p}" represents a prime number ;
+   \item ``\texttt{d}" or ``\texttt{div}" represents a divisor ;
+   \item ``\texttt{L}" or ``\texttt{lst}" represents a list ;
+   \item ``\texttt{r}" or ``\texttt{rest}" represents the rest of a euclidean division ;
+   \item ``\texttt{M}" or ``\texttt{msg}" represents a plain message ;
+   \item ``\texttt{C}" or ``\texttt{msg\_c}" represents a encrypted message ;
+   \item ``\texttt{key}" or ``\texttt{k}" represents a key ;
+   \item ``\texttt{p}" or ``\texttt{primality}" represents the primality ;
+   \item ``\texttt{x}" represents a preimage in a function ;
+   \item ``\texttt{y}" represents an image in a function ;
+   \item ``\texttt{f}" or ``\texttt{func}" represents a function ;
+   \item ``\texttt{window}", ``\texttt{wind}", ``\texttt{win}", or ``\texttt{w}" represent a window (Tkinter or PyQt5).
+   
+   \end{itemize}
+
+   
+  
+  \section{Whitespaces}
+   Before and after the equal symbol (\texttt{=}), the test symbols (\texttt{'==' '!=' '>' '>=' '<' '<='}) and \texttt{';'}, one whitespace should be placed. \\
+
+   \noindent Good examples :
+   
+   \texttt{a = 8 ; b = 7}
+   
+   \texttt{c = 2} \\
+   
+   \texttt{if a == 8:}
+       \par \setlength{\leftskip}{40pt} \noindent \texttt{print(a)} \\
+       
+   \setlength{\leftskip}{10pt} \noindent Bad examples :
+   
+   \texttt{a $\quad$ = $\quad$ 8; b= 7}
+   
+   \texttt{c=2}
+   
+   \texttt{if a==8 :}
+   
+   \setlength{\leftskip}{20pt} \texttt{print(a)} \newline
+   
+   \setlength{\leftskip}{10pt} \noindent Before and after an operator (\texttt{+ - * / // \% **}), one whitespace should but if there is a proritary operation. \\
+   
+   \noindent Good examples :
+   
+   \texttt{a = 2 + 4 + 18}
+   
+   \texttt{b = a*2 + 4 + 18/3}
+   
+   \texttt{c = a * (b + 3**2)}
+   
+   \texttt{c = a \% (b + 3**2)} \\
+   
+   
+   \noindent Bad examples :
+   
+   \texttt{a = 2+4+18}
+   
+   \texttt{b = a * 2 + 4 + 18 / 3}
+   
+   \texttt{c = a*(b + 3 ** 2)}
+   
+   \texttt{c = a \% (b+3 ** 2)} \newline \newline
+   
+   
+   \noindent After '\texttt{:}' and '\texttt{,}', one whitespace should be placed. But not before. \\
+   
+   \noindent Good examples :
+   
+   \texttt{if a == 2:}
+   
+   \indent \indent \texttt{d = \{'a': 14, 23: 'test'\}}
+   
+   \indent \indent \texttt{L = [1, 'hello', 42]} \\
+   
+   
+   \noindent Bad examples :
+   
+   \texttt{if a == 2 :}
+   
+   \indent \indent \texttt{d = \{'a' : 14, 23:'test'\}}
+   
+   \indent \indent \texttt{L = [1 , 'hello',42]} \newline \newline
+   
+   
+   \noindent For other symbols ( \texttt{( ) \{ \} [ ] ' " .})  , no whitespace should be placed. \\
+   
+   \noindent Good examples :
+   
+   \texttt{L = [3, 90, 'bonjour', (4, 2)]}
+   
+   \texttt{a = 2 * (4+2)}
+   
+   \texttt{b = f(2)} \\
+   
+   
+   \noindent Bad examples :
+   
+   \texttt{L = [ 3, 90, 'bonjour', ( 4, 2 ) ]}
+   
+   \texttt{a = 2 * ( 4+2 )}
+   
+   \texttt{b = f ( 2 )}
+  
+  
+  
+  \section{Indentations}
+   Four spaces, automatic indentations and tabulations can be used to indent.
+  
+  \section{Blank lines}
+   Blanks lines improve \emph{readability}, so they should be inserted between the differents \emph{code portions}, i.e. between the import portion, the functions, the classes, the run portion. Blanks lines can also be inserted in the \emph{functions} and \emph{classes}, to separate the differents parts. \\
+   
+   The number of blanks line to insert depends on the code's length. \emph{Three} blanks lines should be inserted at maximum. \\
+   
+   One blank line should be inserted after the \emph{documentation} in the classes and functions.
+  
+  
+  \section{Single and double quote}
+   For lists, tuples and dictionnaries, single quotes are prefered to lighten the code. If there should be a quote in your string, it is prefered to use the others. Triple quotes are strongly discouraged. \\
+  
+  
+   \noindent Good examples :
+   
+   \texttt{d = \{`b': 8, `23': `hello', `logo' : "Cracker's logo"\}}
+   
+   \texttt{L = [7, `afternoon', (`monday', `wednesday'), `"quoted"']} \\
+   
+   
+   \noindent Bad examples :
+   
+   \texttt{d = \{"b": 8, "23": "hello"\}}
+   
+   \texttt{L = [7, "test", "$\backslash$"quoted$\backslash$"", `Cracker$\backslash$'s logo']} \\
+   
+   
+   \noindent Very bad example :
+   
+   \texttt{L = [7, ```afternoon''', ("""monday""", """wednesday""")]} \newline \newline
+   
+   
+   \noindent To frame a word, single quotes are also recommended. \\
+   
+   \noindent Good examples :
+   
+   \texttt{a = `hello'}
+   
+   \texttt{b = "Cracker's logo"}
+   
+   \texttt{c = `"This" is quoted'} \\
+   
+   
+   \noindent Bad examples :
+   
+   \texttt{a = """hello"""}
+   
+   \texttt{b = `Cracker$\backslash$'s logo'}
+   
+   \texttt{c = "$\backslash$"This$\backslash$" is quoted"} \newline \newline
+   
+   
+   \noindent To define an empty character string, 2 double quotes are prefered. \\
+   
+   \noindent Good example :
+   
+   \texttt{a = ""}
+   
+   \noindent Rather not :
+   
+   \texttt{a = `'}
+   
+   \noindent Absolutely not :
+   
+   \texttt{a = """"""}
+  
+  
+  
+  \section{Docstrings}
+   Both single and double quoted are accepted in the docstrings, but only one type of quote should be used within a same file, to have a consistent code.
+   
+   If the description line measures one line, the 2 docstrings should be on the same line, else they have to be on the same column. \\
+   
+   \noindent Good examples :
+   
+   \texttt{def f(x):}
+   
+   \indent \indent \texttt{"""Return the square of x."""} \\
+   
+   \indent \indent \texttt{return x ** 2} \\
+   
+   \texttt{def g(x):}
+   
+   \indent \indent \texttt{```Return the inverse of x. \newline
+	   \indent \indent x : a number different of 0. \newline
+	   \indent \indent''' \newline \newline
+	   \indent \indent return 1 / x} \\
+   
+   \texttt{def h(x, n): \newline
+	   \indent \indent """\newline 
+	   \indent \indent Return the \emph{n}th root of x. \newline \newline
+	   \indent \indent x : a float number ; \newline
+	   \indent \indent n : an other float number. \newline
+	   \indent \indent """ \newline \newline
+	   \indent \indent return x **(1 / n)} \newline \newline
+   
+   
+   \noindent Bad examples :
+   
+   \texttt{def f(x): \newline
+	   \indent \indent """Return the square of x. \newline
+	   \indent \indent """ \newline \newline
+	   \indent \indent return x ** 2} \\
+  
+   \texttt{def g(x): \newline
+	   \indent \indent """Return the inverse of x. \newline
+	   \indent \indent x : a number different of 0""" \newline \newline
+	   \indent \indent return 1 / x} \\
+   
+   \texttt{def h(x, n): \newline
+	   \indent \indent """\newline 
+	   \indent \indent Return the \emph{n}th root of x. \newline \newline
+	   \indent \indent x : a float number ; \newline
+	   \indent \indent n : an other float number.""" \newline \newline
+	   \indent \indent return x **(1 / n)}
+  
+  
+  \section{Annotations}
+   Todo.
+  
+  \section{Imports}
+   Todo.
+  
+  \section{Modules}
+   Todo.
+  
+  
+  
+ \chapter{Using of Craker functions}
+  Todo
+  
+  
+  
+ \chapter{Documents about Cracker}
+  \section{Updates}
+   An update note should be fill every time the program is modified. It should be saved in the folder \texttt{Cracker\_v[version]/updates/updates\_notes}, and it should be named ``\texttt{update\_YYYY-MM-DD\_[new version].txt}'' (with the brackets, this time). \\
+   
+   The update note should begin by the date at the format ``\texttt{YYYY.MM.DD}'' (or can be ``\texttt{YYYY.MM.[day begin]-[day finish]}'' (example : \texttt{2020.05.01-09}) if the update took more than one day, but it is not needed), and should be followed, the line after, by ``\texttt{Cracker v[new version] <-- v[old version]}''. There should be a part for every module improved, begining by ``\texttt{[module name] v[new version] <-- v[old version] :}'', and ending by ``-''$\times 3$. The first part should be consecreted to the general improvements, begin by ``\texttt{General improvements (from [old Cracker version]) :}'', and end by ``-''$\times 6$.
+   
+   \noindent The update note should end by a separation followed the line after by ``\texttt{By [author]}'' \\
+   
+   \noindent The update notes should be written in raw text, with the ``\texttt{.txt}'' extension. \newline \newline
+   
+   
+   
+   \noindent Example :
+   
+   file name : ``\texttt{update\_2020-05-02\_[2.4.0].txt}'' \\
+   
+   \begin{framed}
+    \texttt{2020.05.02 \newline
+	   \indent Cracker v2.4.0 <-- v2.3.2 \newline
+	   \indent --------------------------------- \newline
+	   \indent General improvements (from 2.3.2) : \newline
+	   \indent \indent - Small bug corrections ; \newline
+	   \indent \indent - Improving Crypta and Prima. \newline
+	   \indent ------ \newline \newline
+	   \indent prima v3.0 <-- v2.4 : \newline
+	   \indent \indent - New algorithms ; \newline
+	   \indent \indent - Pollard's rho algorithm is the fastest. \newline
+	   \indent --- \newline \newline
+	   \indent crypta v2.9 <-- v2.8 : \newline
+	   \indent \indent - Joining AES in the menu. \newline
+	   \indent --- \newline \newline
+	   \indent --------------------------------- \newline
+	   \indent By Elerias}
+   \end{framed}
+
+  
+  \section{History}
+   The file ``\texttt{history.txt}'' contain all the majors improvements of \emph{Cracker}. It is situated at \texttt{Cracker\_v[version]/updates}. If this software is improved enough, i.e. if the version pass from \texttt{x.y.z} to \texttt{x+1.0.0} or \texttt{x.y+1.0} (First or second digit incremented), the file should be updated. To update this file, the \texttt{General improvements} part of the update note should be added to the \texttt{history.txt} file.
+  
+  \section{Version}
+   The file ``\texttt{Version.txt}'' contain the actual \emph{Cracker} version. The version should contain \textbf{three} numbers, separeted by two dots, i.e. at the format \texttt{x.y.z}, where \texttt{x}, \texttt{y}, and \texttt{z} are positive integers. \newline
+   
+   \noindent Example : \texttt{2.4.0} \\
+   
+   If the actual version is \texttt{x.y.9}, the next version should not be \texttt{x.y+1.0}, but \underline{\texttt{x.y.10}}. The same rule applies to the others digits. \\
+   
+   If only some small bugs were fixed, whitout major improvements, only the \emph{last digit} (\texttt{z}) should be incremented. If some improvements were added, and maybe new modules added, the \emph{second digit} (\texttt{y}) should be incremented, and the last should be set to 0. If the program was improved generaly, maybe with a total re-organisation, a lot of functionnal upturns, and a lot of modules improved, then the \emph{first digit} (\texttt{x}) should be incremented. \newline \newline
+   
+   
+   \noindent Good exemples :
+   
+   \texttt{2.3.9} $\rightarrow$ \texttt{2.3.10} (small bux corrections)
+   
+   \texttt{2.4.3} $\rightarrow$ \texttt{2.5.0} (new module, launchers improved)
+   
+   \texttt{1.5.2} $\rightarrow$ \texttt{2.0.0} (rewriting some parts, put the project in modules) \\
+   
+   
+   \noindent Bad examples :
+   
+   \texttt{2.3.9} $\rightarrow$ \texttt{2.4.0} (small bux corrections)
+   
+   \texttt{2.4.3} $\rightarrow$ \texttt{2.5.3} (new module)
+   
+   \texttt{1.5.2} $\rightarrow$ \texttt{2.5.0} (bug fix)
+  
+   
+  \section{Version\_modules}
+   The file ``\texttt{Versions\_modules.txt}'' contain the actual \emph{Cracker}'s modules versions. They should correspond to the variables set at the top of the modules (\texttt{[module name]\_\_ver}). They should be composed of \textbf{two} numbers, separated by one dot. If the version need to contain more than two numbers, separate the lasts with a comma (\texttt{,}). \\
+   
+   \noindent Exampe :
+    \begin{framed}
+     \texttt{
+		 \noindent Version of cracker\_launcher : 1.0,1 \newline
+		 \indent Version of cracker\_gui\_launcher : 1.1 \newline
+		 \indent Version of cracker\_parser : 2.0 \newline \newline
+		 \indent Version of cracker\_console\_functions : 1.1 \newline
+		 \indent Version of base\_functions : 2.2 \newline
+		 \indent Version of color : 2.2 \newline
+		 \indent Version of matrix : 1.1 \newline \newline
+		 \indent Version of Hasher : 3.3 \newline
+		 \indent Version of hash\_crack\_2 : 1.0 \newline
+		 \indent Version of wordlist\_generator : 6.4 \newline
+		 \indent Version of Crypta : 2.9 \newline
+		 \indent Version of Prima : 3.0 \newline
+		 \indent Version of Base convert : 2.1,2 \newline
+		 \indent Version of P@ssw0rd\_Test0r : 1.0}
+    \end{framed}
+    
+    \noindent When a module is created, its version should be \texttt{1.0}.
+
+  
+  \section{CDC}
+   Todo
+ 
+\end{document}

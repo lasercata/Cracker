@@ -1,0 +1,28 @@
+2020.02.25
+Cracker v2.3.1 <-- v2.2.0
+-------------------------
+Version stable
+The menu of crypta has been corrected.
+The crypta functions in the gui launcher work.
+-------------------------
+
+2020.02.25-21
+Cracker v2.3.0 <-- v2.2.1
+-------------------------
+
+General improvements :
+- Continuing of the Convention for the Developers of Cracker (CDC)
+- Adding of # -*- coding: utf-8 -*- in every modules
+- Creating of cracker_gui_launcher which launchs Cracker with a graphic interface
+- Adding of hash_crack_2 which cracks a hash with wordlists and brute force method
+**************
+
+crypta v2.6 <-- v2.5
+Improvements :
+- Small corrections
+- Adding of Rail fence cipher
+- Adding of Morse code
+- Adding of reverse code
+-------------------------
+
+By Elerias
