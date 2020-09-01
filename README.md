@@ -25,6 +25,13 @@ cracked by brute-force, the "P@ssw0rd_Test0r" tab is for you ! It gives a lot of
 about the password you entered, like its entropy.
 
 
+## Requirements
+
+To run the software, you need to have :
+    * [Python3](https://www.python.org/downloads/)
+    * [PyQt5](https://pypi.org/project/PyQt5/) or [PySide2](https://pypi.org/project/PySide2/)
+
+
 ## Installing
 
 Download or clone the repository :
