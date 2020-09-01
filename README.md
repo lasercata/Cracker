@@ -28,8 +28,9 @@ about the password you entered, like its entropy.
 ## Requirements
 
 To run the software, you need to have :
-    * [Python3](https://www.python.org/downloads/)
-    * [PyQt5](https://pypi.org/project/PyQt5/) or [PySide2](https://pypi.org/project/PySide2/)
+
+* [Python3](https://www.python.org/downloads/)
+* [PyQt5](https://pypi.org/project/PyQt5/) or [PySide2](https://pypi.org/project/PySide2/)
 
 
 ## Installing
