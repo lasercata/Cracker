@@ -81,7 +81,7 @@ The password is `swiss_knife`
 ## Authors
 
 * **Lasercata** - [Lasercata](https://github.com/lasercata)
-* **Elerias** - [Elerias](about:blank)
+* **Elerias** - [Elerias](https://github.com/EleriasQueflunn)
 
 
 ## License
