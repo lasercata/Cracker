@@ -3,8 +3,8 @@
 '''Module incuding wordlist_analyzer function'''
 
 wrdlst_ana__auth = 'Lasercata'
-wrdlst_ana__last_update = '09.06.2020'
-wrdlst_ana__version = '3.0'
+wrdlst_ana__last_update = '09.09.2020'
+wrdlst_ana__version = '3.1'
 
 ##-import
 #---------Cracker's modules
@@ -16,6 +16,9 @@ from modules.b_cvrt.b_cvrt import space_b
 
 #------packages
 from datetime import datetime as dt
+import platform
+import ctypes
+import os
 
 ##-main
 class WordlistAnalyzer:
@@ -79,7 +82,7 @@ class WordlistAnalyzer:
         elif ana == -2:
             msg_err = 'Bad encoding "{}" for the file "{}"'.format(self.encod, self.fn)
 
-        if ana in (-1, -2):
+        if ana in (-1, -2, -3):
             if self.interface == None:
                 raise FileNotFoundError(msg_err)
 
@@ -95,6 +98,8 @@ class WordlistAnalyzer:
         sizes = ana[0]
         times = ana[1]
         infos = ana[2]
+        lib_C = ana[3][0]
+        infosLibC = ana[3][1]
 
         ret = 'Filename : {} ;'.format(self.fn)
         ret += '\n\nSize : {} ({}) ;'.format(*sizes)
@@ -102,10 +107,21 @@ class WordlistAnalyzer:
         ret += '\n\nLast modification : {} ;'.format(times[0])
         ret += '\nLast access : {} ;'.format(times[1])
         ret += '\nCreation : {} ;'.format(times[2])
+        
+        if lib_C:
+            ret += '\n\nNumber of characters : {} ;'.format(infosLibC['nb_car'])
 
         ret += '\n\nMinimum line length : {} characters ;'.format(infos['min'])
         ret += '\nMaximum line length : {} characters ;'.format(infos['max'])
+        if lib_C:
+            ret += '\nAverage line length : {} characters ;'.format(infosLibC['av_len'])
+            ret += '\nMedian line length : {} characters ;'.format(infosLibC['med_len'])
         ret += "\nWordlist's length : {} lines ;".format(space_b(infos['nb_lines']))
+        if lib_C:
+            ret += '\nWordlength repartition :'
+            
+            for k in infosLibC['dct_len_w']:
+                ret += "\n\t'{}': {} ;".format(k, space_b(infosLibC['dct_len_w'][k]))
 
         ret += '\n\nLength of the alphabet : {} characters ;'.format(infos['alf_lth'])
         ret += '\nAlphabets : {} ;'.format(set_prompt(infos['lst_alf']))
@@ -114,7 +130,7 @@ class WordlistAnalyzer:
         ret += "\nCharacters' repartition :"
 
         for k in infos['dct_occ']:
-            ret += "\n\t'{}' : {} ;".format(k, space_b(infos['dct_occ'][k]))
+            ret += "\n\t'{}': {} ;".format(k, space_b(infos['dct_occ'][k]))
 
         ret = ret[:-2] + '.' #replace ' ;' by '.' at the last line.
 
@@ -143,6 +159,48 @@ class WordlistAnalyzer:
 
         elif self.interface == 'console':
             pb = ConsoleProgressBar()
+            
+        lib_C = True
+        try:
+            if platform.system() == 'Windows':
+                dll_fn = 'wordlist_analyzer_win.dll'
+            else:
+                dll_fn = 'wordlist_analyzer_unix.dll'
+       
+            lib = ctypes.cdll.LoadLibrary('{}/modules/wordlists/library/{}'.format(os.getcwd(), dll_fn))
+            f_ana = lib.analyzeWordlist
+            f_ana.argtypes = (ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int)
+            f_ana.restype = ctypes.POINTER(ctypes.c_ulonglong)
+            
+            if self.encod == 'utf-8':
+                encoding = 1
+            else:
+                encoding = 0
+
+            L = f_ana(os.path.abspath(self.fn).encode('ascii'), "\n".encode('ascii'), encoding)
+            if L[0] != 0:
+                if L[0] == 1: # File not found
+                    return -1
+                else:
+                    return -3 # Other error, access denied for example
+            
+            D = {}
+            D["Size in octets"] = L[2]
+            D["Number of characters"] = L[3]
+            D["Number of different characters (without separators)"] = L[4]
+            D["Code point minimum"] = L[5]
+            D["Code point maximum"] = L[6]
+            D["Number of words"] = L[7]
+            D["Minimum length"] = L[8]
+            D["Maximum length"] = L[9]
+            D["Average length"] = L[10] / 1000
+            if L[11] != 2**64 -1:
+                D["Median length"] = L[11] / 10
+            else:
+                D["Median length"] = 'Not calculated'
+           
+        except:
+            lib_C = False
 
 
         md = ('r', 'rb')[self.binary]
@@ -165,47 +223,74 @@ class WordlistAnalyzer:
         mtime = f_info.h_dates('m')
         atime = f_info.h_dates('a')
         ctime = f_info.h_dates('c')
+        
+        
+        if not lib_C:
+   
+            nb_lines = self.count_lines()
 
-        nb_lines = self.count_lines()
+            with open(self.fn, mode=md, encoding=self.encod) as f:
+                for j, line in enumerate(f):
 
+                    if self.binary:
+                        line = line.decode(errors='ignore')
 
-        with open(self.fn, mode=md, encoding=self.encod) as f:
-            for j, line in enumerate(f):
+                    line = line.strip('\r\n')
 
-                if self.binary:
-                    line = line.decode(errors='ignore')
+                    #------number of lines
+                    i += 1
 
-                line = line.strip('\r\n')
+                    #------occ
+                    for char in line:
+                        try:
+                            dct_occ[char] += 1
 
-                #------number of lines
-                i += 1
-
-                #------occ
-                for char in line:
-                    try:
-                        dct_occ[char] += 1
-
-                    except KeyError:
-                        dct_occ[char] = 1
-
-
-                #------min
-                if len(line) < mn:
-                    mn = len(line)
-
-                #------max
-                if len(line) > mx:
-                    mx = len(line)
+                        except KeyError:
+                            dct_occ[char] = 1
 
 
-                #------progress bar
-                if j % 2**10 == 0:
-                    if self.interface in ('gui', 'console'):
-                        pb.set(i, nb_lines)
+                    #------min
+                    if len(line) < mn:
+                        mn = len(line)
+
+                    #------max
+                    if len(line) > mx:
+                        mx = len(line)
 
 
-        lst_alf = walf(list(dct_occ.keys()))
-        nb_occ = len(list(dct_occ.keys()))
+                    #------progress bar
+                    if j % 2**10 == 0:
+                        if self.interface in ('gui', 'console'):
+                            pb.set(i, nb_lines)
+
+            lst_alf = walf(list(dct_occ.keys()))
+            nb_occ = len(list(dct_occ.keys()))
+        
+        else:
+    
+            mn = D["Minimum length"]
+            mx = D["Maximum length"]
+            nb_lines = D["Number of words"]
+            for k in range(268 + D["Code point minimum"], 268 + D["Code point maximum"] + 1):
+                if L[k] != 0:
+                    dct_occ[chr(k-268)] = L[k]
+            lst_alf = walf(list(dct_occ.keys()))
+            nb_occ = D["Number of different characters (without separators)"]
+            
+            if mx > 254:
+                mx2 = 254
+            else:
+                mx2 = mx
+                
+            W = {}
+           
+            for k in range(12 + mn, 12 + mx2 + 1):
+                if L[k] != 0:
+                    W[k-12] = L[k]
+            
+            if L[267] != 0:
+                W['>254'] = L[267]
+            
 
         t_end = dt.now()
         self.show_time(t_end - t0)
@@ -224,16 +309,26 @@ class WordlistAnalyzer:
 
 
         infos = {
-            'dct_occ' : dct_occ,        #Counted occurences (dict) ;
-            'lst_alf' : lst_alf[1],     #Tuple of the alphabets ;
-            'alf_lth' : lst_alf[0],     #Length of the alphabets ;
-            'nb_occ' : nb_occ,          #Number of differents characters ;
-            'nb_lines' : nb_lines,      #Number of lines ;
-            'min' : mn,                 #Smaller line length ;
-            'max' : mx                  #Longer line length.
+            'dct_occ': dct_occ,        #Counted occurences (dict) ;
+            'lst_alf': lst_alf[1],     #Tuple of the alphabets ;
+            'alf_lth': lst_alf[0],     #Length of the alphabets ;
+            'nb_occ': nb_occ,          #Number of differents characters ;
+            'nb_lines': nb_lines,      #Number of lines ;
+            'min': mn,                 #Smaller line length ;
+            'max': mx                  #Longer line length.
         }
+        
+        infoLibC = {}
+        
+        if lib_C:
+            infosLibC = {
+                'nb_car': D["Number of characters"],
+                'av_len': D["Average length"],
+                'med_len': D["Median length"],
+                'dct_len_w': W  #Repartition of word length
+            }
 
-        ret = (size_b, size_d), (mtime, atime, ctime), infos
+        ret = (size_b, size_d), (mtime, atime, ctime), infos, (lib_C, infosLibC)
 
         self.analysis = ret
         return ret
