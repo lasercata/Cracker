@@ -24,7 +24,7 @@ Version of RSA : 3.0
 Version of BaseCipher : 1.0
 
 Version of wordlist_generator : 7.0
-Version of wordlist_analyzer : 3.0
+Version of wordlist_analyzer : 3.1
 Version of Prima : 3.0
 Version of Base convert : 3.0
 Version of P@ssw0rd_Test0r : 1.0,1
