@@ -1,0 +1,30 @@
+Description of the dll wordlist_analyzer
+
+functions :
+
+POINTER(c_ulonglong) wordlistAnalyze(c_char_p(filename), c_char_p(separators), c_int(encoding));
+	- Return a POINTER(c_ulonglong), converted to a list in python
+
+	- filename is the path of the file. The string has to be encoded in ascii (ex : "C:\\Users\\test.txt".encode('ascii'))
+	- separators is a string composed of the characters which delimit the words (ex : b'\n'). The string has to be encoded in ascii.
+	- encoding is a number. Its value is 0 if the file is encoded with an one-octet encoding, else 1 for utf-8.
+
+Description of the returned array :
+Indexes			Value			Description
+0			Error return		1 if file not found, 2 if denied access, 3 if allocation 1 error, 4 if allocation 2 error.
+1			Array length		Total length of the returned array
+2			Size file		Size of the file in octets
+3			n_char			Number of characters in the file (with separators)
+4			n_diff_char		Number of different characters in the file (without separators)
+5			n_words			Number of words in the wordlist
+6			min_code_point		Minimum ascii or unicode code point in the file
+7			max_code_point		Maximum ascii or unicode code point in the file
+8			l_smaller_word		Length of the smaller word in the wordlist
+9			l_bigger_word		Length of the bigger word in the wordlist
+10			average_length		Average length * 1000 of a word in the wordlist
+11			median_length		Median length * 10 of a word in the wordlist. If a word has a length > 254, the median is not calculated and its value is -1 (2**64-1)
+12-266	(m)		length_table		In every case n, there is the number of words of length m-12
+267		number_words > 254	Number of words whose length is greater than 254
+268-point_code_max	occurences_table	In every case n, there is the number of characters whose code is n - 268
+
+by Elerias
