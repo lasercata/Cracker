@@ -3,8 +3,8 @@
 '''Module incuding b_cvrt fonctions'''
 
 b_cvrt__auth = 'Lasercata'
-b_cvrt__last_update = '26.06.2020'
-b_cvrt__version = '3.0'
+b_cvrt__last_update = '19.09.2020'
+b_cvrt__version = '3.1'
 
 ##-import
 #---------Cracker modules
@@ -15,8 +15,14 @@ from modules.base.base_functions import use_menu
 from math import log
 
 ##-ini
-alf = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-alf_36 = '0123456789abcdefghijklmnopqrstuvwxyz'
+alf_base16 = '0123456789ABCDEF'
+alf_base32 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
+alf_base32hex = '0123456789ABCDEFGHIJKLMNOPQRSTUV'
+alf_base36 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+alf_base62 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+alf_base64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+alf_140 = r'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZαβγδεζηθικλμνξοπρςστυφχψωϊϋόύώϐϑϒϓϔϕϖϗϘϙϚϛϜϝϞϟϠϡϢϣϤϥϦϧϨϩϪϫϬϭϮϯϰϱϲϳϴϵ϶ϷϸϹϺϻϼϽϾϿ'
+alf = alf_140
 
 ##-functions
 #---------n_add
@@ -278,10 +284,10 @@ class BaseConvert:
     def __repr__(self):
         '''Represent the BaseConvert object.'''
 
-        return 'BaseConvert("{}", "{}"'.format(self.n, self.nb)
+        return 'BaseConvert("{}", "{}")'.format(self.n, self.nb)
 
 
-    def convert(self, b, NEG=False):
+    def convert(self, b, NEG=False, alf_b=""):
         '''Function which allow to choose the good funtion to convert.
 
         NEG : Should be True or False. Indicate if the number is encoded using the two's complement.
@@ -329,7 +335,7 @@ class BaseConvert:
 
         elif NEG and self.FL and b == 2:
             if number_fl.floating(b, True):
-                return 'Approxiamte value : ' + space_b(float(self.b_cvrt_neg(b)) + number_fl.floating(b), b)
+                return 'Approximate value : ' + space_b(float(self.b_cvrt_neg(b)) + number_fl.floating(b), b)
 
             else:
                 return space_b(float(self.b_cvrt_neg(b)) + number_fl.floating(b), b)
@@ -337,7 +343,7 @@ class BaseConvert:
 
         elif NEG and self.FL and b == 10:
             if number_fl.floating(b, True):
-                return 'Approxiamte value : ' + space_b(float(number_int.b_cvrt_neg(b)) - number_fl.floating(b), b)
+                return 'Approximate value : ' + space_b(float(number_int.b_cvrt_neg(b)) - number_fl.floating(b), b)
 
             else:
                 return space_b(float(number_int.b_cvrt_neg(b)) - number_fl.floating(b), b)
@@ -349,7 +355,7 @@ class BaseConvert:
 
         elif self.FL:
             if number_fl.floating(b, True):
-                return 'Approxiamte value : ' + space_b(self.floating(b), b)
+                return 'Approximate value : ' + space_b(self.floating(b), b)
 
             else:
                 return space_b(self.floating(b), b)
@@ -357,25 +363,29 @@ class BaseConvert:
 
         else:
             if neg:
-                return '-' + space_b(self.cvrt(b), b)
+                return '-' + space_b(self.cvrt(b, alf_b), b)
 
             else:
-                return space_b(self.cvrt(b), b)
+                return space_b(self.cvrt(b, alf_b), b)
 
 
     #---------b_cvrt
-    def cvrt(self, b):
+    def cvrt(self, b, alf_b=""):
         '''
         Function which return the number n, in base nb, converted to the base b.
 
         b : return's base.
+        alf_b : the alphabet of the return's base.
 
         Return n, in string.
         '''
+        
+        if alf_b == '':
+            alf_b = self.alf
 
-        if b > len(self.alf):
+        if b > len(alf_b):
             raise ValueError('Impossible to convert in a base bigger than ' + \
-                str(len(self.alf)) + ' (the lenght of the alphabet) !')
+                str(len(alf_b)) + ' (the lenght of the alphabet) !')
 
         if self.neg:
             n = str(self.n)[1:]
@@ -385,7 +395,7 @@ class BaseConvert:
 
 
         #---convert in base 10
-        if self.nb != 10:
+        if self.nb != 10 or self.alf[0:10] != '0123456789':
             n_inv = n[::-1] #Reverse n
             lst_10 = []
 
@@ -422,7 +432,7 @@ class BaseConvert:
 
         ret = ''
         for k in lst_b:
-            ret += str(self.alf[k])
+            ret += str(alf_b[k])
 
 
         #---return
