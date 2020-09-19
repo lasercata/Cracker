@@ -4,8 +4,8 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '31.08.2020'
-Cracker_gui__version = '1.0'
+Cracker_gui__last_update = '19.09.2020'
+Cracker_gui__version = '1.1'
 
 
 ##-import/ini
@@ -1088,7 +1088,7 @@ class CrackerGui(QMainWindow):
             self.b_cvrt_b.setMaximum(len(alf))
 
             if len(alf) > 36:
-                if alf[:36] != b_cvrt_alf_list['alf_36']:
+                if alf[:36] != b_cvrt_alf_list['alf_base36']:
                     self.b_cvrt_n_big_chk.setDisabled(True)
                     self.b_cvrt_n_big_chk.setChecked(True)
                     chk_big_n()
@@ -1149,11 +1149,10 @@ class CrackerGui(QMainWindow):
         self.b_cvrt_nb = QSpinBox()
         self.b_cvrt_nb.setMaximumSize(55, 35)
         self.b_cvrt_nb.setMinimum(1)
-        self.b_cvrt_nb.setMaximum(62)
+        self.b_cvrt_nb.setMaximum(140)
         self.b_cvrt_nb.setValue(10)
         self.b_cvrt_nb.valueChanged.connect(chk_nb)
         nb_alf_lay.addWidget(self.b_cvrt_nb)
-
         nb_alf_lay.addWidget(QLabel(' '*5))
 
         #alf (in the same row that nb, but align right)
@@ -1162,14 +1161,26 @@ class CrackerGui(QMainWindow):
         self.b_cvrt_opt_alf.activated[str].connect(chk_alf)
         self.b_cvrt_opt_alf.addItems([alf for alf in list(b_cvrt_alf_list.values())])
         nb_alf_lay.addWidget(self.b_cvrt_opt_alf, Qt.AlignRight)
+        
+        #-b and alf_b
+        nb_alf_b_lay = QHBoxLayout()
+        nb_lay.addRow("Return base :", nb_alf_b_lay)
 
         #-b
         self.b_cvrt_b = QSpinBox()
         self.b_cvrt_b.setMaximumSize(55, 35)
         self.b_cvrt_b.setMinimum(1)
-        self.b_cvrt_b.setMaximum(62)
-        self.b_cvrt_b.setValue(16)
-        nb_lay.addRow("Return base :", self.b_cvrt_b)
+        self.b_cvrt_b.setMaximum(140)
+        self.b_cvrt_b.setValue(10)
+        nb_alf_b_lay.addWidget(self.b_cvrt_b)
+        nb_alf_b_lay.addWidget(QLabel(' '*5))
+        
+        #alf_b
+        self.b_cvrt_opt_alf_b = QComboBox()
+        self.b_cvrt_opt_alf_b.setEditable(True)
+        self.b_cvrt_opt_alf_b.activated[str].connect(chk_alf)
+        self.b_cvrt_opt_alf_b.addItems([alf for alf in list(b_cvrt_alf_list.values())])
+        nb_alf_b_lay.addWidget(self.b_cvrt_opt_alf_b, Qt.AlignRight)
 
         #---check boxes
         chk_box_lay = QVBoxLayout()
@@ -1199,7 +1210,7 @@ class CrackerGui(QMainWindow):
 
         #------connection
         use_b_cvrt = UseBaseConvertTab(self.b_cvrt_n, self.b_cvrt_n_big, \
-            self.b_cvrt_nb, self.b_cvrt_b, self.b_cvrt_opt_alf, self.b_cvrt_2_2, \
+            self.b_cvrt_nb, self.b_cvrt_b, self.b_cvrt_opt_alf, self.b_cvrt_opt_alf_b, self.b_cvrt_2_2, \
             self.b_cvrt_ieee754, self.b_cvrt_n_big_chk, self.b_cvrt_chk_auto, self.b_cvrt_ret)
 
         self.b_cvrt_bt_c.clicked.connect(lambda: use_b_cvrt.convert(sender='bt'))
@@ -1211,6 +1222,7 @@ class CrackerGui(QMainWindow):
         self.b_cvrt_b.valueChanged.connect(lambda: use_b_cvrt.convert())
 
         self.b_cvrt_opt_alf.currentIndexChanged.connect(lambda: use_b_cvrt.convert())
+        self.b_cvrt_opt_alf_b.currentIndexChanged.connect(lambda: use_b_cvrt.convert())
 
         self.b_cvrt_2_2.toggled.connect(lambda: use_b_cvrt.convert())
         self.b_cvrt_ieee754.toggled.connect(lambda: use_b_cvrt.convert())
@@ -3202,7 +3214,7 @@ class UsePrimaTab:
 class UseBaseConvertTab:
     '''Class which allow to use the Base convert tab.'''
 
-    def __init__(self, n, n_big, nb, b, alf, chk_2_std, chk_ieee754, chk_n_big, chk_auto, ret):
+    def __init__(self, n, n_big, nb, b, alf, alf_b, chk_2_std, chk_ieee754, chk_n_big, chk_auto, ret):
         '''Create the UseBaseConvertTab object.'''
 
         self.n = n
@@ -3210,6 +3222,7 @@ class UseBaseConvertTab:
         self.nb = nb
         self.b = b
         self.alf = alf
+        self.alf_b = alf_b
         self.chk_2_std = chk_2_std
         self.chk_ieee754 = chk_ieee754
         self.chk_n_big = chk_n_big
@@ -3254,7 +3267,7 @@ class UseBaseConvertTab:
 
         #---convert
         try:
-            ret = number.convert(b, self.chk_2_std.isChecked())
+            ret = number.convert(b, self.chk_2_std.isChecked(), self.alf_b.currentText())
 
         except ValueError as err:
             QMessageBox.critical(None, '!!! Number error !!!', '<h2>' + str(err) + '</h2>')
@@ -3299,5 +3312,4 @@ if __name__ == '__main__':
 
     #------Launch the GUI
     CrackerGui.use()
-
 
