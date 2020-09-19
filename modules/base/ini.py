@@ -4,8 +4,8 @@
 '''Initiate Cracker's needed data.'''
 
 ini__auth = 'Lasercata'
-ini__last_update = '31.08.2020'
-ini__version = '1.0'
+ini__last_update = '19.09.2020'
+ini__version = '1.1'
 
 ##-import
 #---------packages
@@ -168,9 +168,13 @@ prima_algo_list = {
     'Sieves' : ('Sieve of Erathostenes', 'Segmented sieve of Erathostenes')
 }
 
-
 b_cvrt_alf_list = {
-    'alf_62' : '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-    'alf_36' : '0123456789abcdefghijklmnopqrstuvwxyz',
-    'alf_140' : r'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZαβγδεζηθικλμνξοπρςστυφχψωϊϋόύώϐϑϒϓϔϕϖϗϘϙϚϛϜϝϞϟϠϡϢϣϤϥϦϧϨϩϪϫϬϭϮϯϰϱϲϳϴϵ϶ϷϸϹϺϻϼϽϾϿ'
+    'alf_base10': '0123456789',
+    'alf_base16': '0123456789ABCDEF',
+    'alf_base32': 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567',
+    'alf_base32hex': '0123456789ABCDEFGHIJKLMNOPQRSTUV',
+    'alf_base36': '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+    'alf_base62': 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
+    'alf_base64': 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+    'alf_140': r'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZαβγδεζηθικλμνξοπρςστυφχψωϊϋόύώϐϑϒϓϔϕϖϗϘϙϚϛϜϝϞϟϠϡϢϣϤϥϦϧϨϩϪϫϬϭϮϯϰϱϲϳϴϵ϶ϷϸϹϺϻϼϽϾϿ'
 }
