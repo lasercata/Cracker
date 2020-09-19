@@ -16,6 +16,3 @@ Cracker_console only :
                                                         |                                                  |
                                                         An error occurred : name 'NewLine' is not defined.
                                                         Back menu ..." ;
-
-Cracker_gui and Cracker_console :
-  - Config error in b_cvrt : Can't convert a number beyond base 62 ;
