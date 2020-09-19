@@ -4,8 +4,8 @@
 '''Launch Cracker with the menu console interface.'''
 
 Cracker_console__auth = 'Lasercata'
-Cracker_console__last_update = '31.08.2020'
-Cracker_console__version = '1.0'
+Cracker_console__last_update = '19.09.2020'
+Cracker_console__version = '1.1'
 
 
 ##-import/ini
@@ -1682,10 +1682,40 @@ def use_b_cvrt():
             nb = cl_inp("Enter number's base :")
             if nb.lower() != 'ieee754':
                 nb = int(nb)
+            
+            alf_nb = cl_inp('Alphabet (let empty to use normal) : ')
+            if alf_nb == "":
+                if nb <= 36 and nb != 32:
+                    alf_nb = b_cvrt_alf_list['alf_base36']
+                elif nb == 32:
+                    r = inp_lst('Base32 hex ? (y/n) ', ('y', 'yes', 'Yes', 'YES', 'n', 'no', 'No', 'NO'))
+                    if r in ('y', 'yes', 'Yes', 'YES'):
+                        alf_nb = b_cvrt_alf_list['alf_base32hex']
+                    else:
+                        alf_nb = b_cvrt_alf_list['alf_base32']
+                elif nb <= 64:
+                    alf_nb = b_cvrt_alf_list['alf_base64']
+                else:
+                    alf_nb = b_cvrt_alf_list['alf_base140']
 
             b = cl_inp("Enter return's base :")
             if b.lower() != 'ieee754':
                 b = int(b)
+            
+            alf_b = cl_inp('Alphabet (let empty to use normal) : ')
+            if alf_b == "":
+                if b <= 36 and b != 32:
+                    alf_b = b_cvrt_alf_list['alf_base36']
+                elif b == 32:
+                    r = inp_lst('Base32 hex ? (y/n) ', ('y', 'yes', 'Yes', 'YES', 'n', 'no', 'No', 'NO'))
+                    if r in ('y', 'yes', 'Yes', 'YES'):
+                        alf_b = b_cvrt_alf_list['alf_base32hex']
+                    else:
+                        alf_b = b_cvrt_alf_list['alf_base32']
+                elif b <= 64:
+                    alf_b = b_cvrt_alf_list['alf_base64']
+                else:
+                    alf_b = b_cvrt_alf_list['alf_base140']
 
         except ValueError:
             cl_out(c_error, 'The value must be an interger !!!')
@@ -1695,7 +1725,7 @@ def use_b_cvrt():
 
 
     #---create number
-    number = BaseConvert(n, nb)
+    number = BaseConvert(n, nb, alf=alf_nb)
 
 
     NEG = False
@@ -1715,7 +1745,7 @@ def use_b_cvrt():
             NEG = True
 
 
-    cl_out(c_output, number.convert(b, NEG=NEG))
+    cl_out(c_output, number.convert(b, NEG=NEG, alf_b=alf_b))
     pause()
 
 
