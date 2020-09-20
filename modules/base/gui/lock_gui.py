@@ -26,7 +26,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QComboBox, QStyleFactory
 ##-ini
 try:
     with open('version.txt', 'r') as f:
-        cracker_version = f.read()
+        cracker_version_0 = f.read()
     cracker_version = ""
     for k in cracker_version_0:
         if not ord(k) in (10, 13):
