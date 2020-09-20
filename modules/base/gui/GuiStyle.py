@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 GuiStyle__auth = 'Lasercata'
-GuiStyle__last_update = '26.05.2020'
-GuiStyle__version = '1.0'
+GuiStyle__last_update = '20.09.2020'
+GuiStyle__version = '1.0.1'
 
 ##-imports
 from PyQt5.QtCore import QSize, Qt
@@ -93,7 +93,8 @@ class GuiStyle:
 
         if r: # Recursive, to run two time this because style don't apply well else.
             self.set_style(style_name, std_palette, False)
-
+            
+        self.main_style_name = style_name
 
         if style_name == 'Dark fusion':
             palette = self.dark_style()
