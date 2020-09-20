@@ -4,8 +4,8 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '19.09.2020'
-Cracker_gui__version = '1.1'
+Cracker_gui__last_update = '20.09.2020'
+Cracker_gui__version = '1.1.1'
 
 
 ##-import/ini
@@ -1333,6 +1333,7 @@ class CrackerGui(QMainWindow):
         self.stng_main_style_opt.activated[str].connect(
             lambda s: self.app_style.set_style(s, self.main_style_std_chkb.isChecked())
         )
+        self.stng_main_style_opt.setCurrentText(self.app_style.main_style_name)
         main_style_lay.addWidget(self.stng_main_style_opt)
 
         #-check box
