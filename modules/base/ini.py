@@ -4,8 +4,8 @@
 '''Initiate Cracker's needed data.'''
 
 ini__auth = 'Lasercata'
-ini__last_update = '19.09.2020'
-ini__version = '1.1.1'
+ini__last_update = '20.09.2020'
+ini__version = '1.1.2'
 
 ##-import
 #---------packages
@@ -71,7 +71,11 @@ except ModuleNotFoundError as ept:
 #---------version
 try:
     with open('version.txt', 'r') as f:
-        cracker_version = f.read()
+        cracker_version_0 = f.read()
+    cracker_version = ""
+    for k in cracker_version_0:
+        if not ord(k) in (10, 13):
+            cracker_version += k
 
 except FileNotFoundError:
     cl_out(c_error, 'The file "version.txt" was not found. A version will be set but can be wrong.')
