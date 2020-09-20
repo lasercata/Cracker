@@ -1,7 +1,7 @@
 List of errors and bugs :
 
 Cracker_gui only :
-  - Display error : At the end of the app title, there is a strange non-ascii character ;
+/
   
 Cracker_console only :
   - Reading file error in brute force crack Vigenere :  "Enter the file to read's name :
@@ -16,3 +16,6 @@ Cracker_console only :
                                                         |                                                  |
                                                         An error occurred : name 'NewLine' is not defined.
                                                         Back menu ..." ;
+                                                       
+Cracker_console and Cracker_gui :
+/
