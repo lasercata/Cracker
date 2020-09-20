@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 lock_gui__auth = 'lasercata'
-lock_gui__ver = '4.0'
-lock_gui__last_update = '19.08.2020'
+lock_gui__ver = '4.0.1'
+lock_gui__last_update = '20.09.2020'
 
 ##-import
 import sys
@@ -27,6 +27,10 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QComboBox, QStyleFactory
 try:
     with open('version.txt', 'r') as f:
         cracker_version = f.read()
+    cracker_version = ""
+    for k in cracker_version_0:
+        if not ord(k) in (10, 13):
+            cracker_version += k
 
 except FileNotFoundError:
     cl_out(c_error, 'The file "version.txt" was not found. A version will be set but can be wrong.')
