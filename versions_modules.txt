@@ -1,16 +1,16 @@
-Version of Cracker_gui : 1.1
+Version of Cracker_gui : 1.1.1
 Version of Cracker_console : 1.1
 
-Version of base_functions : 2.3,1
-Version of ini : 1.1.1
+Version of base_functions : 2.3.1
+Version of ini : 1.1.2
 Version of glb : 1.0
 Version of matrix : 1.1
 Version of progress_bars : 1.0
 
 Version of color : 2.2
 
-Version of GuiStyle : 1.0
-Version of lock_gui : 4.0
+Version of GuiStyle : 1.0.1
+Version of lock_gui : 4.0.1
 Version of Popup : 1.0
 Version of TextEditor : 1.0
 
@@ -19,7 +19,7 @@ Version of Crack : 1.0
 Version of Crypta : 3.1
 Version of Hasher : 4.0
 Version of KRIS : 1.1
-Version of AES : 2.0,1
+Version of AES : 2.0.1
 Version of RSA : 3.0
 Version of BaseCipher : 1.0
 
@@ -27,4 +27,4 @@ Version of wordlist_generator : 7.0
 Version of wordlist_analyzer : 3.1
 Version of Prima : 3.0
 Version of Base convert : 3.1
-Version of P@ssw0rd_Test0r : 1.0,1
+Version of P@ssw0rd_Test0r : 1.0.1
