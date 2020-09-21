@@ -4,18 +4,7 @@ Cracker_gui only :
 /
   
 Cracker_console only :
-  - Reading file error in brute force crack Vigenere :  "Enter the file to read's name :
-                                                        >test.txt
-
-                                                        Generated words' length :
-                                                        >1
-
-                                                        Which alphabet choose ? 
-                                                        (a-z ; 0-9 ; a-z, 0-9 ; A-Z ; A-Z, 0-9 ; a-z, A-Z ; a-z, A-Z, 0-9 ; 0-1 ; hex (0-9, A-F) ; spe ; all (a-z, A-Z, 0-9, spe) ; write) :
-                                                        >a-z
-                                                        |                                                  |
-                                                        An error occurred : name 'NewLine' is not defined.
-                                                        Back menu ..." ;
+/
                                                        
 Cracker_console and Cracker_gui :
 /
