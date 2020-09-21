@@ -14,7 +14,7 @@ Version of lock_gui : 4.0.1
 Version of Popup : 1.0
 Version of TextEditor : 1.0
 
-Version of Crack : 1.0
+Version of Crack : 1.0.1
 
 Version of Crypta : 3.1
 Version of Hasher : 4.0
