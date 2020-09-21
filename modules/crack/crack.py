@@ -7,9 +7,8 @@ crack__last_update = '21.09.2020'
 
 ##-import
 #---------Cracker's modules
-from modules.base.base_functions import NewLine
 from modules.base.progress_bars import *
-from modules.base.base_functions import chd, list_files
+from modules.base.base_functions import chd, list_files, NewLine
 from modules.base.console.color import color, cl_inp, cl_out, c_error, c_wrdlt, c_output, c_prog, c_succes
 
 #---------Packages
