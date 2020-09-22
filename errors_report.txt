@@ -1,10 +1,26 @@
 List of errors and bugs :
 
 Cracker_gui only :
-/
+    - Problem for monoalphabetic substitutions :
+    Error in monoalphabetic substitution :
+"Traceback (most recent call last):
+  File "Cracker_gui.py", line 806, in <lambda>
+    self.cipher_bt_dec.clicked.connect(lambda: use_ciph.decrypt())
+  File "Cracker_gui.py", line 2937, in decrypt
+    msg_d = C.decrypt(txt)
+  File "/home/elerias/Documents/Cracker/modules/ciphers/crypta/crypta.py", line 2133, in decrypt
+    msg_c += k
+UnboundLocalError: local variable 'msg_c' referenced before assignment
+Abandon"
+    - Bad keys for Fleissner cipher
   
 Cracker_console only :
 /
                                                        
 Cracker_console and Cracker_gui :
-/
+    - Problem in ciphers :
+        * Morse (/ between words have disappeared)
+        * Polybius square (decrypt(encrypt(text)) != text) 
+        * Hill (Problem in det)
+        * ADFGX (decrypt(encrypt(text)) != text) 
+        * ADFGVX (decrypt(encrypt(text)) != text) 
