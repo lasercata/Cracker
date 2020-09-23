@@ -3,8 +3,8 @@
 """Module dealing with prime numbers."""
 
 prima__auth = 'Elerias'
-prima__last_update = '30.04.2020'
-prima__version = '3.0'
+prima__last_update = '23.09.2020'
+prima__version = '3.1'
 
 
 ##-import
@@ -12,7 +12,6 @@ prima__version = '3.0'
 import math
 from random import randint
 from datetime import datetime
-from tkinter import *
 from time import time
 from os import getcwd, chdir
 
@@ -43,9 +42,10 @@ def isPerfectPower(n: int) -> (bool, int, int):
             return (True, int(a), k)
     return (False, n, 1)
 
+
 ##-factorization algorithms
 
-    ##-Trial divisions
+    ##-trial divisions
 
 def trial_division(n: int) -> (bool, list):
     """Decompose the integer n as a product of prime factors by trial division method. Here, the divisors are tested until sqrt(n) and only 2 and odd numbers are tested."""
@@ -206,8 +206,6 @@ def pollard_rho_decomposition(n: int, primality_test=True) -> (bool, list):
         factors.append(n)
     return (len(factors) == 1, factors)
 
-##-todo
-
 def pollard_pm1(n: int) -> (bool, list) :
     """Find a prime factor of n with the pollard's p - 1 algorithm."""
     if type(n) is not int:
@@ -254,7 +252,33 @@ def pollard_pm1_decomposition(n: int, primality_test=True) -> (bool, list) :
         factors.append(n)
     return (len(factors) == 1, factors)
 
+
 ##-Probabilistic primalities test
+
+# isSurelyPrime from Prime.isprime RSA by Lasercata
+def isSurelyPrime(n):
+    """
+    Check if n is prime. Uses Miller Rabin test.
+    If n is prime, return True ;
+    return False else.
+    """
+
+    if n == 1 or n % 2 == 0 or n % 3 == 0 or n % 5 == 0 or n % 7 == 0:
+        return False
+
+    if n in (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41):
+        return True
+
+    elif n in (0, 1, 4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20):
+        return False
+
+    if n > 1027:
+        for d in range(7, 1028, 30) :
+            if n % d == 0 or n % (d+4) == 0 or n % (d+6) == 0 or n % (d+10) == 0 or n % (d+12) == 0 or n % (d+16) == 0 or n % (d+22) == 0 or n % (d+24) == 0:
+                return False
+
+    return miller_rabin(n, 15)
+
 
 def fermat_test(n) :
     """Use the Fermat's test a**(p-1) - 1 = 0 if p is prime for k in 2, 3, 5, 7."""
@@ -278,7 +302,14 @@ def miller_rabin_witness(a, d, s, n):
     return True
 
 def miller_rabin(n, k=15) :
-    """Return the primality of n using the probabilistic test of primality of Miller-Rabin. k is the number of the loops. The possible decreases in averages of 75 % by unity if k."""
+    # Description from Prime from RSA by Elerias
+    """
+    Return the primality of n using the probabilistic test of primality of Miller-Rabin. k is the number of the loops.
+    The possible decreases in averages of 75 % by unity if k.
+
+    n : number to determine the primality ;
+    k : number of tests (Error = 0.25 ^ number of tests).
+    """
 
     if n in (0, 1):
         return False
@@ -294,6 +325,7 @@ def miller_rabin(n, k=15) :
         if miller_rabin_witness(a, d, s, n):
             return False
     return True
+
 
 ##-sieves
 
@@ -332,10 +364,10 @@ def segmentation_erathostenes_sieve(end: int) -> list:
         i = i + s
     return P+P2
 
+
 ##-using
 
-
-##-console
+    ##-console
 
 def parser_use(n, pb=False):
     """Use prima functions with the parser console mode. Lasercata"""
@@ -501,9 +533,3 @@ def use(cracker=cracker):
             if cracker: color(c_wrdlt)
             input('---End---')
             if cracker: color(c_prog)
-
-
-##-tkinter
-
-class use_gui(Frame):
-    """"""
