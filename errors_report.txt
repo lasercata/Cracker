@@ -21,6 +21,5 @@ Cracker_console and Cracker_gui :
     - Problem in ciphers :
         * Morse (/ between words have disappeared)
         * Polybius square (decrypt(encrypt(text)) != text) 
-        * Hill (Problem in det)
         * ADFGX (decrypt(encrypt(text)) != text) 
         * ADFGVX (decrypt(encrypt(text)) != text) 
