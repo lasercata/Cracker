@@ -65,6 +65,7 @@ chdir(path)
 
 
 alf_az = 'abcdefghijklmnopqrstuvwxyz'
+alf_az09 = alf_az + '0123456789'
 alf_AZ = alf_az.upper()
 alf_azAZ = alf_az + alf_AZ
 
