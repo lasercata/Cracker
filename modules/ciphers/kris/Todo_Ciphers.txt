@@ -1,13 +1,5 @@
 RSA :
-    - replace pgcd by math.gcd ;
-    - replace expmod(a, e, n) by pow(a, e, n) ;
-    
-    - Improve gen_p_q(size) : RSA.get_p_q entre 2^(size // 2) et 2^(size //2 + 1) --- done
-
-    
-    - Re-write the whole prog using the power of the classes (__init__, self) ; --- done
-
+/
 
 KRIS :
-    - Re-write the whole prog ; --- done
-    - Change "CryptoSys" to "KRIS" --- done.
+/
