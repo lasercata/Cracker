@@ -20,7 +20,7 @@ for k in range(3):
     try:
         from modules.prima import prima
         from modules.base.matrix import *
-        from modules.crypta import AES
+        from modules.ciphers.kris import AES
         from modules.base.arithmetic import mult_inverse
     except:
         pass
