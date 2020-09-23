@@ -182,3 +182,9 @@ b_cvrt_alf_list = {
     'alf_base64': 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
     'alf_base140': r'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZαβγδεζηθικλμνξοπρςστυφχψωϊϋόύώϐϑϒϓϔϕϖϗϘϙϚϛϜϝϞϟϠϡϢϣϤϥϦϧϨϩϪϫϬϭϮϯϰϱϲϳϴϵ϶ϷϸϹϺϻϼϽϾϿ'
 }
+
+crypta_alf_list = {
+    'alf_25': crypta.alf_25,
+    'alf_az': crypta.alf_az,
+    'alf_az09': crypta.alf_az09
+}
