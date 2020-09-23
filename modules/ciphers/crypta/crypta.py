@@ -1589,7 +1589,9 @@ class Avgad(BaseCipher):
 
 
 class Caesar(BaseCipher):
-    """Defining the Caesar cipher."""
+    """
+    Caesar cipher is one of the most simple and famous ciphers. Its name comes from Julius Caesar who used it for his correspondence. The operation of Caesar cipher involves shifting of the alphabet's letters. The key is then the difference of place between an encrypted letter and a plain letter. For example, for a shift of value 3, A becomes D, T becomes W and Y becomes B. To decrypt, we do the inverse operation. Of course, that cipher is very weak and can be cracked easily by brute force.
+    """
     
     def __init__(self, key=None, alf=alf_az, ignore=False, verbose=True, interface=None):
         """
