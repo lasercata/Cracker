@@ -543,7 +543,9 @@ def make_ciph(ciph, key=None, key2=None, alf=alf_az, ignore=False, verbose=True,
 #todo: add Binary code.
 
 class Morse(BaseCipher):
-    """Define the Morse code."""
+    """
+    Morse code is a code converting text into a sequence of signals of two different durations : dots (.) and dashes (-). A dot is a brief signal and a dash is a long signal. Its name comes from Samuel Morse, the inventor of telegraph. It was very used because telegrams were encoding in Morse.
+    """
     
     def __init__(self, a='.', b='-', c_sep=' ', w_sep='/', verbose=True, interface=None):
         """Initiate the Morse code.
