@@ -2,62 +2,9 @@
 # -*- coding: utf-8 -*-
 """Crypta is a cryptology program including cryptography and cryptanalysis functions."""
 
-#auth = 'Elerias'
-#date = '16.05.2020'
-#version = '3.0'
-
 crypta__auth = 'Elerias'
-crypta__last_update = '31.08.2020'
+crypta__last_update = '23.09.2020'
 crypta__ver = '3.1'
-
-update_notes = """
-Crypta v3.0      16.05.2020
-Improvements (from 2.9) :
-    - New ciphers :
-        * Autoclave cipher
-        * Gronsfeld cipher
-        * Tritheme cipher
-        * UBCHI cipher
-        * ABC cipher
-        * Beaufort cipher
-        * Porta cipher
-        * Albam, Achbi and Avgad codes
-        * Fleissner cipher
-    - Simplification of reverse_code
-    - ver_plain_text works now for the french thanks to the list of all the tetragrams in french generated
-    - prob_plain_text gives the possibility to the program to know if a text is "more french" than another. Therefore, the Hill-climbing can be used with a bank of famous books.
-    - Corrections :
-        * inverse
-        * affine.crack
-        * scytale.crack
-        * caesar.crack
-        * reverse_code.crack
-        * atbash.crack
-    - Beginning of function crack
-    - Sort of the ciphers
-    - New crack functions :
-        * morse.crack
-        * tritheme.crack
-        * columnar_transposition.crack
-        * UBCHI.crack
-        * monosub.crack with the Hill-climbing method
-        * albam, achbi and avgad crack
-    - Adding test of Friedman
-    - Adding Assist_cryptanalysis to help for the cryptanalysis of simple substitution
-Crypta v2.9
-Improvements (from 2.8) :
-    - Joining AES cipher
-Crypta v2.8
-Improvements (from 2.7) :
-    - Adding Playfair cipher
-    - Beginning ver_plain_text
-    - Adding crack function in 6 ciphers/codes (caesar, affine, atbash, rail fence, scytale, reverse)
-Crypta v2.7       05.03.2020
-Improvements (from 2.6.2) :
-    - Correcting columnar transposition
-    - Adding polybius square
-    - Adding ADFGX and ADFGVX ciphers
-    - Program works now if Cracker functions are not imported""" 
 
 sites = ("https://www.lama.univ-savoie.fr/pagesmembres/hyvernat/Enseignement/1920/info910/tp1.html", 'http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/expose_vigenere.html') #the second one is to crack vigenre.
 
@@ -74,6 +21,7 @@ for k in range(3):
         from modules.prima import prima
         from modules.base.matrix import *
         from modules.crypta import AES
+        from modules.base.arithmetic import mult_inverse
     except:
         pass
     chdir('..')
@@ -188,34 +136,6 @@ def prob_plain_text(text, wprocess=False):
 
 
 ##-base functions
-
-def bezout(a, b):
-    """Return the Bezout's coefficient of a and b.
-    r = a % b
-    r = ua + vb
-    lu : last u
-    lv : last v
-    q : quotient
-    """
-    r = a % b
-    lu = 1
-    lv = 0
-    u = 0
-    v = 1
-    while r > 1:
-        r = a % b
-        q = (a-r) // b
-        u, lu = lu - q*u, u
-        v, lv = lv - q*v, v
-        a = b
-        b = r
-    return u, v
-
-def inverse(a, n):
-    """Return the inverse of a in base n."""
-    u, v = bezout(a, n)
-    inverse = u % n
-    return inverse
 
 def msgform(M, f='min', space=False, number=False, alf='abcdefghijklmnopqrstuvwxyz'):
     """Delete the special characters and replace the majuscules and the accent"""
@@ -1869,7 +1789,7 @@ class Affine(BaseCipher):
         if None in (self.keyA, self.keyB):
             raise ValueError("Can't decrypt with empty keys !!!")
         
-        keyA = inverse(self.keyA, self.lalf)
+        keyA = mult_inverse(self.keyA, self.lalf)
         
         msg_d = ''
         
