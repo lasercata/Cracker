@@ -4,8 +4,8 @@
 '''This program allow you to encrypt and decrypt with RSA cipher.'''
 
 RSA__auth = 'Lasercata, Elerias'
-RSA__last_update = '09.08.2020'
-RSA__version = '3.0'
+RSA__last_update = '23.09.2020'
+RSA__version = '3.1'
 
 
 ##-import
@@ -20,7 +20,7 @@ from modules.ciphers.hashes.hasher import Hasher
 from modules.base import glb
 
 #---------packages
-from math import *
+import math
 from random import randint, choice
 
 from datetime import datetime as dt
@@ -215,73 +215,10 @@ class Prime:
 
 
     #------from Prima by Elerias
-    def expmod(a, e, n):
-        '''Return fastly a ** e % n.'''               #todo: use math.pow (faster) ?
-
-        p = a
-        if e == 0:
-            return 1
-
-        m = 1
-        while e > 1:
-            if e % 2 == 1:
-                m = m * p
-                e = e - 1
-
-            p = p ** 2
-            e = e // 2
-            m = m % n
-            p = p % n
-
-        return (m*p) % n
-
-    #---
-    def exponent(a, e):
-        '''Return fastly a ** e.'''               #todo: use math.pow
-
-        p = a
-        if e == 0:
-            return 1
-
-        m = 1
-        while e > 1:
-            if e % 2 == 1:
-                m = m * p
-                e = e - 1
-
-            p = p ** 2
-            e = e // 2
-
-        return m * p
-
-    #---
-    def pgcd(a, b):
-        '''Return fastly the greater same divisor of a and b.'''  #todo: use math.gcd
-
-        if b > a:
-            a, b = b, a
-
-        if b == 0:
-            return a
-
-        if a == b or a % b == 0:
-            return b
-
-        rest = a % b
-        while rest > 0:
-            last_rest = rest
-            a = b
-            b = rest
-            rest = a % b
-
-        return last_rest
-
-
-    #---
     def miller_rabin_witness(a, d, s, n):
         '''Return True if a is a Miller-Rabin witness.'''
 
-        r = Prime.expmod(a, d, n)
+        r = pow(a, d, n)
 
         if r == 1 or r == n - 1:
             return False
@@ -601,7 +538,7 @@ class RSA:
         for j, k in enumerate(encoded_txt):
             i = int(k)
 
-            l_txt_crypted.append(Prime.expmod(i, e, n)) #todo: try the math.pow speed !
+            l_txt_crypted.append(pow(i, e, n)) #todo: try the math.pow speed !
 
             if self.interface in ('gui', 'console'):
                 pb.set(j, len(encoded_txt))
@@ -653,7 +590,7 @@ class RSA:
 
         for j, k in enumerate(l_txt):
             i = int(k)
-            l_txt_decrypted.append(Prime.expmod(i, d, n)) #todo: use math.pow ?
+            l_txt_decrypted.append(pow(i, d, n)) #todo: use math.pow ?
 
             #---progress bar
             if self.interface in ('gui', 'console'):
@@ -916,7 +853,7 @@ class RsaKeys:
         if verbose:
             print('\nSearching e ...\n')
         e = 0
-        while Prime.pgcd(e, phi) != 1: #todo: test if math.gcd is faster
+        while math.gcd(e, phi) != 1: #todo: test if math.gcd is faster
             e = randint(q, phi)
 
             if self.interface in ('gui', 'console'):
