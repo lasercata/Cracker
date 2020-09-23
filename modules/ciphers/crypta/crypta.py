@@ -4,7 +4,7 @@
 
 crypta__auth = 'Elerias'
 crypta__last_update = '23.09.2020'
-crypta__ver = '3.1'
+crypta__ver = '3.2'
 
 sites = ("https://www.lama.univ-savoie.fr/pagesmembres/hyvernat/Enseignement/1920/info910/tp1.html", 'http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/expose_vigenere.html') #the second one is to crack vigenre.
 
