@@ -4,8 +4,13 @@
 """Program including matrice object."""
 
 matrix__auth = 'Elerias'
-matrix__last_update = '09.07.2020'
-matrix__version = '1.1'
+matrix__last_update = '23.09.2020'
+matrix__version = '1.3'
+
+
+##-ini
+
+from modules.base.arithmetic import *
 
 
 ##-functions
@@ -17,34 +22,7 @@ def t(M, i, j):
     del M2[i]
     for k in range(len(M2)):
         del M2[k][j]
-    return M2
-
-def modular_inverse(a, n):
-    """Return the modular inverse of the integer a in a base n."""
-
-    if a == 1:
-        return 1
-    n2 = n
-    rest = a % n2
-    aq = 1
-    au = 1
-    av = 0
-    u = 0
-    v = 1
-    while rest > 1:
-        rest = a % n2
-        q = (a-rest) // n2
-        nu = au - q*u
-        nv = av-  q*v
-        aq = q
-        au = u
-        av = v
-        u = nu
-        v = nv
-        a = n2
-        n2 = rest
-    i = (u+n) % n
-    return i
+    return Matrix(M2)
 
 
 ##-main class
@@ -76,7 +54,7 @@ class Matrix:
         return self.value[i]
 
     def __add__(A, B):
-        """Addition of two matrix."""
+        """Addition of two matrices."""
 
         vA = A.value
         vB = B.value
@@ -87,13 +65,12 @@ class Matrix:
                 for j in range(len(vA[0])):
                     a.append(vA[i][j] + vB[i][j])
                 vC.append(a)
-            C = Matrix(vC)
-            return C
+            return Matrix(vC)
         else:
-            return "Undefined"
+            return 'Undefined'
 
     def __sub__(A, B):
-        """Soustraction of two matrix."""
+        """Substraction of two matrices."""
 
         vA = A.value
         vB = B.value
@@ -104,13 +81,12 @@ class Matrix:
                 for j in range(len(vA[0])):
                     a.append(vA[i][j] - vB[i][j])
                 vC.append(a)
-            C = Matrix(vC)
-            return C
+            return Matrix(vC)
         else:
-            return "IndÃƒÆ’Ã‚Â©fini" # 'Undefined' ?
+            return 'Undefined'
 
     def __mul__(A, B):
-        """Product of two matrix or scalar multiplication of one matrix and one number."""
+        """Product of two matrices or scalar multiplication of a number and a matrix."""
 
         if type(A) != Matrix or type(B) != Matrix:
             if type(A) == Matrix:
@@ -122,8 +98,7 @@ class Matrix:
                 for j in i:
                     a.append(A * j)
                 vC.append(a)
-            C = Matrix(vC)
-            return C
+            return Matrix(vC)
 
         vA = A.value
         vB = B.value
@@ -137,13 +112,12 @@ class Matrix:
                         s = s + vA[i][k] * vB[k][j]
                     a.append(s)
                 vC.append(a)
-            C = Matrix(vC)
-            return C
+            return Matrix(vC)
         else:
-            return "Undefined"
+            return 'Undefined'
 
     def __truediv__(A, B):
-        """Product of matrix A and inverse of matrix or the number B in base n if specified."""
+        """Product of matrix A and inverse of matrix or the number B."""
 
         if type(B) == Matrix:
             return A * B.inverse()
@@ -191,7 +165,7 @@ class Matrix:
                         d = d - M[0][k] * M2.det()
                 return d
         else:
-            return "Undefined"
+            return 'Undefined'
 
     def transpose(self):
         """Return the transpose of the matrix."""
@@ -205,7 +179,7 @@ class Matrix:
             M2.append(c)
         return Matrix(M2)
 
-    def comatrice(self):
+    def comatrix(self):
         """Return the comatrix of the matrix."""
 
         M = self.value
@@ -216,9 +190,9 @@ class Matrix:
             c = []
             for j in range(nl):
                 if (i + j) % 2 == 0:
-                    c.append(det(t(M, i, j))) #todo: What is this function ?
+                    c.append(t(M, i, j).det())
                 else:
-                    c.append(-det(t(M, i, j))) #todo: there is a self.det function, but it does not take other arg than self.
+                    c.append(-t(M, i, j).det())
             C.append(c)
         return Matrix(C)
 
@@ -227,9 +201,9 @@ class Matrix:
 
         M = self.value
         if n == 0:
-            return self.comatrice().transpose() * (1 / (self.det()))
+            return self.comatrix().transpose() * (1 / (self.det()))
         else:
-            return (self.comatrice().transpose() * modular_inverse(self.det(), n)) % n
+            return (self.comatrix().transpose() * mult_inverse(self.det(), n)) % n
 
     def trace(self):
         """Return the trace of the matrix."""
