@@ -4,9 +4,9 @@
 
 crypta__auth = 'Elerias'
 crypta__last_update = '24.09.2020'
-crypta__ver = '3.2.3'
+crypta__ver = '3.3'
 
-sites = ("https://www.lama.univ-savoie.fr/pagesmembres/hyvernat/Enseignement/1920/info910/tp1.html", 'http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/expose_vigenere.html') #the second one is to crack vigenre.
+sites = ("https://www.lama.univ-savoie.fr/pagesmembres/hyvernat/Enseignement/1920/info910/tp1.html", 'http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/expose_vigenere.html')
 
 
 ##-initialisation
@@ -22,6 +22,7 @@ for k in range(3):
         from modules.base.matrix import *
         from modules.ciphers.kris import AES
         from modules.base.arithmetic import mult_inverse
+        from modules.b_cvrt import b_cvrt
     except:
         pass
     chdir('..')
@@ -73,6 +74,7 @@ alf_wrt = ' .,:;!?"\'-'
 alf_usual = alf_azAZ + alf_wrt
 
 alf_25 = alf_az.replace('j', '')
+
 
 ##-plain text checker
 
@@ -139,10 +141,7 @@ def prob_plain_text(text, wprocess=False):
 ##-base functions
 
 def msgform(M, f='min', space=False, number=False, alf='abcdefghijklmnopqrstuvwxyz'):
-    """Delete the special characters and replace the majuscules and the accent"""
-    
-    #spe = "àåâæáāăãäąçćčďđėéęèěêĕëəēģğíıìįïīîķłľļĺňņńñőóøòöœõôŕřß§śšşþťțţųüűúůùūûýźżžÀÅÂÆÁĀĂÃÄĄÇĆČĎĐĖÉĘÈĚÊĔËƏĒĢĞÍIÌĮÏĪÎĶŁĽĻĹŇŅŃÑŐÓØÒÖŒÕÔŔŘSS§ŚŠŞÞŤȚŢŲÜŰÚŮÙŪÛÝŹŻŽ"
-    #nor = "aaaaaaaaaacccddeeeeeeeeeeggiiiiiiikllllnnnnoooooooorrsssssttttuuuuuuuuyzzzAAAAAAAAAACCCDDEEEEEEEEEEGGIIIIIIIKLLLLNNNNOOOOOOOORRSSSSSTTTTTUUUUUUUUYZZZ"
+    """Delete the special characters and replace the majuscules and the accents."""
     
     d = {'à': 'a', 'å': 'a', 'â': 'a', 'æ': 'ae', 'á': 'a', 'ā': 'a', 'ă': 'a', 'ã': 'a',
         'ä': 'a', 'ą': 'a', 'ç': 'c', 'ć': 'c', 'č': 'c', 'ď': 'd', 'đ': 'd', 'ė': 'e',
@@ -342,6 +341,8 @@ def give_result(res):
 
 ciph_types = { # Used in make_ciph
     'verbose, interface': (
+        'ASCII',
+        'Binary code',
         'Morse',
         'Reverse code',
         'Reverse code word',
@@ -409,6 +410,8 @@ ciph_types = { # Used in make_ciph
 
 ciph_sort = {
     '0_key': (
+        'ASCII',
+        'Binary code',
         'Morse',
         'Reverse code',
         'Reverse code word',
@@ -541,11 +544,140 @@ def make_ciph(ciph, key=None, key2=None, alf=alf_az, ignore=False, verbose=True,
 
 #todo: add a description for every code ! (from wikipedia, like Decrypto)
 
-#todo: add Binary code.
+class ASCII(BaseCipher):
+    """
+    ASCII code is one of the most famous informatic character encoding. It represents text in machines. Most of actual character encoding are based on that code. It encodes all alphanumeric characters and symbols into numbers between 0 and 127.
+    """
+
+    def __init__(self, verbose=True, interface=None):
+        """Initiate the ASCII code.
+        - verbose : A boolean. Print 'ASCII' in `meaning` if True.
+        """
+        
+        super().__init__('ASCII', interface=interface)
+        
+        if verbose not in (0, 1):
+            raise ValueError('"verbose" arg should be a boolean !!!')
+        
+        self.verbose = verbose
+    
+    
+    def encrypt(self, txt):
+        """Encode 'txt' using the ASCII code."""
+        
+        ret = ''
+        for k in txt:
+            if ord(k) < 128:
+                ret += str(ord(k)) + ' '
+        
+        return ret[:-1]
+        
+    def decrypt(self, txt):
+        """Decode 'txt' using the ASCII code."""
+        
+        txt = txt.split(' ')
+        
+        ret = ''
+        for k in txt:
+            try:
+                j = int(k) 
+                if j < 128:
+                    ret += chr(j)
+            except:
+                pass
+        
+        return ret
+    
+    def break_(self, txt):
+        """Return txt decoded using the self.decrypt method."""
+        
+        return self.decrypt(txt)
+    
+    
+    def meaning(self, txt, brk=None):
+        """Use the function 'ver_plain_text' which search if the text mean something."""
+        
+        if self.verbose:
+            print('ASCII')
+        
+        if brk == None:
+            brk = self.break_(txt)
+        
+        if ver_plain_text(brk, False):
+            return (True, brk)
+            
+        else:
+            return (False,)
+
+
+class BinaryCode(BaseCipher):
+    """
+    BinaryCode is the ASCII code converted in binary.
+    """
+
+    def __init__(self, verbose=True, interface=None):
+        """Initiate the Binary code.
+        - verbose : A boolean. Print 'BinaryCode in `meaning` if True.
+        """
+        
+        super().__init__('Binary code', interface=interface)
+        
+        if verbose not in (0, 1):
+            raise ValueError('"verbose" arg should be a boolean !!!')
+        
+        self.verbose = verbose
+    
+    
+    def encrypt(self, txt):
+        """Encode 'txt' using the Binary code."""
+        
+        ret = ''
+        for k in txt:
+            if ord(k) < 128:
+                ret += b_cvrt.b_cvrt(ord(k), 10, 2) + ' '
+        
+        return ret[:-1]
+        
+    def decrypt(self, txt):
+        """Decode 'txt' using the Binary code."""
+        
+        txt = txt.split(' ')
+        
+        ret = ''
+        for k in txt:
+            try:
+                j = b_cvrt.b_cvrt(k, 2, 10)
+                if j < 128:
+                    ret += chr(j)
+            except:
+                pass
+        
+        return ret
+    
+    def break_(self, txt):
+        """Return txt decoded using the self.decrypt method."""
+        
+        return self.decrypt(txt)
+    
+    
+    def meaning(self, txt, brk=None):
+        """Use the function 'ver_plain_text' which search if the text mean something."""
+        
+        if self.verbose:
+            print('Binary code')
+        
+        if brk == None:
+            brk = self.break_(txt)
+        
+        if ver_plain_text(brk, False):
+            return (True, brk)
+            
+        else:
+            return (False,)
 
 class Morse(BaseCipher):
     """
-    Morse code is a code converting text into a sequence of signals of two different durations : dots (.) and dashes (-). A dot is a brief signal and a dash is a long signal. Its name comes from Samuel Morse, the inventor of telegraph. It was very used because telegrams were encoding in Morse.
+    Morse code is a code which converts text into a sequence of signals of two different durations : dots (.) and dashes (-). A dot is a brief signal and a dash is a long signal. It is called after Samuel Morse, the inventor of the telegraph. It was very used because telegrams were encoding in Morse.
     """
     
     def __init__(self, a='.', b='-', c_sep=' ', w_sep='/', verbose=True, interface=None):
@@ -1592,7 +1724,7 @@ class Avgad(BaseCipher):
 
 class Caesar(BaseCipher):
     """
-    Caesar cipher is one of the most simple and famous ciphers. Its name comes from Julius Caesar who used it for his correspondence. The operation of Caesar cipher involves shifting of the alphabet's letters. The key is then the difference of place between an encrypted letter and a plain letter. For example, for a shift of value 3, A becomes D, T becomes W and Y becomes B. To decrypt, we do the inverse operation. Of course, that cipher is very weak and can be cracked easily by brute force.
+    Caesar's cipher is one of the most simple and famous ciphers. It is called after Julius Caesar who used it for his correspondence. The operation of Caesar's cipher consists in shifting the alphabet's letters. The key is then the difference between the place of an encrypted letter and the original place of this letter. For example, for a shift of value 3, A becomes D, T becomes W and Y becomes B. The deciphering is the opposite operation. Of course, that cipher is very weak and can be cracked easily with brute-force attack.
     """
     
     def __init__(self, key=None, alf=alf_az, ignore=False, verbose=True, interface=None):
@@ -3771,8 +3903,7 @@ def crack(text, com=True): #todo: move this in modules/crack ; add GUI com, ...
         a = open('quad_f.wrdlst', 'r', encoding='latin-1')
     except:
         try:
-            a = open('modules\\crypta\\quad.wrdlst', 'r', encoding='latin-1')
-            #todo: use slashes (/) (works on both Windows and Linux)
+            a = open('modules/crypta/quad.wrdlst', 'r', encoding='latin-1')
         except:
             print(path, "Can't import quad.wrdlst")
             a = False
@@ -3807,6 +3938,8 @@ def crack_use():
 
 
 crypta_ciphers = {
+    'ASCII': ASCII,
+    'Binary code': BinaryCode,
     'Morse': Morse,
     'Reverse code': ReverseCode,
     'Reverse code word': ReverseCode,
@@ -3875,97 +4008,6 @@ for k in crypta_ciphers:
     
     else:
         broken_ciph_dict['break_'].append(k)
-
-
-
-
-def use(): #todo: move this somewhere else
-    """Use crypta fonctions."""
-
-    d = {'1': textana, '1a': freqana.use, '1b': ic.use, '1c': kasiki.use, '1d': friedman.use, '1e': Assist_cryptanalysis.simplesub, '2a': morse.use, '3a1': atbash.use, '3a2': albam.use, '3a3': achbi.use, '3a4': avgad.use, '3b': caesar.use, '3c': affine.use, '3d': polybius.use, '3e': monosub.use, '4a': reverse_code.use, '4b': rail_fence.use, '4c': scytale.use, '4d': fleissner.use, '4e': columnar_transposition.use, '4f': UBCHI.use, '5a': tritheme.use, '5b': porta.use, '5c': vigenere.use, '5d': beaufort.use, '5e': gronsfeld.use, '5f': porta.use, '6a': playfair.use, '6b': four_squares.use, '6c': hill.use, '7a': ABC.use, '7b': ADFGX.use, '7c': ADFGVX.use, '8a': AES.use, '9': crack_use}
-    c = ""
-    while c not in ('0', 'q'):
-
-        color(c_succes)
-        print()
-        print('\\'*50)
-
-        color(c_prog)
-        print('\nCrypta menu :\n')
-
-        color(c_error)
-        print('\t0.Exit')
-
-        color(c_succes)
-        print('    ' + '-'*25)
-        color(c_ascii)
-        print('\t1.Cryptanalysis')
-        print('\t\ta.Frequence analysis\tc.Kasiki examination\te.Help for simple sub')
-        print('\t\tb.Index of coincidence\td.Test of Friedman')
-
-        color(c_succes)
-        print('    ' + '-'*25)
-        color(c_ascii)
-        print('\t2.Codes')
-        print('\t\ta.Morse code')
-
-        color(c_succes)
-        print('    ' + '-'*25)
-        color(c_ascii)
-        print('\t3.Monoalphabetic ciphers')
-        print('\t\ta.(1: Atbash, 2: Albam, 3: Abchi, 4: Avgad) \tc.Affine\te.Monoalphabetic substitution')
-        print('\t\tb.Caesar\td.Polybius')
-
-        color(c_succes)
-        print('    ' + '-'*25)
-        color(c_ascii)
-        print('\t4.Transposition ciphers')
-        print('\t\ta.Reverse code\tc.Scytale\te.Columnar transposition')
-        print('\t\tb.Rail fence\td.Fleissner\tf.UBCHI cipher')
-        
-        color(c_succes)
-        print('    ' + '-'*25)
-        color(c_ascii)
-        print('\t5.Polyalphabetic ciphers')
-        print('\t\ta.Tritheme\tc.Vigenere\te.Gronsfeld')
-        print('\t\tb.Porta\td.Beaufort\tf.Autoclave')
-        
-        color(c_succes)
-        print('    ' + '-'*25)
-        color(c_ascii)
-        print('\t6.Polygraphic ciphers')
-        print('\t\ta.Playfair\tb.Four squares\tc.Hill')
-
-        color(c_succes)
-        print('    ' + '-'*25)
-        color(c_ascii)
-        print('\t7.Substitution and transposition ciphers')
-        print('\t\ta.ABC\tb.ADFGX\tc.ADFGVX')
-        
-        color(c_succes)
-        print('    ' + '-'*25)
-        color(c_ascii)
-        print('\t8.Modern ciphers')
-        print('\t\ta.AES cipher')
-        
-        color(c_succes)
-        print('    ' + '-'*25)
-        color(c_ascii)
-        print('\t9.Crack unknown code (Atbash, Atbash, Albam, Abchi, Avgad, Caesar, Affine, Reverse code, Scytale, Rail Fence, Morse, Tritheme, Columnar transposition, Monoalphabetic substitution)')
-        print()
-        color(c_prog)
-
-        c = ""
-        c = input('>> ')
-
-        if c not in d and c not in ('q', '0'):
-            prnt = c + ' is NOT an option of this menu !'
-            cl_out(c_error, prnt)
-        elif c not in ('q', '0'):
-            use_menu(d[c])
-            color(c_succes)
-            cl_inp('\n---End---')
-            color(c_prog)
 
 
 ##-setup
