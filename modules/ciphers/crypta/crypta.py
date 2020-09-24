@@ -3,8 +3,8 @@
 """Crypta is a cryptology program including cryptography and cryptanalysis functions."""
 
 crypta__auth = 'Elerias'
-crypta__last_update = '23.09.2020'
-crypta__ver = '3.2.2'
+crypta__last_update = '24.09.2020'
+crypta__ver = '3.2.3'
 
 sites = ("https://www.lama.univ-savoie.fr/pagesmembres/hyvernat/Enseignement/1920/info910/tp1.html", 'http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/expose_vigenere.html') #the second one is to crack vigenre.
 
@@ -392,7 +392,7 @@ ciph_types = { # Used in make_ciph
         'Autoclave'
     ),
     
-    'key, key2, alf, ignore, interface': (
+    'key, key2, alf, interface': (
         'ADFGX',
         'ADFGVX'
     ),
@@ -401,7 +401,7 @@ ciph_types = { # Used in make_ciph
         'Affine',
     ),
     
-    'key, indexes, alf, ignore, space, verbose, interface': (
+    'key, indexes, alf, space, verbose, interface': (
         'Polybius',
     )
 }
@@ -528,8 +528,8 @@ def make_ciph(ciph, key=None, key2=None, alf=alf_az, ignore=False, verbose=True,
     elif ciph in ciph_types['key, key2, alf, ignore, verbose, interface']:
         return get_ciph(ciph, key, key2, alf=alf, ignore=ignore, verbose=verbose, interface=interface)
     
-    elif ciph in ciph_types['key, indexes, alf, ignore, space, verbose, interface']:
-        return get_ciph(ciph, key, alf=alf, ignore=ignore, verbose=verbose, interface=interface, **kargs)
+    elif ciph in ciph_types['key, indexes, alf, space, verbose, interface']:
+        return get_ciph(ciph, key, alf=alf, verbose=verbose, interface=interface, **kargs)
     
     else:
         raise NotImplemented('The cipher "{}" was NOT found !!!\nIf it exists, please add it to the dict "ciph_types".'.format(ciph))
@@ -1353,7 +1353,6 @@ class Atbash(BaseCipher):
     def __init__(self, alf=alf_az, ignore=False, verbose=True, interface=None):
         """
         Initiate the Atbash code.
-
         - alf : the alphabet to use ;
         - ignore : a boolean which indicates what to do if a character of txt (in
         encrypt / decrypt) is not in the alphabet :
@@ -1886,7 +1885,7 @@ class Affine(BaseCipher):
 class Polybius(BaseCipher):
     """Defining the Polybius square code."""
     
-    def __init__(self, key='', indexes='12345', alf=alf_25, ignore=False, space=True, verbose=True, interface=None):
+    def __init__(self, key='', indexes='12345', alf=alf_25, space=True, verbose=True, interface=None):
         """
         Initiate the Polybius square code.
         
@@ -1904,12 +1903,8 @@ class Polybius(BaseCipher):
         
         if verbose not in (0, 1):
             raise ValueError('"verbose" arg should be a boolean !!!')
-        
-        if ignore not in (0, 1):
-            raise ValueError('"ignore" arg should be a boolean !!!')
             
         self.verbose = verbose
-        self.ignore = ignore
         
         if len(indexes) not in (5, 6):
             raise ValueError('The length of "indexes" should be of 5 or 6, but it has a length of "{}" !!!'.format(len(indexes)))
@@ -1937,11 +1932,7 @@ class Polybius(BaseCipher):
         
         for k in txt:
             if k in self.d_e:
-                msg_c += self.d_e[k]
-                
-            elif not self.ignore:
-                msg_c += k
-            
+                msg_c += self.d_e[k]       
             elif self.verbose:
                 print('Omitting "{}" because it is not in the alphabet !'.format(k))
         
@@ -1963,11 +1954,7 @@ class Polybius(BaseCipher):
         
         for k in txt:
             if k in self.d_d:
-                msg_d += self.d_d[k]
-            
-            elif not self.ignore:
-                msg_d += k
-            
+                msg_d += self.d_d[k]            
             else:
                 print('Unknown encrypted group "{}" !'.format(k))
     
@@ -2158,7 +2145,6 @@ class Tritheme(BaseCipher):
     def __init__(self, alf=alf_az, ignore=False, verbose=True, interface=None):
         """
         Initiate the Tritheme cipher.
-
         - alf : the alphabet to use ;
         - ignore : a boolean which indicates what to do if a character of txt (in
         encrypt / decrypt) is not in the alphabet :
@@ -3168,7 +3154,7 @@ class ABC(BaseCipher):
 class ADFGX(BaseCipher):
     """Defining the ADFGX cipher."""
     
-    def __init__(self, key1=None, key2='', alf=alf_az, ignore=False, interface=None):
+    def __init__(self, key1=None, key2='', alf=alf_az, interface=None):
         """
         Initiate the ADFGX cipher.
         
@@ -3181,7 +3167,7 @@ class ADFGX(BaseCipher):
         ind = ('A', 'D', 'F', 'G', 'X')
         
         self.col_tr = ColumnarTransposition(key1, alf, interface=interface)
-        self.poly = Polybius(key2, ind, alf, ignore, space=False, interface=interface)
+        self.poly = Polybius(key2, ind, alf, space=False, interface=interface)
         
         self.alf = alf
     
@@ -3224,7 +3210,7 @@ class ADFGX(BaseCipher):
 class ADFGVX(BaseCipher):
     """Defining the ADFGVX cipher."""
     
-    def __init__(self, key1=None, key2='', alf=alf_az, ignore=False, interface=None):
+    def __init__(self, key1=None, key2='', alf=alf_az, interface=None):
         """
         Initiate the ADFGVX cipher.
         
@@ -3237,7 +3223,7 @@ class ADFGVX(BaseCipher):
         ind = ('A', 'D', 'F', 'G', 'V', 'X')
         
         self.col_tr = ColumnarTransposition(key1, alf, interface=interface)
-        self.poly = Polybius(key2, ind, alf, ignore, space=False, interface=interface)
+        self.poly = Polybius(key2, ind, alf, space=False, interface=interface)
         
         self.alf = alf
     
