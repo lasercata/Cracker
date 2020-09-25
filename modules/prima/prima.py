@@ -3,8 +3,8 @@
 """Module dealing with prime numbers."""
 
 prima__auth = 'Elerias'
-prima__last_update = '23.09.2020'
-prima__version = '3.1'
+prima__last_update = '25.09.2020'
+prima__version = '3.2'
 
 
 ##-import
@@ -12,6 +12,7 @@ prima__version = '3.1'
 import math
 from random import randint
 from datetime import datetime
+from tkinter import *
 from time import time
 from os import getcwd, chdir
 
@@ -21,13 +22,14 @@ for k in range(3):
     try:
         from modules.base.console.color import color, cl_inp, cl_out, c_output, c_succes, c_wrdlt, c_error, c_prog, c_ascii
         from modules.base.base_functions import use_menu, inp_int
+        import modules.base.ini as ini
         cracker = True
     except:
         pass
     chdir('..')
 chdir(path)
 if not cracker:
-    print("~prima_v" + version + ".py in " + getcwd())
+    print("~prima_v" + prima__version + ".py in " + getcwd())
     print("Cracker not found")
 
 
@@ -45,7 +47,7 @@ def isPerfectPower(n: int) -> (bool, int, int):
 
 ##-factorization algorithms
 
-    ##-trial divisions
+    ##-Trial divisions
 
 def trial_division(n: int) -> (bool, list):
     """Decompose the integer n as a product of prime factors by trial division method. Here, the divisors are tested until sqrt(n) and only 2 and odd numbers are tested."""
@@ -252,10 +254,11 @@ def pollard_pm1_decomposition(n: int, primality_test=True) -> (bool, list) :
         factors.append(n)
     return (len(factors) == 1, factors)
 
-
 ##-Probabilistic primalities test
 
+
 # isSurelyPrime from Prime.isprime RSA by Lasercata
+
 def isSurelyPrime(n):
     """
     Check if n is prime. Uses Miller Rabin test.
@@ -302,13 +305,12 @@ def miller_rabin_witness(a, d, s, n):
     return True
 
 def miller_rabin(n, k=15) :
-    # Description from Prime from RSA by Elerias
     """
     Return the primality of n using the probabilistic test of primality of Miller-Rabin. k is the number of the loops.
     The possible decreases in averages of 75 % by unity if k.
 
     n : number to determine the primality ;
-    k : number of tests (Error = 0.25 ^ number of tests).
+    k : Number of tests (Error = 0.25 ^ number of tests).
     """
 
     if n in (0, 1):
@@ -316,16 +318,21 @@ def miller_rabin(n, k=15) :
     if n == 2:
         return True
     s = 1
+
     d = n // 2
+
     while d % 2 == 0:
+
         s +=  1
+
         d = d // 2
+
     for k in range(k) :
+
         a = randint(2, n - 1)
         if miller_rabin_witness(a, d, s, n):
             return False
     return True
-
 
 ##-sieves
 
@@ -367,7 +374,90 @@ def segmentation_erathostenes_sieve(end: int) -> list:
 
 ##-using
 
-    ##-console
+def to_str(alg, n, n_tests=15):
+    """Return informations extracted from the algorithm name specified."""
+
+    ret = ""
+
+    dct_algo_f = {
+            'Trial division': trial_division,
+            'Wheel factorization': wheel_factorization,
+            "Fermat's factorization": fermat_factorization,
+            "Pollard's rho": pollard_rho_decomposition,
+            'p - 1': pollard_pm1_decomposition,
+            "Miller-Rabin's test": miller_rabin,
+            "Fermat's test": fermat_test,
+            'Sieve of Erathostenes': basic_erathostenes_sieve,
+            'Segmented sieve of Erathostenes': segmentation_erathostenes_sieve
+        }
+    
+    dct_unicode_exp = {
+            '0': '\u2070',
+            '1': '\u00B9',
+            '2': '\u00B2',
+            '3': '\u00B3',
+            '4': '\u2074',
+            '5': '\u2075',
+            '6': '\u2076',
+            '7': '\u2077',
+            '8': '\u2078',
+            '9': '\u2079'
+        }
+
+    f = dct_algo_f[alg]
+
+    if alg in ini.prima_algo_list['Decomposition']:
+        primality, dec = f(n)
+
+        if primality:
+            txt = 'Prime'
+        else:
+            txt = 'Not prime\n' + str(n) + ' = '
+            
+            dec.sort()
+            dec2 = []
+            
+            k = 0
+            while k < len(dec):
+                p = dec[k]
+                n = k
+                while k < len(dec) and dec[k] == p:
+                    k += 1
+                txt += str(p)
+                if (k-n) > 1:
+                    l = str(k-n)
+                    for j in l:
+                        txt += dct_unicode_exp[j]
+                txt += ' * '
+            
+
+            txt = txt[:-3]
+
+
+    elif alg in ini.prima_algo_list['Probabilistic']:
+        if alg == "Miller-Rabin's test":
+            primality = f(n, n_tests)
+
+        else:
+            primality = f(n)
+
+        if primality:
+            txt = 'Probably prime'
+
+        else:
+            txt = 'Not prime'
+
+
+    else:
+        L = f(n)
+        txt = str(len(L)) + ' prime numbers :\n\n'
+        for k in L:
+            txt += '\t' + str(k) + '\n'
+
+    return txt
+
+
+##-console
 
 def parser_use(n, pb=False):
     """Use prima functions with the parser console mode. Lasercata"""
@@ -449,87 +539,69 @@ def use(cracker=cracker):
             else: print(prnt)
 
 
-        if c in ('1', '2', '3', '4', '5', '6'):
+        if c in ('1', '2', '3', '4', '5', '6', '7'):
             if cracker: n = inp_int('Enter the integer number : ')
             else: n = int(input("Enter the integer number : "))
+        
+        if c != '0':
 
-        t1 = datetime.now()
-        if c == '1':
-            p, L = trial_division(n)
-
-        elif c == '2':
-            p, L = wheel_factorization(n)
-
-        elif c == '3':
-            p, L = fermat_factorization(n)
-
-        elif c == '4':
-            p, L = pollard_rho_decomposition(n)
-
-        elif c == '5':
-            p, L = pollard_pm1_decomposition(n)
-
-        elif c == '6':
-            p = fermat(n)
-
-        elif c == '7':
-            if cracker: nt = inp_int('Number of tests (Error = 0.25 ^ number of tests) : ')
-            else: nt = int(input("Number of tests (Error = 0.25 ^ number of tests) : "))
             t1 = datetime.now()
-            p = miller_rabin(n, nt)
-
-        elif c in ('8', '9'):
-            if cracker: end = inp_int('Limit : ')
-            else: end = int(input('Limit : '))
-
-            if c == '8':
-                L = basic_erathostenes_sieve(end)
+            
+            dct = {
+                '1': 'Trial division',
+                '2': 'Wheel factorization',
+                '3': "Fermat's factorization",
+                '4': "Pollard's rho",
+                '5': 'p - 1',
+                '6': "Miller-Rabin's test",
+                '7': "Fermat's test",
+                '8': 'Sieve of Erathostenes',
+                '9': 'Segmented sieve of Erathostenes'
+            }
+            
+            t1 = datetime.now()
+            
+            if c == '7':
+                if cracker: nt = inp_int('Number of tests (Error = 0.25 ^ number of tests) : ')
+                else: nt = int(input("Number of tests (Error = 0.25 ^ number of tests) : "))
+                txt = to_str(dct['7'], n, nt)
             else:
-                L = segmentation_erathostenes_sieve(end)
-                t1 = datetime.now()
 
-        t = datetime.now() - t1
-
-        if c in ('1', '2', '3', '4', '5'):
-            if p:
-                if cracker: cl_out(c_output, str(n) + ' is a prime number')
-                else: print(str(n), 'is a prime number')
-            else:
-                if cracker: cl_out(c_output, str(n) + ' is a composite number')
-                else: print(str(n) + ' is a composite number')
-                rep = str(n) + " = "
-                for k in L:
-                    rep += str(k) + " * "
-                rep = rep[0:-2]
-                print(rep)
-
-        elif c in ('6', '7'):
-            if p:
-                if craker: cl_out(c_output, str(n) + ' is likely a prime number')
-                else: print(str(n) + ' is likely a prime number')
-            else:
-                if cracker: cl_out(c_output, str(n) + ' is a composite number')
-                else: print(str(n) + ' is a composite number')
-
-        if c in ('1', '2', '3', '4', '5', '6', '7', '8', '9'):
-            if cracker: cl_out(c_succes, 'Realised in ' + str(t))
-            else: print('Realised in ' + str(t))
-
-            if c in ('8', '9'):
-                print("Length of the list :", len(L))
-                ans = input("Write the prime numbers in a file ? ")
-                if ans in ('y', 'Y', 'yes', 'Yes', 'YES', 'o', 'O', 'Oui', 'OUI', 'oui'):
-                    nf = input("Name of the file (a file of the same name will be erase) : ")
-                    f = open(nf, 'w')
-                    for k in L:
-                        f.write(str(k)+"\n")
-                    f.close()
+                if c in ('8', '9'):
+                    if cracker: n = inp_int('Limit : ')
+                    else: n = int(input('Limit : '))
+                    if c == '8':
+                        f = basic_erathostenes_sieve
+                    else:
+                        f = segmentation_erathostenes_sieve
+                    L = f(n)
+                    txt = ""
                 else:
-                    if len(L) < 1000:
-                        ans = input("Print the list on the screen ? ")
-                        if ans in ('y', 'Y', 'yes', 'Yes', 'YES', 'o', 'O', 'Oui', 'OUI', 'oui'):
-                            for k in L:
-                                print(k)
-            if cracker: color(c_wrdlt)
-            input('---End---')
-            if cracker: color(c_prog)
+                    txt = to_str(dct[c], n)
+
+            t = datetime.now() - t1
+
+            print(txt)
+
+            if c in ('1', '2', '3', '4', '5', '6', '7', '8', '9'):
+                if cracker: cl_out(c_succes, 'Realised in ' + str(t))
+                else: print('Realised in ' + str(t))
+
+                if c in ('8', '9'):
+                    print("Length of the list :", len(L))
+                    ans = input("Write the prime numbers in a file ? ")
+                    if ans in ('y', 'Y', 'yes', 'Yes', 'YES', 'o', 'O', 'Oui', 'OUI', 'oui'):
+                        nf = input("Name of the file (a file of the same name will be erase) : ")
+                        f = open(nf, 'w')
+                        for k in L:
+                            f.write(str(k)+"\n")
+                        f.close()
+                    else:
+                        if len(L) < 1000:
+                            ans = input("Print the list on the screen ? ")
+                            if ans in ('y', 'Y', 'yes', 'Yes', 'YES', 'o', 'O', 'Oui', 'OUI', 'oui'):
+                                for k in L:
+                                    print(k)
+                if cracker: color(c_wrdlt)
+                input('---End---')
+                if cracker: color(c_prog)
