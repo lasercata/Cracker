@@ -722,7 +722,7 @@ class CrackerGui(QMainWindow):
         self.cipher_opt_alf.setEditable(True)
         self.cipher_opt_alf.addItem('-- Select an alphabet --')
         self.cipher_opt_alf.insertSeparator(1)
-        self.cipher_opt_alf.addItems(['abcdefghijklmnopqrstuvwxyz', 'abcdefghiklmnopqrstuvwxyz'])
+        self.cipher_opt_alf.addItems(list(crypta_alf_list.values()))
         keys_lay.addWidget(self.cipher_opt_alf, 0, 5)
 
         keys_lay.setColumnMinimumWidth(6, 50) #Spacing
