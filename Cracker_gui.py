@@ -4,8 +4,8 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '20.09.2020'
-Cracker_gui__version = '1.1.1'
+Cracker_gui__last_update = '25.09.2020'
+Cracker_gui__version = '1.1.2'
 
 
 ##-import/ini
@@ -722,7 +722,7 @@ class CrackerGui(QMainWindow):
         self.cipher_opt_alf.setEditable(True)
         self.cipher_opt_alf.addItem('-- Select an alphabet --')
         self.cipher_opt_alf.insertSeparator(1)
-        self.cipher_opt_alf.addItems(list(crypta_alf_list.values()))
+        self.cipher_opt_alf.addItems(['abcdefghijklmnopqrstuvwxyz', 'abcdefghiklmnopqrstuvwxyz'])
         keys_lay.addWidget(self.cipher_opt_alf, 0, 5)
 
         keys_lay.setColumnMinimumWidth(6, 50) #Spacing
@@ -3124,50 +3124,11 @@ class UsePrimaTab:
         elif self.verify_algo() == -3:
             return -3 #Aborted.
 
-        dct_algo_f = {
-            'Trial division': prima.trial_division,
-            'Wheel factorization': prima.wheel_factorization,
-            "Fermat's factorization": prima.fermat_factorization,
-            "Pollard's rho": prima.pollard_rho_decomposition,
-            'p - 1': prima.pollard_pm1_decomposition,
-            "Miller-Rabin's test": prima.miller_rabin,
-            "Fermat's test": prima.fermat_test,
-            'Sieve of Erathostenes': prima.basic_erathostenes_sieve,
-            'Segmented sieve of Erathostenes': prima.segmentation_erathostenes_sieve
-        }
-
         alg = self.algo.currentText()
-        f = dct_algo_f[alg]
 
         t0 = dt.now()
-        if alg in prima_algo_list['Decomposition']:
-            primality, dec = f(self.nb)
 
-            if primality:
-                txt = 'Prime'
-            else:
-                txt = 'Not prime'
-                for k in range(len(dec)):
-                    dec[k] = str(dec[k])
-
-                txt = txt + '\n' + str(self.nb) + " = " + " * ".join(dec)
-
-
-        elif alg in prima_algo_list['Probabilistic']:
-            if alg == "Miller-Rabin's test":
-                primality = f(self.nb, 10)
-
-            else:
-                primality = f(self.nb)
-
-            if primality:
-                txt = 'Probably prime'
-
-            else:
-                txt = 'Not prime'
-
-
-        else:
+        if alg in ('Sieve of Erathostenes', 'Segmented sieve of Erathostenes'):
             if self.nb >= 2**24: #Abritrary value
                 sure = QMessageBox.question(None, 'Are you sure !?', \
                     '<h2>Are you sure !?</h2>\n<h3>This may take some time and slow you computer !</h3>', \
@@ -3176,10 +3137,7 @@ class UsePrimaTab:
                 if sure == QMessageBox.No:
                     return -3 #Cancel
 
-            L = f(self.nb)
-            txt = str(len(L)) + ' prime numbers :\n\n'
-            for k in L:
-                txt += '\t' + str(k) + '\n'
+        txt = prima.to_str(alg, self.nb)
 
         t1 = dt.now() - t0
 
@@ -3313,4 +3271,3 @@ if __name__ == '__main__':
 
     #------Launch the GUI
     CrackerGui.use()
-
