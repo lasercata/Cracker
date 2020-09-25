@@ -4,7 +4,7 @@
 
 crypta__auth = 'Elerias'
 crypta__last_update = '24.09.2020'
-crypta__ver = '3.3'
+crypta__ver = '3.3.1'
 
 sites = ("https://www.lama.univ-savoie.fr/pagesmembres/hyvernat/Enseignement/1920/info910/tp1.html", 'http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/expose_vigenere.html')
 
@@ -2955,6 +2955,8 @@ class Playfair(BaseCipher):
         
         if a not in (-1, 1):
             raise ValueError('The arg "a" must be 1 or -1, but "{}" was found !!!'.format(a))
+            
+        txt = msgform(txt, 'min', space=False, number=False)
         
         msg = ''
         i1, i2, j1, j2 = 0, 0, 0, 0
