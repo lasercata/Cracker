@@ -7,4 +7,4 @@ Cracker_console only :
 /
                                                        
 Cracker_console and Cracker_gui :
-    - Problem in Playfair (after deciphering, new bigrams appear)
+/
