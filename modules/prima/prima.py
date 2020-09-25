@@ -12,7 +12,6 @@ prima__version = '3.2'
 import math
 from random import randint
 from datetime import datetime
-from tkinter import *
 from time import time
 from os import getcwd, chdir
 
@@ -47,7 +46,8 @@ def isPerfectPower(n: int) -> (bool, int, int):
 
 ##-factorization algorithms
 
-    ##-Trial divisions
+
+    ##-trial divisions
 
 def trial_division(n: int) -> (bool, list):
     """Decompose the integer n as a product of prime factors by trial division method. Here, the divisors are tested until sqrt(n) and only 2 and odd numbers are tested."""
@@ -126,6 +126,7 @@ def wheel_factorization(n: int, base=(2, 3, 5, 7)) -> (bool, list):
         factors.append(n)
     return (len(factors) == 1, factors)
 
+
     ##-Congruence of squares
 
 def fermat(n: int) -> int:
@@ -158,6 +159,7 @@ def fermat_factorization(n: int) -> (bool, list):
             factors.extend(factors_p)
             n = n // p
     return (len(factors) == 1, factors)
+
 
     ##-Others
 
@@ -310,7 +312,7 @@ def miller_rabin(n, k=15) :
     The possible decreases in averages of 75 % by unity if k.
 
     n : number to determine the primality ;
-    k : Number of tests (Error = 0.25 ^ number of tests).
+    k : number of tests (Error = 0.25 ^ number of tests).
     """
 
     if n in (0, 1):
@@ -333,6 +335,7 @@ def miller_rabin(n, k=15) :
         if miller_rabin_witness(a, d, s, n):
             return False
     return True
+
 
 ##-sieves
 
