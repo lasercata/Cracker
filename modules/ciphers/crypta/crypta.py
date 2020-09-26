@@ -3,8 +3,8 @@
 """Crypta is a cryptology program including cryptography and cryptanalysis functions."""
 
 crypta__auth = 'Elerias'
-crypta__last_update = '24.09.2020'
-crypta__ver = '3.3.1'
+crypta__last_update = '26.09.2020'
+crypta__ver = '3.4'
 
 sites = ("https://www.lama.univ-savoie.fr/pagesmembres/hyvernat/Enseignement/1920/info910/tp1.html", 'http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/expose_vigenere.html')
 
@@ -140,7 +140,7 @@ def prob_plain_text(text, wprocess=False):
 
 ##-base functions
 
-def msgform(M, f='min', space=False, number=False, alf='abcdefghijklmnopqrstuvwxyz'):
+def msgform(M, f='min', space=False, number=False, alf='abcdefghijklmnopqrstuvwxyz', spe_car=False):
     """Delete the special characters and replace the majuscules and the accents."""
     
     d = {'à': 'a', 'å': 'a', 'â': 'a', 'æ': 'ae', 'á': 'a', 'ā': 'a', 'ă': 'a', 'ã': 'a',
@@ -168,26 +168,29 @@ def msgform(M, f='min', space=False, number=False, alf='abcdefghijklmnopqrstuvwx
     for k in d:
         M = M.replace(k, d[k])
         
-    if f == 'maj':
-        M = M.upper()
-        aut += alf.upper()
-        
-    elif f == 'min':
-        M = M.lower()
-        aut += alf.lower()
-        
-    else:
-        aut += alf.lower() + alf.upper()
+    aut += alf
         
     if number:
         aut += '0123456789'
         
     if space:
         aut += ' '
+    
+    if spe_car:
+        aut += '&~"#' + "'{" + '([-|`_\\^@°)]+=}£$%µ*?,.;/:§!<>'
         
     for k in M:
         if k in aut:
             Mf += k
+        elif f == 'min' and k.lower() in aut:
+            Mf += k.lower()
+        elif f == 'maj' and k.upper() in aut:
+            Mf += k.upper()
+        elif f == 'all':
+            if k.lower() in aut:
+                Mf += k.lower()
+            elif k.upper() in aut:
+                Mf += k.upper()
             
     return Mf
 
@@ -234,6 +237,38 @@ def write_columns_c(text, nc):
         i = (i+1) % nl
         if i == nl - 1 and len(T[i]) == r:
             i = 0
+    return T
+
+def write_lines_l(text, nl):
+    """Return the list of the list T issue of the writing in lines of the text in nl lines."""
+
+    T = []
+    nc = len(text) // nl
+    r = 0
+    if len(text) % nl != 0:
+        nc = nc + 1
+        r = len(text) % nl
+    else:
+        r = nl
+    for k in range(nl):
+        T.append([])
+    i = 0
+    for k in range(len(text)):
+        T[i].append(text[k])
+        if len(T[i]) == nc or (i >= r and len(T[i]) == nc-1):
+            i += 1
+    return T
+
+def write_columns_l(text, nl):
+    """Return the list of the list T issue of the writing in columns of the text in nl lines."""
+    
+    T = []
+    for k in range(nl):
+        T.append([])
+    i = 0
+    for k in range(len(text)):
+        T[i].append(text[k])
+        i = (i+1) % nl
     return T
 
 def gen_dic_ite(L):
@@ -340,6 +375,11 @@ def give_result(res):
 
 
 ciph_types = { # Used in make_ciph
+
+    'alf, verbose, interface': (
+        'Place of letters',
+    ),
+    
     'verbose, interface': (
         'ASCII',
         'Binary code',
@@ -413,6 +453,7 @@ ciph_sort = {
         'ASCII',
         'Binary code',
         'Morse',
+        'Place of letters',
         'Reverse code',
         'Reverse code word',
         'Atbash',
@@ -458,6 +499,7 @@ ciph_sort = {
     ),
 
     'alf': (
+        'Place of letters',
         'Fleissner',
         'Columnar transposition',
         'UBCHI',
@@ -501,6 +543,9 @@ def make_ciph(ciph, key=None, key2=None, alf=alf_az, ignore=False, verbose=True,
             
         return get_ciph(ciph, verbose=verbose, interface=interface)
     
+    elif ciph in ciph_types['alf, verbose, interface']:
+        return get_ciph(ciph, alf=alf, verbose=verbose, interface=interface)
+    
     elif ciph in ciph_types['key, interface']:
         return get_ciph(ciph, key=key, interface=interface)
     
@@ -524,9 +569,6 @@ def make_ciph(ciph, key=None, key2=None, alf=alf_az, ignore=False, verbose=True,
     
     elif ciph in ciph_types['key, alf, ignore, verbose, interface']:
         return get_ciph(ciph, key=key, alf=alf, ignore=ignore, verbose=verbose, interface=interface)
-    
-    elif ciph in ciph_types['key, key2, alf, ignore, interface']:
-        return get_ciph(ciph, key, key2, alf=alf, ignore=ignore, interface=interface)
     
     elif ciph in ciph_types['key, key2, alf, ignore, verbose, interface']:
         return get_ciph(ciph, key, key2, alf=alf, ignore=ignore, verbose=verbose, interface=interface)
@@ -793,6 +835,66 @@ class Morse(BaseCipher):
         else:
             return (False,)
 
+class Place_of_letters(BaseCipher):
+    """
+    Replace letters by their places in the alphabet.
+    """
+    
+    def __init__(self, alf=alf_az, verbose=True, interface=None):
+        
+        super().__init__('Place of letters in alphabet', interface=interface)
+        
+        if verbose not in (0, 1):
+            raise ValueError('"verbose" arg should be a boolean !!!')
+        
+        self.verbose = verbose
+        self.alf = alf
+
+
+    def encrypt(self, txt):
+        """Replace letters by their places in the alphabet."""
+        
+        txt = msgform(txt, space=False, alf=self.alf)
+        
+        ret = ''
+        for k in txt:
+            ret += str(self.alf.find(k)) + ' '
+        
+        return ret[:-1]
+
+
+    def decrypt(self, txt):
+        """Replace the places in the alphabet by the letters."""
+        
+        txt = txt.split(' ')
+        
+        ret = ''
+        for k in txt:
+            ret += self.alf[int(k)]
+        
+        return ret
+    
+    def break_(self, txt):
+        """Return txt decoded using the self.decrypt method."""
+        
+        return self.decrypt(txt)
+    
+    
+    def meaning(self, txt, brk=None):
+        """Use the function 'ver_plain_text' which search if the text mean something."""
+        
+        if self.verbose:
+            print('Place of letters in alphabet')
+        
+        if brk == None:
+            brk = self.break_(txt)
+        
+        if ver_plain_text(brk, False):
+            return (True, brk)
+            
+        else:
+            return (False,)
+
 
 ##------ciphers
 
@@ -879,7 +981,7 @@ class Scytale(BaseCipher):
     def __init__(self, key=None, verbose=True, interface=None):
         """Initiate the Scytale cipher.
         
-        key : an intenger, or None to brute-force it ;
+        key : an integer, or None to brute-force it ;
         verbose : A boolean. Print 'Scytale' in meaning if True.
         """
         
@@ -907,8 +1009,8 @@ class Scytale(BaseCipher):
         if self.key == None:
             raise ValueError("Can't encrypt with an empty key !!!")
         
-        T = write_lines_c(txt, self.key)
-        return read_columns(T)
+        T = write_columns_l(txt, self.key)
+        return read_lines(T)
     
     def decrypt(self, txt):
         """Decrypt 'txt' with the Scytale cipher."""
@@ -916,8 +1018,8 @@ class Scytale(BaseCipher):
         if self.key == None:
             raise ValueError("Can't decrypt with an empty key !!!")
         
-        T = write_columns_c(txt, self.key)
-        return read_lines(T)
+        T = write_lines_l(txt, self.key)
+        return read_columns(T)
     
     def brute_force(self, txt):
         """Return a dict cointaining all the possibles decryptions, associated with their keys."""
@@ -1507,6 +1609,7 @@ class Atbash(BaseCipher):
     def encrypt(self, txt):
         """Encrypt 'txt' using the Atbash code"""
         
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         dct = gen_dic_ite(self.alf)
         alf_2 = "".join(reversed(self.alf))
         msg_c = ''
@@ -1779,6 +1882,8 @@ class Caesar(BaseCipher):
         
         if self.key == None:
             raise ValueError("Can't encrypt with an empty key !!!")
+            
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         
         msg_c = ''
         
@@ -1904,6 +2009,8 @@ class Affine(BaseCipher):
         if None in (self.keyA, self.keyB):
             raise ValueError("Can't encrypt with empty keys !!!")
         
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
+        
         msg_c = ''
         
         for k in txt:
@@ -1924,6 +2031,8 @@ class Affine(BaseCipher):
         
         if None in (self.keyA, self.keyB):
             raise ValueError("Can't decrypt with empty keys !!!")
+        
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         
         keyA = mult_inverse(self.keyA, self.lalf)
         
@@ -2060,6 +2169,8 @@ class Polybius(BaseCipher):
     def encrypt(self, txt):
         """Encrypt 'txt' using the Polybius square code."""
         
+        txt = msgform(txt, 'all', False, False, self.alf, False)
+        
         msg_c = ''
         
         for k in txt:
@@ -2146,6 +2257,8 @@ class MonoSub(BaseCipher):
         
         if self.key == None:
             raise ValueError("Can't encrypt with an empty key !!!")
+            
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         
         msg_c = ''
         
@@ -2166,6 +2279,8 @@ class MonoSub(BaseCipher):
         
         if self.key == None:
             raise ValueError("Can't decrypt with an empty key !!!")
+        
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         
         msg_d = ''
         
@@ -2301,14 +2416,18 @@ class Tritheme(BaseCipher):
     def encrypt(self, txt):
         """Encrypt 'txt' using the Tritheme cipher."""
         
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
+        
         msg_c = ''
+        i = 0
         
         for j, k in enumerate(txt):
             if k in self.alf:
-                msg_c += self.alf[(self.alf.index(k) + j) % self.lalf]
+                msg_c += self.alf[(self.alf.index(k) + j - i) % self.lalf]
             
             elif not self.ignore:
                 msg_c += k
+                i += 1
             
             elif self.verbose:
                 print('Omitting "{}" because it is not in the alphabet !'.format(k))
@@ -2319,14 +2438,18 @@ class Tritheme(BaseCipher):
     def decrypt(self, txt):
         """Decrypt 'txt' using the Tritheme cipher."""
         
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
+        
         msg_d = ''
+        i = 0
         
         for j, k in enumerate(txt):
             if k in self.alf:
-                msg_d += self.alf[(self.alf.index(k) - j + self.lalf) % self.lalf]
+                msg_d += self.alf[(self.alf.index(k) - j + i + self.lalf) % self.lalf]
             
             elif not self.ignore:
                 msg_d += k
+                i += 1
             
             elif self.verbose:
                 print('Unknown "{}" ! (try ignore=False)'.format(k))
@@ -2402,10 +2525,13 @@ class Porta(BaseCipher):
     def encrypt(self, txt):
         """Encrypt 'txt' using the Porta cipher."""
         
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
+        
         msg_c = ''
+        i = 0
         
         for j, k in enumerate(txt):
-            ck = self.alf.index(self.key[j % self.lkey])
+            ck = self.alf.index(self.key[(j-i) % self.lkey])
             
             if k in self.alf_0:
                 msg_c += self.alf_1[(self.alf_0.index(k) - ck // 2) % self.lalf_1]
@@ -2415,6 +2541,7 @@ class Porta(BaseCipher):
             
             elif not self.ignore:
                 msg_c += k
+                i += 1
             
             elif self.verbose:
                 print('Omitting "{}" because it is not in the alphabet !'.format(k))
@@ -2487,16 +2614,20 @@ class Vigenere(BaseCipher):
         if self.key == None:
             raise ValueError("Can't encrypt with an empty key !!!")
         
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
+        
         msg_c = ''
+        i = 0
         
         for j, k in enumerate(txt):
-            ck = self.alf.index(self.key[j % self.lkey])
+            ck = self.alf.index(self.key[(j-i) % self.lkey])
             
             if k in self.alf:
                 msg_c += self.alf[(self.alf.index(k) + ck) % self.lalf]
             
             elif not self.ignore:
                 msg_c += k
+                i += 1
             
             elif self.verbose:
                 print('Omitting "{}" because it is not in the alphabet !'.format(k))
@@ -2510,16 +2641,20 @@ class Vigenere(BaseCipher):
         if self.key == None:
             raise ValueError("Can't decrypt with an empty key !!!")
         
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
+        
         msg_d = ''
+        i = 0
         
         for j, k in enumerate(txt):
-            ck = self.alf.index(self.key[j % self.lkey])
+            ck = self.alf.index(self.key[(j-i) % self.lkey])
             
             if k in self.alf:
                 msg_d += self.alf[(self.alf.index(k) - ck + self.lalf) % self.lalf]
             
             elif not self.ignore:
                 msg_d += k
+                i += 1
             
             elif self.verbose:
                 print('Unknown character "{}" ! It is not in the alphabet ! (try ignore=False)'.format(k))
@@ -2723,16 +2858,20 @@ class Beaufort(BaseCipher):
         if self.key == None:
             raise ValueError("Can't encrypt with an empty key !!!")
         
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
+        
         msg_c = ''
+        i = 0
         lth = len(txt)
         key = self.key * int(lth / lth + 2)
         
         for j, k in enumerate(txt):
             if k in self.alf:
-                msg_c += self.alf[(self.alf.index(key[j % self.lkey]) - self.alf.index(k) + self.lalf) % self.lalf]
+                msg_c += self.alf[(self.alf.index(key[(j-i) % self.lkey]) - self.alf.index(k) + self.lalf) % self.lalf]
             
             elif not self.ignore:
                 msg_c += k
+                i += 1
             
             elif self.verbose:
                 print('Omitting "{}" because it is not in the alphabet !'.format(k))
@@ -2799,16 +2938,20 @@ class Gronsfeld(BaseCipher):
         if self.key == None:
             raise ValueError("Can't encrypt with an empty key !!!")
         
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
+        
         msg_c = ''
+        i = 0
         lth = len(txt)
         key = str(self.key) * int(lth / lth + 2)
         
         for j, k in enumerate(txt):
             if k in self.alf:
-                msg_c += self.alf[(self.alf.index(k) + int(key[j % self.lkey])) % self.lalf]
+                msg_c += self.alf[(self.alf.index(k) + int(key[(j-i) % self.lkey])) % self.lalf]
             
             elif not self.ignore:
                 msg_c += k
+                i += 1
             
             elif self.verbose:
                 print('Omitting "{}" because it is not in the alphabet !'.format(k))
@@ -2822,16 +2965,20 @@ class Gronsfeld(BaseCipher):
         if self.key == None:
             raise ValueError("Can't decrypt with an empty key !!!")
         
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
+        
         msg_d = ''
+        i = 0
         lth = len(txt)
         key = str(self.key) * int(lth / lth + 2)
         
         for j, k in enumerate(txt):
             if k in self.alf:
-                msg_d += self.alf[(self.alf.index(k) - int(key[j % self.lkey]) + self.lalf) % self.lalf]
+                msg_d += self.alf[(self.alf.index(k) - int(key[(j-i) % self.lkey]) + self.lalf) % self.lalf]
             
             elif not self.ignore:
                 msg_d += k
+                i += 1
             
             elif self.verbose:
                 print('Unknown character "{}" ! It is not in the alphabet ! (try ignore=False)'.format(k))
@@ -2891,6 +3038,8 @@ class Autoclave(BaseCipher):
         
         key = self.key + txt
         
+        key = msgform(key, 'all', False, False, self.alf, False)
+        
         return Vigenere(key, self.alf, self.ignore, self.verbose, self.interface).encrypt(txt)
     
     
@@ -2901,19 +3050,22 @@ class Autoclave(BaseCipher):
             raise ValueError("Can't decrypt with an empty key !!!")
         
         msg_d = ''
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
+        i = 0
         key = self.key
         
         for j, k in enumerate(txt):
             if k in self.alf:
-                char = self.alf[(self.alf.index(k) - self.alf.index(key[j]) + self.lalf) % self.lalf]
+                char = self.alf[(self.alf.index(k) - self.alf.index(key[j-i]) + self.lalf) % self.lalf]
+                key += char
             
             elif not self.ignore:
                 char = k
+                i += 1
             
             else:
                 char = ''
             
-            key += char
             msg_d += char
         
         return msg_d
@@ -3023,7 +3175,7 @@ class Playfair(BaseCipher):
 class FourSquares(BaseCipher):
     """Defining the Delastelle's Four squares cipher."""
     
-    def __init__(self, key1=None, key2=None, alf=alf_az, interface=None):
+    def __init__(self, key1=None, key2=None, alf=alf_25, interface=None):
         """
         Initiate the Four squares cipher.
         
@@ -3075,6 +3227,7 @@ class FourSquares(BaseCipher):
             raise ValueError("Can't encrypt with empty key !!!")
         
         msg_c = ''
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         
         if len(txt) % 2 == 1:
             txt += 'x'
@@ -3094,6 +3247,7 @@ class FourSquares(BaseCipher):
             raise ValueError("Can't decrypt with empty key !!!")
         
         msg_d = ''
+        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         
         if len(txt) % 2 == 1:
             txt += 'x'
@@ -3183,6 +3337,8 @@ class Hill(BaseCipher):
         if self.key == None:
             raise ValueError("Can't encrypt with an empty key !!!")
         
+        txt = msgform(txt, 'all', False, False, self.alf, False)
+        
         return self._crypt(txt, self.key)
     
     
@@ -3192,7 +3348,9 @@ class Hill(BaseCipher):
         if self.key == None:
             raise ValueError("Can't decrypt with an empty key !!!")
         
-        return self._crypt(txt, self.key.inverse(self.lalf)) #todo: there will ba an error here (cf inverse in Matrix (+ comatrice))
+        txt = msgform(txt, 'all', False, False, self.alf, False)
+        
+        return self._crypt(txt, self.key.inverse(self.lalf))
     
     
     def gen_key(self, size, mn=0, mx=9):
@@ -3943,6 +4101,7 @@ crypta_ciphers = {
     'ASCII': ASCII,
     'Binary code': BinaryCode,
     'Morse': Morse,
+    'Place of letters': Place_of_letters,
     'Reverse code': ReverseCode,
     'Reverse code word': ReverseCode,
     'Scytale': Scytale,
