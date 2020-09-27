@@ -1,5 +1,7 @@
 To do :
     - Apply the CDC on every module ;
+    
+    - If first time launched and OS is Linux and quad.wrdlst is not unzip, unzip it automaticly.
 
     - Add a file named "__main__.py" or "Cracker.py" which ask for the mode (console, GUI) with a checkbox "save this choice" which save in a file in ~/.Cracker (value can be gui, console, or none) and which check this file at startup, + live mode ;
     - Add an option to pass from gui to console and vice versa + modify the file in the GUI settings ;
