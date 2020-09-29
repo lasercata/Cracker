@@ -4,7 +4,7 @@
 '''Initiate Cracker's needed data.'''
 
 ini__auth = 'Lasercata'
-ini__last_update = '20.09.2020'
+ini__last_update = '29.09.2020'
 ini__version = '1.1.2'
 
 ##-import
@@ -82,8 +82,8 @@ except FileNotFoundError:
     cracker_version = '3.0.0 ?'
 
 else:
-    if len(cracker_version) > 9:
-        cl_out(c_error, 'The file "version.txt" contain more than 9 characters, so it certainly doesn\'t contain the actual version. A version will be set but can be wrong.')
+    if len(cracker_version) > 12:
+        cl_out(c_error, 'The file "version.txt" contain more than 12 characters, so it certainly doesn\'t contain the actual version. A version will be set but can be wrong.')
         cracker_version = '3.0.0 ?'
 
 #---------modules_ver
