@@ -1,9 +1,9 @@
 #!/bin/python3
 # -*- coding: utf-8 -*-
 
-lock_gui__auth = 'lasercata'
+lock_gui__auth = 'Lasercata'
 lock_gui__ver = '4.0.1'
-lock_gui__last_update = '20.09.2020'
+lock_gui__last_update = '29.09.2020'
 
 ##-import
 import sys
@@ -37,8 +37,8 @@ except FileNotFoundError:
     cracker_version = '3.0.0 ?'
 
 else:
-    if len(cracker_version) > 9:
-        cl_out(c_error, 'The file "version.txt" contain more than 9 characters, so it certainly doesn\'t contain the actual version. A version will be set but can be wrong.')
+    if len(cracker_version) > 12:
+        cl_out(c_error, 'The file "version.txt" contain more than 12 characters, so it certainly doesn\'t contain the actual version. A version will be set but can be wrong.')
         cracker_version = '3.0.0 ?'
 
 
