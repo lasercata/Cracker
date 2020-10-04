@@ -3,8 +3,8 @@
 """Crypta is a cryptology program including cryptography and cryptanalysis functions."""
 
 crypta__auth = 'Elerias'
-crypta__last_update = '26.09.2020'
-crypta__ver = '3.4'
+crypta__last_update = '04.10.2020'
+crypta__ver = '3.4.1'
 
 sites = ("https://www.lama.univ-savoie.fr/pagesmembres/hyvernat/Enseignement/1920/info910/tp1.html", 'http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/expose_vigenere.html')
 
@@ -163,6 +163,10 @@ def msgform(M, f='min', space=False, number=False, alf='abcdefghijklmnopqrstuvwx
         'Ü': 'U', 'Ű': 'U', 'Ú': 'U', 'Ů': 'U', 'Ù': 'U', 'Ū': 'U', 'Û': 'U', 'Ý': 'Y',
         'Ź': 'Z', 'Ż': 'Z', 'Ž': 'Z'} #Using a dict allow to replace 'œ' by 'oe', and not by 'o'
     
+    if 'i' in alf and not 'j' in alf:
+        d['j'] = 'i'
+        d['J'] = 'I'
+
     aut = ""
     Mf = ""
     for k in d:
@@ -2149,11 +2153,17 @@ class Polybius(BaseCipher):
         
         if len(indexes) not in (5, 6):
             raise ValueError('The length of "indexes" should be of 5 or 6, but it has a length of "{}" !!!'.format(len(indexes)))
+
+        if len(alf) == 36 and indexes=='12345':
+            indexes = '123456'
         
         self.size = len(indexes)
         self.square = word_to_square(key, self.size)
         self.ind = tuple(list(indexes))
-        self.alf = alf
+        if len(alf) != 36 and len(alf) != 25:
+            self.alf = 'abcdefghiklmnopqrstuvwxyz'
+        else:
+            self.alf = alf
         self.space = space
         
         self.d_e = {}
