@@ -2154,7 +2154,7 @@ class Polybius(BaseCipher):
         if len(indexes) not in (5, 6):
             raise ValueError('The length of "indexes" should be of 5 or 6, but it has a length of "{}" !!!'.format(len(indexes)))
 
-        if len(alf) == 36 and indexes=='12345':
+        if len(alf) == 36 and indexes == '12345':
             indexes = '123456'
         
         self.size = len(indexes)
