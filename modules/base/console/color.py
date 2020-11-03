@@ -4,8 +4,8 @@
 '''Module including color fonctions'''
 
 color__auth = 'lasercata'
-color__last_update = '02.02.2020'
-color__version = '2.2'
+color__last_update = '03.11.2020'
+color__version = '2.2.1'
 
 
 ##-import
@@ -69,12 +69,14 @@ def color(choice_color):
 
 ##-color_input
 
-def cl_inp(prompt): #color input, works like normal input : var = cl_inp(prompt)
+def cl_inp(prompt, func=input):
+    '''Color input, works like normal input : var = cl_inp(prompt)'''
+
     color(c_prog)
     print('')
     print(prompt)
     color(c_input)
-    ret = input('>')
+    ret = func('>')
     color(c_prog)
 
     return ret
