@@ -1,0 +1,17 @@
+2020.11.03
+Cracker v3.0.0_BETA-1.1 <-- v3.0.0_BETA-1.0
+---------------------------------
+General improvements :
+    - It is now possible to change the password from both interfaces ;
+    - Small corrections and improvements :
+        - Removing the importation of tkinter in AES ;
+        - Improving cl_inp (in color) ;
+        - Improving get_sth (in pwd_testor) ;
+        - Correcting the error message if Data/Crack/quad_f.wrdlst is not unziped.
+
+    - Cleaning Todo.txt file.
+
+
+---------------------------------
+
+By Lasercata
