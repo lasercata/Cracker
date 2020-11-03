@@ -1,4 +1,16 @@
 To do :
+    - Encrypt the private part of the RSA key when the app is closed :
+        * Encrypt the files and copy them with an other name ;
+        * Use AES for this, the key is the Cracker's password in clear ;
+        
+        * Process :
+            - When launching the app : decrypt the files (copy the crypted file to the clear file) ;
+            - If the user generate a RSA key, ask the password (and make the encrypted file) ;
+            - If the user change the password, re-encrypt all the RSA private key files ;
+            - When closing the app (need to detect it), delete the clear files.
+        
+        * Like that, we could bring Cracker securely, it will be even more portable.
+    
     - Apply the CDC on every module ;
     
     - If first time launched, OS is Linux, 7z is installed, and quad.wrdlst is not unzip, unzip it automaticly.
