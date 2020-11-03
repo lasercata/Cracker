@@ -3,8 +3,8 @@
 '''Module including P@ssw0rd_Test0r functions.'''
 
 pwd_testor__auth = 'lasercata'
-pwd_testor__date = '07.06.2020'
-pwd_testor__version = '1.0,1'
+pwd_testor__date = '03.11.2020'
+pwd_testor__version = '1.0.2'
 
 ##-import
 from math import *
@@ -233,12 +233,21 @@ def walf(word):
     
 
 #------------------------------------------------------------------------get_sth
-def get_sth(word):
-    '''Print infomations and return word strenth, in bits.'''
+def get_sth(word, ret_entro=False):
+    '''
+    Print infomations and return word strenth, in bits.
+    
+    - word : the word to test ;
+    - ret_entro : a boolean which indicates whatever return only the entropy (if True),
+    or the normal return (the info string).
+    '''
     
     if word == '':
         print('\nYou should enter something !!!')
         return -3 #Abort
+    
+    if ret_entro not in (0, 1):
+        raise ValueError('ret_entro should be a boolean !!!')
     
     entro = None
     
@@ -292,6 +301,9 @@ def get_sth(word):
     
     else:
         entro = pwd_entro(None, lth_alfs, lth)
+    
+    if ret_entro:
+        return entro
 
 
     #---------set the scale (from https://www.ssi.gouv.fr/administration/precautions-elementaires/calculer-la-force-dun-mot-de-passe/ and me)
