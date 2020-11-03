@@ -5,7 +5,7 @@
 
 auth = 'Elerias'
 last_update = '11.08.2020'
-version = '2.0,1'
+version = '2.0.2'
 sites = ["https://en.wikipedia.org/wiki/Advanced_Encryption_Standard", "https://en.wikipedia.org/wiki/Rijndael_S-box", "https://en.wikipedia.org/wiki/Rijndael_MixColumns", "https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf", "https://fr.wikipedia.org/wiki/Division_d%27un_polyn%C3%B4me", "https://www.samiam.org/galois.html", "https://www.samiam.org/key-schedule.html", "https://en.wikipedia.org/wiki/AES_key_schedule"]
 
 update_notes = """
@@ -28,8 +28,6 @@ Replace gfmul(1, a) by a"""
 import platform
 import ctypes
 import os
-from tkinter import *
-import tkinter.filedialog
 
 
 ##-library import
