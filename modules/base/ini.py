@@ -4,8 +4,8 @@
 '''Initiate Cracker's needed data.'''
 
 ini__auth = 'Lasercata'
-ini__last_update = '29.09.2020'
-ini__version = '1.1.2'
+ini__last_update = '03.11.2020'
+ini__version = '1.1.3'
 
 ##-import
 #---------packages
@@ -82,8 +82,8 @@ except FileNotFoundError:
     cracker_version = '3.0.0 ?'
 
 else:
-    if len(cracker_version) > 12:
-        cl_out(c_error, 'The file "version.txt" contain more than 12 characters, so it certainly doesn\'t contain the actual version. A version will be set but can be wrong.')
+    if len(cracker_version) > 16:
+        cl_out(c_error, 'The file "version.txt" contain more than 16 characters, so it certainly doesn\'t contain the actual version. A version will be set but can be wrong.')
         cracker_version = '3.0.0 ?'
 
 #---------modules_ver
@@ -106,9 +106,27 @@ except FileNotFoundError:
 
 
 #---------passwords
+
+#todo: Check if there is a file with this data in ./Data/pwd
+#todo + add a salt for passwords ?
+
+
 pwd_h = 'SecHash'
 pwd_loop = 512
-pwd = '0c0bf58bf97b83c9dd7c260ff3eefea72455d6c7768810cefb41697f266d97f8db06b9bfcce0dd1fa9f3c656b01876bd837f201c9e605ed4d357a22f7aa94cff'
+
+try:
+    with open('Data/pwd') as f:
+        pwd = f.read().strip('\n')
+
+    if len(pwd) != 128:
+        raise FileNotFoundError #Set the password to the default
+
+    for k in pwd:
+        if k not in '0123456789abcdef':
+            raise FileNotFoundError
+
+except FileNotFoundError:
+    pwd = '0c0bf58bf97b83c9dd7c260ff3eefea72455d6c7768810cefb41697f266d97f8db06b9bfcce0dd1fa9f3c656b01876bd837f201c9e605ed4d357a22f7aa94cff'
 
 # pwd_h = 'sha512'
 # pwd = '6a0cc613e360caf70250b1ddbe169554ddfe9f6edc8b0ec33d61d80d9d0b11090434fcf27d24b40f710bc81e01c05efd78a0086b4673bd042b213e8c7afb4b0c'
