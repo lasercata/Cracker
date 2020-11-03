@@ -3,8 +3,8 @@
 """Crypta is a cryptology program including cryptography and cryptanalysis functions."""
 
 crypta__auth = 'Elerias'
-crypta__last_update = '04.10.2020'
-crypta__ver = '3.4.1'
+crypta__last_update = '03.11.2020'
+crypta__ver = '3.4.2'
 
 sites = ("https://www.lama.univ-savoie.fr/pagesmembres/hyvernat/Enseignement/1920/info910/tp1.html", 'http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/expose_vigenere.html')
 
@@ -4032,12 +4032,20 @@ def open_D_quad(interface=None):
     D_quad = {}
     
     #------chdir to the wordlist
+    old_path = chd('Crack')
+    
+    #------read it
     try:
-        old_path = chd('Crack')
+        with open('quad_f.wrdlst', 'r', encoding='latin-1') as f:
+            for line in f:
+                line = line.strip('\n')
+                quad, nb = line.split(' ')
+                
+                D_quad[quad] = int(nb) / 2_456_316 # Number of tetragrams
     
     except FileNotFoundError:
-        msg = 'Folder "Crack" not found !!! You may have remove it by error, please re-download it and replace it !!!'
-        msg += "\nThe software won't start until the folder will be here."
+        msg = 'File "quad_f.wrdlst" was not found !\nYour may have forgotten to unzip it.\nIt is in Data/Crack.'
+        msg += "\n\nThe software can't start until the file is not unziped."
         
         if interface == None:
             print(msg)
@@ -4051,15 +4059,8 @@ def open_D_quad(interface=None):
             QMessageBox.critical(None, 'Fatal error !!!', '<h2>{}</h2>'.format(msg))
         
         import sys
-        sys.exit('Folder "Crack" is missing. It should be in Cracker_v3.0.0/Live or in ~/.Cracker.')
-    
-    #------read it
-    with open('quad_f.wrdlst', 'r', encoding='latin-1') as f:
-        for line in f:
-            line = line.strip('\n')
-            quad, nb = line.split(' ')
-            
-            D_quad[quad] = int(nb) / 2_456_316 # Number of tetragrams
+        sys.exit('File "quad_f.wrdlst" was not found.')
+        
         
 
     chdir(old_path)
