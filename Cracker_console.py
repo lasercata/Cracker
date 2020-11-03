@@ -4,8 +4,8 @@
 '''Launch Cracker with the menu console interface.'''
 
 Cracker_console__auth = 'Lasercata'
-Cracker_console__last_update = '19.09.2020'
-Cracker_console__version = '1.1'
+Cracker_console__last_update = '03.11.2020'
+Cracker_console__version = '1.2'
 
 
 ##-import/ini
@@ -211,9 +211,7 @@ class CrackerConsole:
 
             self.sep(c_wrdlt)
 
-            print('    7.Change directory')
-            print('    8.Change colors')
-            print('    9.Show infos about Cracker')
+            print('    7.Settings menu')
 
             color(c_prog)
             print('\nYour choice :')
@@ -222,12 +220,12 @@ class CrackerConsole:
             c = input('>')
             color(c_prog)
 
-            if c not in ('quit', 'exit', 'q', 'l', *[str(k) for k in range(10)]):
+            if c not in ('quit', 'exit', 'q', 'l', *[str(k) for k in range(8)]):
                 cl_out(c_error, '"{}" is NOT an option of this menu !!!'.format(c))
                 sleep(0.5)
 
             elif c.lower() == 'l':
-                self.lock()
+                self.lock(pwd)
 
             elif c == '1':
                 use_func(self.crack_menu)
@@ -248,13 +246,7 @@ class CrackerConsole:
                 use_func(pwd_testor.use)
 
             elif c == '7':
-                use_func(self.cd)
-
-            elif c == '8':
-                use_func(c_color)
-
-            elif c == '9':
-                use_func(self.about)
+                use_func(self.stng_menu)
 
 
             elif c in ('quit', 'exit', 'q', '0'):
@@ -681,6 +673,51 @@ class CrackerConsole:
                 use_func(use_wrdlst_ana)
 
 
+    #------Settings
+    def stng_menu(self):
+        '''Show the Settings menu.'''
+
+        c = ''
+        while c.lower() not in ('quit', 'exit', '0', 'q'):
+
+            color(c_succes)
+            print('')
+            print('\\'*50)
+
+            color(c_prog)
+            print('\nSettings menu :\n')
+
+            color(c_error)
+            print('    0.Main menu')
+
+            self.sep(c_ascii)
+
+            print('    1.Change directory')
+            print('    2.Change colors')
+            print('    3.Change password')
+            print('    4.Show infos about Cracker')
+
+            color(c_prog)
+
+            c = cl_inp('Your Choice :')
+
+            if c.lower() not in ('quit', 'exit', '0', 'q', '1', '2', '3', '4'):
+                cl_out(c_error, '"{}" is NOT an option of this menu !!!'.format(c))
+                sleep(0.5)
+
+            elif c == '1':
+                use_func(self.cd)
+
+            elif c == '2':
+                use_func(c_color)
+
+            elif c == '3':
+                use_func(change_pwd)
+
+            elif c == '4':
+                use_func(self.about)
+
+
 
     def about(self):
         '''Show infos about Cracker.'''
@@ -742,7 +779,6 @@ about the password you entered, like its entropy.
 
 
 
-
     def lock(self, pwd=pwd, pwd_hash=pwd_h, pwd_l=pwd_loop, mx=3):
         '''put self.lock in a try block, to exit if <ctrl + C> was pressed..'''
 
@@ -755,7 +791,7 @@ about the password you entered, like its entropy.
             sys.exit()
 
     def _lock(self, pwd=pwd, pwd_hash=pwd_h, pwd_l=pwd_loop, mx=3):
-        '''Lock the app with the password, after clear the console.'''
+        '''Lock the app with the password, after clearing the console.'''
 
         cls()
 
@@ -1682,7 +1718,7 @@ def use_b_cvrt():
             nb = cl_inp("Enter number's base :")
             if nb.lower() != 'ieee754':
                 nb = int(nb)
-            
+
             alf_nb = cl_inp('Alphabet (let empty to use normal) : ')
             if alf_nb == "":
                 if nb <= 36 and nb != 32:
@@ -1701,7 +1737,7 @@ def use_b_cvrt():
             b = cl_inp("Enter return's base :")
             if b.lower() != 'ieee754':
                 b = int(b)
-            
+
             alf_b = cl_inp('Alphabet (let empty to use normal) : ')
             if alf_b == "":
                 if b <= 36 and b != 32:
@@ -1748,6 +1784,50 @@ def use_b_cvrt():
     cl_out(c_output, number.convert(b, NEG=NEG, alf_b=alf_b))
     pause()
 
+
+#---------Change password
+def change_pwd():
+    '''Change Cracker's password'''
+
+    global pwd
+
+    old_pwd = cl_inp('\nActual password :', getpass)
+
+    if hasher.SecHash(old_pwd) != pwd:
+        cl_out(c_error, 'Wrong password !!!')
+        sleep(0.5)
+        return -3
+
+    pwd1 = cl_inp('New password :', getpass)
+
+    entro = pwd_testor.get_sth(pwd1, True)
+
+    if entro < 40:
+        cl_out(c_error, 'The password is too much weak !!!\nIt should have an entropy of 40 bits at least, but it has an entropy of {} bits !!!'.format(round(entro)))
+        sleep(0.5)
+        return -3
+
+    pwd2 = cl_inp('Confirm password :', getpass)
+
+    if pwd1 != pwd2:
+        cl_out(c_error, 'The passwords does not correspond !')
+        sleep(0.5)
+        return -3
+
+    #---good
+    pwd = hasher.SecHash(pwd1)
+
+    try:
+        with open('Data/pwd', 'w') as f:
+            f.write(pwd)
+
+    except Exception as err:
+        cl_out(c_error, str(err))
+        return -1
+
+    else:
+        cl_out(c_succes, 'Done !\nYour password has been be changed.\nIt has an entropy of {} bits.'.format(round(entro)))
+        sleep(0.5)
 
 
 

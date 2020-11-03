@@ -4,8 +4,8 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '25.09.2020'
-Cracker_gui__version = '1.1.2'
+Cracker_gui__last_update = '03.11.2020'
+Cracker_gui__version = '1.2'
 
 
 ##-import/ini
@@ -1161,7 +1161,7 @@ class CrackerGui(QMainWindow):
         self.b_cvrt_opt_alf.activated[str].connect(chk_alf)
         self.b_cvrt_opt_alf.addItems([alf for alf in list(b_cvrt_alf_list.values())])
         nb_alf_lay.addWidget(self.b_cvrt_opt_alf, Qt.AlignRight)
-        
+
         #-b and alf_b
         nb_alf_b_lay = QHBoxLayout()
         nb_lay.addRow("Return base :", nb_alf_b_lay)
@@ -1174,7 +1174,7 @@ class CrackerGui(QMainWindow):
         self.b_cvrt_b.setValue(10)
         nb_alf_b_lay.addWidget(self.b_cvrt_b)
         nb_alf_b_lay.addWidget(QLabel(' '*5))
-        
+
         #alf_b
         self.b_cvrt_opt_alf_b = QComboBox()
         self.b_cvrt_opt_alf_b.setEditable(True)
@@ -1319,9 +1319,11 @@ class CrackerGui(QMainWindow):
         #---main style
         #-ini
         self.style_grp = QGroupBox('Syle')
+        self.style_grp.setMaximumSize(500, 100)
+        #self.style_grp.setMinimumSize(500, 200)
         main_style_lay = QHBoxLayout()
         self.style_grp.setLayout(main_style_lay)
-        tab_stng_lay.addWidget(self.style_grp, 0, 0, Qt.AlignLeft)
+        tab_stng_lay.addWidget(self.style_grp, 0, 0, Qt.AlignLeft | Qt.AlignTop)
 
         self.main_style_palette = QApplication.palette()
 
@@ -1347,6 +1349,79 @@ class CrackerGui(QMainWindow):
         )
         main_style_lay.addWidget(self.main_style_std_chkb)
 
+
+        #---change password
+        #-chk function
+        def chk_pwd_shown():
+            '''Actualise if the password needs to be shown.'''
+
+            for k in dct_cb:
+                if k.isChecked():
+                    dct_cb[k].setEchoMode(QLineEdit.Normal)
+
+                else:
+                    dct_cb[k].setEchoMode(QLineEdit.Password)
+
+        #-ini
+        self.stng_pwd_grp = QGroupBox('Change password')
+        self.stng_pwd_grp.setMaximumSize(600, 200)
+        self.stng_pwd_grp.setMinimumSize(500, 200)
+        stng_pwd_lay = QGridLayout()
+        self.stng_pwd_grp.setLayout(stng_pwd_lay)
+
+        tab_stng_lay.addWidget(self.stng_pwd_grp, 0, 1)#, Qt.AlignRight)
+
+        #-form widgets (ask for pwd)
+        stng_pwd_form_lay = QFormLayout()
+        stng_pwd_lay.addLayout(stng_pwd_form_lay, 0, 0)
+
+        self.stng_old_pwd = QLineEdit()
+        self.stng_old_pwd.setMinimumSize(250, 0)
+        self.stng_old_pwd.setEchoMode(QLineEdit.Password) # don't print pwd
+        stng_pwd_form_lay.addRow('Old password :', self.stng_old_pwd)
+
+        self.stng_pwd1 = QLineEdit()
+        self.stng_pwd1.setMinimumSize(250, 0)
+        self.stng_pwd1.setEchoMode(QLineEdit.Password) # don't print pwd
+        stng_pwd_form_lay.addRow('New password :', self.stng_pwd1)
+
+        self.stng_pwd2 = QLineEdit()
+        self.stng_pwd2.setMinimumSize(250, 0)
+        self.stng_pwd2.setEchoMode(QLineEdit.Password) # don't print pwd
+        stng_pwd_form_lay.addRow('Verify :', self.stng_pwd2)
+
+        #-checkbox widgets (show pwd)
+        stng_pwd_cb_lay = QVBoxLayout()
+        stng_pwd_cb_lay.setSpacing(15)
+        stng_pwd_lay.addLayout(stng_pwd_cb_lay, 0, 1)
+
+        self.stng_old_pwd_cb = QCheckBox()
+        stng_pwd_cb_lay.addWidget(self.stng_old_pwd_cb)
+        self.stng_old_pwd_cb.toggled.connect(chk_pwd_shown)
+
+        self.stng_pwd1_cb = QCheckBox()
+        stng_pwd_cb_lay.addWidget(self.stng_pwd1_cb)
+        self.stng_pwd1_cb.toggled.connect(chk_pwd_shown)
+
+        self.stng_pwd2_cb = QCheckBox()
+        stng_pwd_cb_lay.addWidget(self.stng_pwd2_cb)
+        self.stng_pwd2_cb.toggled.connect(chk_pwd_shown)
+
+        dct_cb = {
+            self.stng_old_pwd_cb: self.stng_old_pwd,
+            self.stng_pwd1_cb: self.stng_pwd1,
+            self.stng_pwd2_cb: self.stng_pwd2
+        }
+
+        #-button
+        self.stng_pwd_bt = QPushButton('Change password')
+        stng_pwd_lay.addWidget(self.stng_pwd_bt, 1, 1, Qt.AlignRight)
+
+        #-connection
+        use_c_pwd = UseSettingsTab(self.stng_old_pwd, self.stng_pwd1, self.stng_pwd2)
+
+        self.stng_pwd_bt.clicked.connect(lambda: use_c_pwd.change_pwd())
+        self.stng_pwd2.returnPressed.connect(lambda: use_c_pwd.change_pwd())
 
         #------show
         self.app_widget.addTab(tab_stng, 'Setti&ngs')
@@ -1551,8 +1626,8 @@ class CrackerGui(QMainWindow):
             self.resize(750, 500)
 
         elif tab == 7: #Settings
-            self.setMinimumSize(50, 50)
-            #self.resize(750, 500)
+            self.setMinimumSize(900, 250)
+            self.resize(900, 250)
 
 
 
@@ -1573,7 +1648,7 @@ class CrackerGui(QMainWindow):
 
         def chk_lock():
             if not self.locker.is_locked():
-                self.setDisabled(False) #todo: if lock wind is closed, quit app (capt when wind is closed)
+                self.setDisabled(False) #todo: if lock wind is closed, quit app (capture when wind is closed)
 
         self.locker = Lock(pwd, pwd_h, pwd_loop, tries)
 
@@ -3260,6 +3335,65 @@ class UseBaseConvertTab:
             return -3
 
         return number
+
+
+
+#---------Settings
+class UseSettingsTab:
+    '''Class which allow to use the Settings tab.'''
+
+    def __init__(self, old_pwd, new_pwd1, new_pwd2):
+        '''Create the UseBaseConvertTab object.'''
+
+        self.old_pwd = old_pwd
+        self.pwd1 = new_pwd1
+        self.pwd2 = new_pwd2
+
+
+    def change_pwd(self):
+        '''Change the password which allow to launch Cracker.'''
+
+        global pwd
+
+        old_pwd = self.old_pwd.text()
+        pwd1 = self.pwd1.text()
+        pwd2 = self.pwd2.text()
+        entro = pwd_testor.get_sth(pwd1, True)
+
+        if '' in (old_pwd, pwd1, pwd2):
+            QMessageBox.critical(None, '!!! Fields empty !!!', '<h2>Please fill the three fields !</h2>')
+            return -3
+
+        elif hasher.SecHash(old_pwd) != pwd:
+            QMessageBox.critical(None, '!!! Bad password !!!', '<h2>The old password is wrong !</h2>')
+            return -3
+
+        elif pwd1 != pwd2:
+            QMessageBox.critical(None, '!!! Passwords does not correspond !!!', '<h2>The passwords does not correspond !</h2>')
+            return -3
+
+        elif entro < 40:
+            QMessageBox.critical(None, '!!! Password too much weak !!!', '<h2>Your new password is too much weak !</h2>\n<h2>It should have an entropy of 40 bits at least, but it has an entropy of {} bits !!!</h2>'.format(round(entro)))
+            return -3
+
+        #-good
+        pwd = hasher.SecHash(pwd1)
+
+        try:
+            with open('Data/pwd', 'w') as f:
+                f.write(pwd)
+
+        except Exception as err:
+            QMessageBox.critical(None, '!!! Error !!!', '<h2>{}</h2>'.format(err))
+            return -1
+
+        else:
+            QMessageBox.about(None, 'Done !', '<h2>Your password has been be changed.</h2>\n<h3>It has an entropy of {} bits.</h3>'.format(round(entro)))
+
+            self.old_pwd.clear()
+            self.pwd1.clear()
+            self.pwd2.clear()
+
 
 
 ##-run
