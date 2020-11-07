@@ -4,7 +4,7 @@
 '''Initiate Cracker's needed data.'''
 
 ini__auth = 'Lasercata'
-ini__last_update = '03.11.2020'
+ini__last_update = '06.11.2020'
 ini__version = '1.1.3'
 
 ##-import
@@ -53,6 +53,7 @@ try:
     from modules.prima import prima
     from modules.b_cvrt.b_cvrt import BaseConvert
     from modules.password_testor import pwd_testor
+    from modules.anamer0 import anamer0
 
 
 except ModuleNotFoundError as ept:
