@@ -4,7 +4,7 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '03.11.2020'
+Cracker_gui__last_update = '06.11.2020'
 Cracker_gui__version = '1.2'
 
 
@@ -259,7 +259,8 @@ class CrackerGui(QMainWindow):
             4 : 'Prima',
             5 : 'Base convert',
             6 : 'P@ssw0rd_Test0r',
-            7 : 'Settings'
+            7 : 'Anamer0',
+            8 : 'Settings'
         }
 
         self.create_home()
@@ -269,6 +270,7 @@ class CrackerGui(QMainWindow):
         self.create_prima()
         self.create_b_cvrt()
         self.create_pwd_strth()
+        self.create_anamer0()
         self.create_settings()
 
         self.app_widget.currentChanged.connect(self.chk_tab)
@@ -1256,10 +1258,9 @@ class CrackerGui(QMainWindow):
         #---get_strth_
         def get_sth_():
             if self.pwd_t_inp.text() == '':
-                QMessageBox.critical(QWidget(), 'No text !', 'Please enter text in the line edit !!')
-                return -3 #Abort
+                self.pwd_t_ret.setPlainText('')
 
-            if self.pwd_t_show.isChecked():
+            elif self.pwd_t_show.isChecked():
                 self.pwd_t_ret.setPlainText('Return for "' + \
                     self.pwd_t_inp.text() + '"\n' + pwd_testor.get_sth(self.pwd_t_inp.text()))
 
@@ -1302,6 +1303,59 @@ class CrackerGui(QMainWindow):
 
         #------show
         self.app_widget.addTab(tab_pwd_t, 'P@&ssw0rd_Test0r')
+
+
+
+    def create_anamer0(self):
+        '''Create the "Anamer0" tab.'''
+
+        #------ini
+        tab_anamer0 = QWidget()
+
+        tab_anamer0_lay = QGridLayout()
+        tab_anamer0_lay.setContentsMargins(5, 5, 5, 5)
+        tab_anamer0.setLayout(tab_anamer0_lay)
+
+        #------functions
+        #---get_strth_
+        def get_info():
+            if self.anamer0_inp.text() == '':
+                self.anamer0_ret.setPlainText('')
+
+            else:
+                self.anamer0_ret.setPlainText(
+                    anamer0.use(self.anamer0_inp.text().split(','))
+                )
+
+        #------widgets
+        #---label
+        tab_anamer0_lay.addWidget(QLabel('Enter french phone number(s) ("," between) :'), 0, 0)
+
+        #---pwd_entry
+        self.anamer0_inp = QLineEdit()
+        self.anamer0_inp.setMinimumSize(300, 0)
+        self.anamer0_inp.returnPressed.connect(get_info) # Don't need to press the button : press <enter>
+        tab_anamer0_lay.addWidget(self.anamer0_inp, 0, 1)
+
+        #---button
+        self.anamer0_bt_get = QPushButton('Get infos')
+        self.anamer0_bt_get.setStyleSheet(self.style)
+        self.anamer0_bt_get.setObjectName('main_obj')
+        self.anamer0_bt_get.clicked.connect(get_info)
+        tab_anamer0_lay.addWidget(self.anamer0_bt_get, 0, 2)
+
+        #---ret
+        self.anamer0_ret = QTextEdit()
+        self.anamer0_ret.setReadOnly(True)
+        self.anamer0_ret.setMinimumSize(400, 100)
+        self.anamer0_ret.setStyleSheet(self.style)
+        self.anamer0_ret.setObjectName('orange_border_hover')
+        tab_anamer0_lay.addWidget(self.anamer0_ret, 2, 0, -1, -1)
+
+
+
+        #------show
+        self.app_widget.addTab(tab_anamer0, 'Ana&mer0')
 
 
 
@@ -1622,10 +1676,14 @@ class CrackerGui(QMainWindow):
             self.resize(750, 350)
 
         elif tab == 6: #P@ssw0rd_Test0r
-            self.setMinimumSize(750, 500)
-            self.resize(750, 500)
+            self.setMinimumSize(800, 500)
+            self.resize(800, 500)
 
-        elif tab == 7: #Settings
+        elif tab == 7: #Anamer0
+            self.setMinimumSize(800, 500)
+            self.resize(800, 500)
+
+        elif tab == 8: #Settings
             self.setMinimumSize(900, 250)
             self.resize(900, 250)
 

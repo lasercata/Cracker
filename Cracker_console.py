@@ -4,7 +4,7 @@
 '''Launch Cracker with the menu console interface.'''
 
 Cracker_console__auth = 'Lasercata'
-Cracker_console__last_update = '03.11.2020'
+Cracker_console__last_update = '06.11.2020'
 Cracker_console__version = '1.2'
 
 
@@ -208,10 +208,11 @@ class CrackerConsole:
             print('    4.Prima menu')
             print('    5.Base convert')
             print('    6.Test your password\'s strenth')
+            print('    7.Get info on a french phone number')
 
             self.sep(c_wrdlt)
 
-            print('    7.Settings menu')
+            print('    8.Settings menu')
 
             color(c_prog)
             print('\nYour choice :')
@@ -220,7 +221,7 @@ class CrackerConsole:
             c = input('>')
             color(c_prog)
 
-            if c not in ('quit', 'exit', 'q', 'l', *[str(k) for k in range(8)]):
+            if c not in ('quit', 'exit', 'q', 'l', *[str(k) for k in range(9)]):
                 cl_out(c_error, '"{}" is NOT an option of this menu !!!'.format(c))
                 sleep(0.5)
 
@@ -246,6 +247,9 @@ class CrackerConsole:
                 use_func(pwd_testor.use)
 
             elif c == '7':
+                use_func(use_anamer0)
+
+            elif c == '8':
                 use_func(self.stng_menu)
 
 
@@ -1783,6 +1787,17 @@ def use_b_cvrt():
 
     cl_out(c_output, number.convert(b, NEG=NEG, alf_b=alf_b))
     pause()
+
+
+#---------Anamer0
+def use_anamer0():
+    '''Allow to use anamer0 in menu console interface.'''
+
+    cl_out(c_output, anamer0.use())
+
+    color(c_input)
+    input('--- Press <enter> to continue ---')
+    color(c_prog)
 
 
 #---------Change password
