@@ -4,8 +4,8 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '06.11.2020'
-Cracker_gui__version = '1.2'
+Cracker_gui__last_update = '07.11.2020'
+Cracker_gui__version = '1.2.1'
 
 
 ##-import/ini
@@ -630,13 +630,17 @@ class CrackerGui(QMainWindow):
             self.cipher_opt_alf.setDisabled(cipher not in crypta.ciph_sort['alf'])
             self.cipher_bt_dec.setDisabled(cipher in (*ciphers_list['hash'], *ciphers_list['analysis']))
 
+            if cipher in ('Frequence analysis', 'Scytale', 'Rail fence'):
+                self.cipher_nb_key.setMinimum(1)
+            elif cipher == 'Gronsfeld':
+                self.cipher_nb_key.setRange(0, 10**9)
+            else:
+                self.cipher_nb_key.setRange(-2**16, 2**16)
+                
             if cipher == 'Frequence analysis':
                 key_label.setText('Group :')
-                self.cipher_nb_key.setMinimum(1)
-
             else:
                 key_label.setText('Key :')
-                self.cipher_nb_key.setMinimum(-2 **16)
 
 
         #------path bar
@@ -678,8 +682,8 @@ class CrackerGui(QMainWindow):
 
         #-Number key
         self.cipher_nb_key = QSpinBox()
-        self.cipher_nb_key.setMinimum(-2 **16)
-        self.cipher_nb_key.setMaximum(2 **16)
+        self.cipher_nb_key.setMinimum(-2**16)
+        self.cipher_nb_key.setMaximum(2**16)
         self.cipher_nb_key.setStyleSheet(self.style)
         self.cipher_nb_key.setObjectName('sec_obj')
         self.cipher_nb_key.setMinimumSize(200, 0)
@@ -696,8 +700,8 @@ class CrackerGui(QMainWindow):
 
         #-Double number key
         self.cipher_db_nb_key = DoubleInput(type_=QSpinBox)
-        self.cipher_db_nb_key.setMinimum(-2 **16)
-        self.cipher_db_nb_key.setMaximum(2 **16)
+        self.cipher_db_nb_key.setMinimum(-2**16)
+        self.cipher_db_nb_key.setMaximum(2**16)
         self.cipher_db_nb_key.setStyleSheet(self.style)
         self.cipher_db_nb_key.setObjectName('sec_obj')
         self.cipher_db_nb_key.setMinimumSize(200, 0)
