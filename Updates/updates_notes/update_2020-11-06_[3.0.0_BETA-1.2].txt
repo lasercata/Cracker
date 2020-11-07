@@ -1,0 +1,11 @@
+2020.11.06
+Cracker v3.0.0_BETA-1.2 <-- v3.0.0_BETA-1.1
+---------------------------------
+General improvements :
+    - Adding the new module 'anamer0', which allow to analyse french phone numbers ;
+    - Implementing it in GUI and in menu console.
+
+
+---------------------------------
+
+By Lasercata
