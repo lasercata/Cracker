@@ -4,7 +4,7 @@
 
 crypta__auth = 'Elerias'
 crypta__last_update = '07.11.2020'
-crypta__ver = '3.4.3'
+crypta__ver = '3.4.4'
 
 sites = ("https://www.lama.univ-savoie.fr/pagesmembres/hyvernat/Enseignement/1920/info910/tp1.html", 'http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/expose_vigenere.html')
 
@@ -401,10 +401,6 @@ ciph_types = { # Used in make_ciph
         'Rail fence'
     ),
     
-    'key, key2, alf, interface': (
-        'Four squares',
-    ),
-    
     'key, alf, interface': (
         'Fleissner',
         'Hill'
@@ -439,7 +435,8 @@ ciph_types = { # Used in make_ciph
     
     'key, key2, alf, interface': (
         'ADFGX',
-        'ADFGVX'
+        'ADFGVX',
+        'Four squares',
     ),
     
     'key, key2, alf, ignore, verbose, interface': (
@@ -556,9 +553,6 @@ def make_ciph(ciph, key=None, key2=None, alf=alf_az, ignore=False, verbose=True,
     elif ciph in ciph_types['key, verbose, interface']:
         return get_ciph(ciph, key=key, verbose=verbose, interface=interface)
     
-    elif ciph in ciph_types['key, key2, alf, interface']:
-        return get_ciph(ciph, key, key2, alf=alf, interface=interface)
-    
     elif ciph in ciph_types['key, alf, interface']:
         return get_ciph(ciph, key=key, alf=alf, interface=interface)
     
@@ -574,6 +568,9 @@ def make_ciph(ciph, key=None, key2=None, alf=alf_az, ignore=False, verbose=True,
     elif ciph in ciph_types['key, alf, ignore, verbose, interface']:
         return get_ciph(ciph, key=key, alf=alf, ignore=ignore, verbose=verbose, interface=interface)
     
+    elif ciph in ciph_types['key, key2, alf, interface']:
+        return get_ciph(ciph, key, key2, alf=alf, interface=interface)
+
     elif ciph in ciph_types['key, key2, alf, ignore, verbose, interface']:
         return get_ciph(ciph, key, key2, alf=alf, ignore=ignore, verbose=verbose, interface=interface)
     
@@ -3243,7 +3240,7 @@ class FourSquares(BaseCipher):
             raise ValueError("Can't encrypt with empty key !!!")
         
         msg_c = ''
-        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
+        txt = msgform(txt, 'all', False, False, self.alf, False)
         
         if len(txt) % 2 == 1:
             txt += 'x'
@@ -3263,7 +3260,7 @@ class FourSquares(BaseCipher):
             raise ValueError("Can't decrypt with empty key !!!")
         
         msg_d = ''
-        txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
+        txt = msgform(txt, 'all', False, False, self.alf, False)
         
         if len(txt) % 2 == 1:
             txt += 'x'
