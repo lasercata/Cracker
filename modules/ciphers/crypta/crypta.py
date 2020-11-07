@@ -3,8 +3,8 @@
 """Crypta is a cryptology program including cryptography and cryptanalysis functions."""
 
 crypta__auth = 'Elerias'
-crypta__last_update = '03.11.2020'
-crypta__ver = '3.4.2'
+crypta__last_update = '07.11.2020'
+crypta__ver = '3.4.3'
 
 sites = ("https://www.lama.univ-savoie.fr/pagesmembres/hyvernat/Enseignement/1920/info910/tp1.html", 'http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/expose_vigenere.html')
 
@@ -1101,6 +1101,9 @@ class RailFence(BaseCipher):
         if self.key == None:
             raise ValueError("Can't encrypt with an empty key !!!")
         
+        if self.key == 1:
+            return txt
+        
         lst = list(self.lst) #Creating a copy
         
         lvl = 0 #Level
@@ -1128,6 +1131,9 @@ class RailFence(BaseCipher):
         
         if self.key == None:
             raise ValueError("Can't decrypt with an empty key !!!")
+        
+        if self.key == 1:
+            return txt
         
         lst = list(self.lst) #Creating a copy
         
