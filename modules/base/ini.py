@@ -4,8 +4,8 @@
 '''Initiate Cracker's needed data.'''
 
 ini__auth = 'Lasercata'
-ini__last_update = '06.11.2020'
-ini__version = '1.1.3'
+ini__last_update = '08.11.2020'
+ini__version = '1.1.4'
 
 ##-import
 #---------packages
@@ -205,5 +205,8 @@ b_cvrt_alf_list = {
 crypta_alf_list = {
     'alf_25': crypta.alf_25,
     'alf_az': crypta.alf_az,
-    'alf_az09': crypta.alf_az09
+    'alf_az09': crypta.alf_az09,
+    'alf_25AZ': crypta.alf_25AZ,
+    'alf_AZ': crypta.alf_AZ,
+    'alf_AZ09': crypta.alf_AZ09
 }
