@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 TextEditor__auth = 'lasercata'
-TextEditor__last_update = '26.06.2020'
-TextEditor__version = '1.1'
+TextEditor__last_update = '08.11.2020'
+TextEditor__version = '1.2'
 
 ##-import
 import sys
@@ -103,24 +103,39 @@ class TextEditor(QWidget):
         main_lay.addWidget(self.bt_reload, 1, 7, alignment=Qt.AlignRight)
 
         #-encoding
+        self.rb_encod = QRadioButton('Text encoding :')
+        main_lay.addWidget(self.rb_encod, 2, 1)
         self.opt_encod = QComboBox()
         self.opt_encod.addItems(lst_encod)
-        main_lay.addWidget(self.opt_encod, 2, 1)
+        main_lay.addWidget(self.opt_encod, 2, 2)
+
+        #-binary mode
+        self.rb_bin = QRadioButton('Binary mode')
+        main_lay.addWidget(self.rb_bin, 2, 3)
+
+        #-hexa mode
+        self.rb_hexa = QRadioButton('Hexa mode')
+        main_lay.addWidget(self.rb_hexa, 2, 4)
 
         #-bytes mode
-        self.chkbt_bytes = QCheckBox('Bytes mode')
-        main_lay.addWidget(self.chkbt_bytes, 2, 2)
-
+        self.rb_bytes = QRadioButton('Bytes mode')
+        main_lay.addWidget(self.rb_bytes, 2, 5)
 
         self.rb_txt.toggled.connect(self.check_bytes)
         self.rb_fn.toggled.connect(self.check_bytes)
         self.rb_fn.toggled.connect(self.select_fn_rb)
-        self.chkbt_bytes.toggled.connect(self.check_bytes)
+        self.rb_bytes.toggled.connect(self.check_bytes)
 
 
         self.rb_bt_grp1 = QButtonGroup()
         self.rb_bt_grp1.addButton(self.rb_txt)
         self.rb_bt_grp1.addButton(self.rb_fn)
+
+        self.rb_bt_grp2 = QButtonGroup()
+        self.rb_bt_grp2.addButton(self.rb_encod)
+        self.rb_bt_grp2.addButton(self.rb_bin)
+        self.rb_bt_grp2.addButton(self.rb_hexa)
+        self.rb_bt_grp2.addButton(self.rb_bytes)
 
 
         #------show
@@ -138,13 +153,13 @@ class TextEditor(QWidget):
 
         if self.rb_txt.isChecked():
             self.opt_encod.setDisabled(False)
-            self.chkbt_bytes.setDisabled(True)
-            self.chkbt_bytes.setChecked(False)
+            self.rb_bytes.setDisabled(True)
+            self.rb_bytes.setChecked(False)
 
         elif self.rb_fn.isChecked():
-            self.chkbt_bytes.setDisabled(False)
+            self.rb_bytes.setDisabled(False)
 
-            if self.chkbt_bytes.isChecked():
+            if self.rb_bytes.isChecked():
                 self.opt_encod.setDisabled(True)
 
             else:
@@ -175,7 +190,7 @@ class TextEditor(QWidget):
         if self.opt_fn.currentText() == '-- Select a file --':
             self.select_fn()
 
-        self.chkbt_bytes.setChecked(True)
+        self.rb_bytes.setChecked(True)
         self.check_bytes()
 
 
@@ -238,15 +253,20 @@ class TextEditor(QWidget):
 
 
         try:
-            if not self.chkbt_bytes.isChecked():
-                bi = False
+            if self.rb_encod.isChecked():
                 with open(self.fn, mode='r', encoding=str(self.opt_encod.currentText())) as f:
                     file_content = f.read()
 
             else:
-                bi = True
                 with open(self.fn, mode='rb') as f:
                     file_content = f.read()
+                if self.rb_hexa.isChecked() or self.rb_bin.isChecked():
+                    file_content = file_content.hex()
+                    if self.rb_bin.isChecked():
+                        d = {'0': '0000', '1': '0001', '2': '0010', '3': '0011', '4': '0100', '5': '0101', '6': '0110', '7': '0111', '8': '1000', '9': '1001', 'a': '1010', 'b': '1011', 'c': '1100', 'd': '1101', 'e': '1110', 'f': '1111'}
+                        for k in d:
+                            file_content = file_content.replace(k, d[k])
+
 
         except FileNotFoundError:
             QMessageBox.critical(QWidget(), '!!! Error !!!', '<h2>The file was NOT found !!!</h2>')
@@ -299,13 +319,11 @@ class TextEditor(QWidget):
             filename = self.fn
 
         try:
-            if not self.chkbt_bytes.isChecked():
-                bi = False
+            if not self.rb_bytes.isChecked():
                 with open(filename, 'r', encoding=str(self.opt_encod.currentText())) as f:
                     line = f.readline()
 
             else:
-                bi = True
                 with open(filename, mode='rb') as f:
                     line = f.readline()
 
@@ -337,7 +355,7 @@ class TextEditor(QWidget):
             if emp != QMessageBox.Yes:
                 return -3 #Aborted
 
-        if not bi:
+        if self.rb_encod.isChecked():
             with open(filename, 'w', encoding=str(self.opt_encod.currentText())) as f:
                 if type(txt) == str:
                     f.write(txt)
@@ -347,6 +365,36 @@ class TextEditor(QWidget):
 
         else:
             try:
+                if not self.rb_bytes.isChecked():
+                    if self.rb_bin.isChecked():
+                        if len(txt) % 8 != 0:
+                            QMessageBox.critical(QWidget(), '!!! Value Error !!!', \
+                    "<h2>The number of binary digits is not a multiple of 8 !!!</h2>")
+                            return -2 #stop
+
+                        else:
+                            d = {'0000': '0', '0001': '1', '0010': '2', '0011': '3', '0100': '4', '0101': '5', '0110': '6', '0111': '7', '1000': '8', '1001': '9', '1010': 'a', '1011': 'b', '1100': 'c', '1101': 'd', '1110': 'e', '1111': 'f'}
+                            txt2 = ""
+                            for k in range(len(txt)//4):
+                                if txt[k*4:k*4+4] not in d:
+                                    QMessageBox.critical(QWidget(), '!!! Value Error !!!', \
+                                    "<h2>A binary number is composed only of 0 and 1 !!!</h2>")
+                                    return -2 #stop
+                                else:
+                                    txt2 += d[txt[k*4:k*4+4]]
+                            txt = txt2
+
+                    try:
+                        if len(txt) % 2 != 0:
+                            QMessageBox.critical(QWidget(), '!!! Value Error !!!', \
+                    "<h2>The number of hexadecimal digits is not a multiple of 2 !!!</h2>")
+                            return -2 #stop
+                        txt = bytes.fromhex(txt)
+                    except ValueError:
+                        QMessageBox.critical(QWidget(), '!!! Value Error !!!', \
+                    "<h2>Error in the conversion of hexadecimal to bytes !!!</h2>")
+                        return -2 #stop
+
                 with open(filename, mode='wb') as f:
                     if type(txt) == str:
                         f.write(txt.encode(encoding=str(self.opt_encod.currentText())))
@@ -439,7 +487,7 @@ class TextEditor(QWidget):
     def get_bytes(self):
         '''Return the bytes, either 't' for text, or 'b' for bytes.'''
 
-        return ('t', 'b')[self.chkbt_bytes.isChecked()]
+        return ('t', 'b')[self.rb_bytes.isChecked()]
 
 
     #------getText
@@ -464,7 +512,7 @@ class TextEditor(QWidget):
 
         if self.opt_fn.currentText() != '-- Select a file --':
             txt_f = self.read_file(self.opt_fn.currentText(), \
-                self.chkbt_bytes.isChecked(), self.opt_encod.currentText())
+                self.rb_bytes.isChecked(), self.opt_encod.currentText())
 
         else:
             txt_f = None
@@ -558,7 +606,7 @@ class TextEditor(QWidget):
 
         if self.opt_fn.currentText() != '-- Select a file --':
             txt_f = self.read_file(self.opt_fn.currentText(), \
-                self.chkbt_bytes.isChecked(), self.opt_encod.currentText())
+                self.rb_bytes.isChecked(), self.opt_encod.currentText())
 
         else:
             txt_f = None
