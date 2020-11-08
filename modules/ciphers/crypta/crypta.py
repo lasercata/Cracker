@@ -3,8 +3,8 @@
 """Crypta is a cryptology program including cryptography and cryptanalysis functions."""
 
 crypta__auth = 'Elerias'
-crypta__last_update = '07.11.2020'
-crypta__ver = '3.4.4'
+crypta__last_update = '08.11.2020'
+crypta__ver = '3.4.5'
 
 sites = ("https://www.lama.univ-savoie.fr/pagesmembres/hyvernat/Enseignement/1920/info910/tp1.html", 'http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/expose_vigenere.html')
 
@@ -68,12 +68,14 @@ chdir(path)
 alf_az = 'abcdefghijklmnopqrstuvwxyz'
 alf_az09 = alf_az + '0123456789'
 alf_AZ = alf_az.upper()
+alf_AZ09 = alf_AZ + '0123456789'
 alf_azAZ = alf_az + alf_AZ
 
 alf_wrt = ' .,:;!?"\'-'
 alf_usual = alf_azAZ + alf_wrt
 
 alf_25 = alf_az.replace('j', '')
+alf_25AZ = alf_AZ.replace('J', '')
 
 
 ##-plain text checker
