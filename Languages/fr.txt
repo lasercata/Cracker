@@ -10,3 +10,62 @@ Dernier essai
 Mot de passe incorrect
 C'était votre dernier essai
 réussi
+Texte
+Sélectionner un fichier
+Effacer
+Fichier
+Sélectionner et charger
+Charger
+Sauvegarder
+Actualiser
+Encodage du texte
+Mode binaire
+Mode hexa
+Mode bytes
+Certain
+Êtes-vous certain ?
+Ouvrir un fichier
+Sélectionner un fichier
+Aucun fichier sélectionné
+Veuillez sélectionner un fichier
+Ou utilisez le bouton "Sélectionner et charger"
+Erreur
+Le fichier est introuvable
+Erreur d'encodage
+Le fichier ne peut être décodé avec cette norme d'encodage
+Essayez le mode bytes
+Supprimer les données du widget Text
+Il y a du texte dans le widget Text, le remplacer par les données du fichier ?
+Erreur de décodage
+Le fichier ne peut pas être décodé en mode bytes
+Sauvegarder le fichier
+Supprimer les données du fichier
+Le fichier sélectionner n'est pas vide
+Ecraser avec les données du widget Text ?
+Le widget Text est vide
+Pas de texte dans le widget Text
+Ecrire quand même ?
+Erreur de valeur
+Le nombre de chiffres binaires n'est pas un multiple de 8
+Un nombre en binaire est composé seulement de 0 et de 1
+Erreur lors de la conversion de l'hexadécimal en bytes
+Le fichier ne peut pas être encodé avec cette norme d'encodage
+Fait
+Votre texte a été écrit
+Erreur de fichier
+Le fichier
+est introuvable
+Le paramètre "from_" devrait être None, "text" ou "file", mais
+a été trouvé
+Le widget Text semble vide
+Lire le fichier ?
+Le widget Text est vide
+Vous n'avez pas sélectionné un fichier
+Le fichier est vide
+Le fichier semble vide
+Lire le widget Text ?
+Le fichier est vide
+Le widget Text n'est pas vide
+Le widget Text n'est pas vide mais le fichier l'est
+Ecrire dans le fichier (Yes) ou écraser le texte (Ignore) ?
+Ecrire dans le widget Text ?
