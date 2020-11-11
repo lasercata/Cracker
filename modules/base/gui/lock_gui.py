@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 lock_gui__auth = 'Lasercata'
-lock_gui__ver = '4.0.1'
-lock_gui__last_update = '02.11.2020'
+lock_gui__ver = '4.0.2'
+lock_gui__last_update = '11.11.2020'
 
 ##-import
 import sys
@@ -88,7 +88,7 @@ class Lock(QWidget):
         main_lay.addWidget(self.pwd, 0, 1)
 
         #---lb wrong
-        self.lb_wrong = QLabel(str(mx) + ' remaining tries')
+        self.lb_wrong = QLabel(str(mx) + ' remaining attempts')
         main_lay.addWidget(self.lb_wrong, 2, 1, 1, 2, alignment=Qt.AlignBottom | Qt.AlignRight)
 
         #---check box
@@ -123,7 +123,10 @@ class Lock(QWidget):
 
         elif self.nb_try < self.mx:
             self.pwd.setText('')
-            self.lb_wrong.setText(str(self.mx - self.nb_try) + ' remaining tries')
+            if self.mx - self.nb_try > 1:
+                self.lb_wrong.setText(str(self.mx - self.nb_try) + ' remaining attempts')
+            else:
+                self.lb_wrong.setText('Last attempt')
 
             if self.mx - self.nb_try == 2:
                 self.lb_wrong.setStyleSheet('color: #ff0')
@@ -139,7 +142,7 @@ class Lock(QWidget):
         else:
             sleep(1.3)
             QMessageBox.critical(QWidget(), 'Wrong password !', \
-                '<h1>Wrong password !!!</h1>\nIt was your last try !!!')
+                '<h1>Wrong password !!!</h1>\nIt was your last attempt !!!')
 
             sys.exit()
 
