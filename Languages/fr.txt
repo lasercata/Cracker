@@ -69,3 +69,47 @@ Le widget Text n'est pas vide
 Le widget Text n'est pas vide mais le fichier l'est
 Ecrire dans le fichier (Yes) ou écraser le texte (Ignore) ?
 Ecrire dans le widget Text ?
+invisible
+orange
+bleu
+vert
+bleu_clair
+rouge
+rose
+jaune
+blanc
+aucune
+gras
+léger
+italique
+souligné
+flaches
+normé
+inversé
+barré
+L'entrée n'est pas une couleur
+Entrer une nouvelle couleur de
+(0 pour garder la couleur)
+La couleur est introuvable
+programme
+entrée
+sortie
+erreur
+wordlist
+succès
+art ascii
+Couleurs actuelles
+Couleur du programme
+Couleur des entrées
+Couleur des sorties
+Couleur des erreurs
+Couleur des wordlists
+Couleur des actions réussites
+Couleur de l'art ascii
+Changer les couleurs ?
+(o/n)
+o
+n
+Restaurer les couleurs par défaut (1) ou les changer une par une (2) ?
+Retour au menu
+Ce que vous avez entré n'est pas dans la liste
