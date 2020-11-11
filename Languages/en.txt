@@ -10,3 +10,62 @@ Last attempt
 Wrong password
 It was your last attempt
 passed
+Text
+Select a file
+Clear
+File
+Select and load
+Load
+Save
+Reload
+Text encoding
+Binary mode
+Hexa mode
+Bytes mode
+Sure
+Are you sure ?
+Open file
+Select a file
+No file selected
+Please select a file
+Or use the button "Select and load"
+Error
+The file was NOT found
+Encoding error
+The file can't be decoded with this encoding
+Try bytes mode
+Erase Text data
+Text is detected in the box ! Remplace by the file's data ?
+Decoding error
+The file can't be decoded in bytes mode
+Save file
+Erase file data
+The selected file is NOT empty
+Overwrite with text data ?
+Text is empty
+There is no text in the box
+Write anyway ?
+Value Error
+The number of binary digits is not a multiple of 8
+A binary number is composed only of 0 and 1
+Error in the conversion of hexadecimal to bytes
+The file can't be encoded with this encoding
+Done
+Your text has been be wrote
+File error
+The file
+was NOT found
+Parameter "from_" should be None, "text" or "file", but
+was found
+The text widget seem to be empty
+Read the file ?
+The text widget is empty
+You did not select a file
+File is empty
+The file seem to be empty
+Read the text widget ?
+The file is empty
+Text is not empty
+The text widget is not empty, but the file is
+Write the file (Yes) or overwrite text (Ignore) ?
+Write in the text widget ?
