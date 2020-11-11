@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 lock_gui__auth = 'Lasercata'
-lock_gui__ver = '4.0.2'
+lock_gui__ver = '4.1'
 lock_gui__last_update = '11.11.2020'
 
 ##-import
@@ -10,10 +10,11 @@ import sys
 from time import sleep
 
 try:
+    from Languages.lang import translate as tr
     from modules.ciphers.hashes.hasher import Hasher
 
 except ModuleNotFoundError as ept:
-    print('\nPut the module ' + str(ept).strip("No module named") + ' back !!!')
+    print('\n' + tr('Put the module') + " " + str(ept).strip("No module named") + " " + tr('back') + ' !!!')
     sys.exit()
 
 from PyQt5.QtCore import QSize, Qt
@@ -33,12 +34,12 @@ try:
             cracker_version += k
 
 except FileNotFoundError:
-    cl_out(c_error, 'The file "version.txt" was not found. A version will be set but can be wrong.')
+    cl_out(c_error, tr('The file "version.txt" was not found. A version will be set but can be wrong.'))
     cracker_version = '3.0.0 ?'
 
 else:
     if len(cracker_version) > 16:
-        cl_out(c_error, 'The file "version.txt" contain more than 16 characters, so it certainly doesn\'t contain the actual version. A version will be set but can be wrong.')
+        cl_out(c_error, tr('The file "version.txt" contain more than 16 characters, so it certainly doesn\'t contain the actual version. A version will be set but can be wrong.'))
         cracker_version = '3.0.0 ?'
 
 
@@ -61,7 +62,7 @@ class Lock(QWidget):
 
         #------ini
         super().__init__(parent)
-        self.setWindowTitle('Cracker v' + cracker_version + ' | locked')
+        self.setWindowTitle('Cracker v' + cracker_version + ' | ' + tr('locked'))
         self.setWindowIcon(QIcon('Style/Cracker_icon.ico'))
 
         self.pwd_hshed = pwd
@@ -77,7 +78,7 @@ class Lock(QWidget):
         self.setLayout(main_lay)
 
         #---label
-        main_lay.addWidget(QLabel('Enter your password :'), 0 ,0)
+        main_lay.addWidget(QLabel(tr('Enter your password') + ' :'), 0 ,0)
 
         #---pwd_entry
         self.pwd = QLineEdit()
@@ -88,11 +89,11 @@ class Lock(QWidget):
         main_lay.addWidget(self.pwd, 0, 1)
 
         #---lb wrong
-        self.lb_wrong = QLabel(str(mx) + ' remaining attempts')
+        self.lb_wrong = QLabel(str(mx) + " " + tr('remaining attempts'))
         main_lay.addWidget(self.lb_wrong, 2, 1, 1, 2, alignment=Qt.AlignBottom | Qt.AlignRight)
 
         #---check box
-        self.inp_show = QCheckBox('Show password')
+        self.inp_show = QCheckBox(tr('Show password'))
         self.inp_show.toggled.connect(self.show_pwd)
 
         main_lay.addWidget(self.inp_show, 1, 0, 1, 2, alignment=Qt.AlignCenter | Qt.AlignTop)
@@ -124,9 +125,9 @@ class Lock(QWidget):
         elif self.nb_try < self.mx:
             self.pwd.setText('')
             if self.mx - self.nb_try > 1:
-                self.lb_wrong.setText(str(self.mx - self.nb_try) + ' remaining attempts')
+                self.lb_wrong.setText(str(self.mx - self.nb_try) + " " + tr('remaining attempts'))
             else:
-                self.lb_wrong.setText('Last attempt')
+                self.lb_wrong.setText(tr('Last attempt'))
 
             if self.mx - self.nb_try == 2:
                 self.lb_wrong.setStyleSheet('color: #ff0')
@@ -141,8 +142,8 @@ class Lock(QWidget):
 
         else:
             sleep(1.3)
-            QMessageBox.critical(QWidget(), 'Wrong password !', \
-                '<h1>Wrong password !!!</h1>\nIt was your last attempt !!!')
+            QMessageBox.critical(QWidget(), tr('Wrong password')+ ' !', \
+                '<h1>' + tr('Wrong password') + ' !!!</h1>\n' + tr('It was your last attempt') + ' !!!')
 
             sys.exit()
 
@@ -213,4 +214,4 @@ if __name__ == '__main__':
     pwd = hasher.hasher('test', 'sha512')
     Lock.use(pwd)
 
-    print('passed !')
+    print(tr('passed') + ' !')
