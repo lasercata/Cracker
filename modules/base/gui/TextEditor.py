@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 TextEditor__auth = 'lasercata'
-TextEditor__last_update = '08.11.2020'
-TextEditor__version = '1.2'
+TextEditor__last_update = '11.11.2020'
+TextEditor__version = '1.3'
 
 ##-import
 import sys
@@ -15,6 +15,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QComboBox, QStyleFactory
     QHBoxLayout, QGroupBox, QButtonGroup, QRadioButton, QTextEdit, QFileDialog)
 
 #------Cracker's modules
+from Languages.lang import translate as tr
 from modules.base.base_functions import list_files
 from modules.base.gui.GuiStyle import GuiStyle
 
@@ -27,13 +28,13 @@ lst_encod = ('utf-8', 'ascii', 'latin-1')
 class TextEditor(QWidget):
     '''Class creating a TextEditor object.'''
 
-    def __init__(self, txt_width=500, txt_height=220, txt_text='Text :', parent=None):
+    def __init__(self, txt_width=500, txt_height=220, txt_text=tr('Text') + ' :', parent=None):
         '''Create the text.'''
 
         #------ini
         super().__init__(parent)
 
-        self.fn = '-- Select a file --'
+        self.fn = '-- ' + tr('Select a file') + ' --'
         self.lst_f_hist = []
 
         self.style = GuiStyle().style_sheet
@@ -57,7 +58,7 @@ class TextEditor(QWidget):
         main_lay.addWidget(self.txt, 0, 1, 1, 7)
 
         #---clear
-        self.bt_clear = QPushButton('Clear')
+        self.bt_clear = QPushButton(tr('Clear'))
         self.bt_clear.setMaximumSize(65, 50)
         self.bt_clear.clicked.connect(self.clear)
         main_lay.addWidget(self.bt_clear, 0, 0, alignment=Qt.AlignTop)
@@ -65,11 +66,11 @@ class TextEditor(QWidget):
 
         #---file
         #-radio button
-        self.rb_fn = QRadioButton('File :')
+        self.rb_fn = QRadioButton(tr('File') + ' :')
         main_lay.addWidget(self.rb_fn, 1, 0)
 
         #-option menu files
-        self.lst_f = ('-- Select a file --', *list_files())
+        self.lst_f = ('-- ' + tr('Select a file') + ' --', *list_files())
         self.opt_fn = QComboBox()
         self.opt_fn.addItems(self.lst_f)
         self.opt_fn.insertSeparator(1)
@@ -77,48 +78,48 @@ class TextEditor(QWidget):
         main_lay.addWidget(self.opt_fn, 1, 1, 1, 2)
 
         #-buttons
-        self.bt_select = QPushButton('Select a file ...')
+        self.bt_select = QPushButton(tr('Select a file') + ' ...')
         self.bt_select.setMaximumSize(100, 50)
         self.bt_select.clicked.connect(self.select_fn)
         main_lay.addWidget(self.bt_select, 1, 3)
 
-        self.bt_select_load = QPushButton('Select and load ▲')
+        self.bt_select_load = QPushButton(tr('Select and load') + ' ▲')
         self.bt_select_load.setMaximumSize(135, 50)
         self.bt_select_load.clicked.connect(self.select_load_fn)
         main_lay.addWidget(self.bt_select_load, 1, 4)
 
-        self.bt_load = QPushButton('Load ▲')
+        self.bt_load = QPushButton(tr('Load') + ' ▲')
         self.bt_load.setMaximumSize(65, 50)
         self.bt_load.clicked.connect(self.load_fn)
         main_lay.addWidget(self.bt_load, 1, 5)
 
-        self.bt_save = QPushButton('Save ▼')
+        self.bt_save = QPushButton(tr('Save') + ' ▼')
         self.bt_save.setMaximumSize(65, 50)
         self.bt_save.clicked.connect(self.save_fn)
         main_lay.addWidget(self.bt_save, 1, 6)
 
-        self.bt_reload = QPushButton('Reload')
+        self.bt_reload = QPushButton(tr('Reload'))
         self.bt_reload.setMaximumSize(65, 50)
         self.bt_reload.clicked.connect(self.reload)
         main_lay.addWidget(self.bt_reload, 1, 7, alignment=Qt.AlignRight)
 
         #-encoding
-        self.rb_encod = QRadioButton('Text encoding :')
+        self.rb_encod = QRadioButton(tr('Text encoding') + ' :')
         main_lay.addWidget(self.rb_encod, 2, 1)
         self.opt_encod = QComboBox()
         self.opt_encod.addItems(lst_encod)
         main_lay.addWidget(self.opt_encod, 2, 2)
 
         #-binary mode
-        self.rb_bin = QRadioButton('Binary mode')
+        self.rb_bin = QRadioButton(tr('Binary mode'))
         main_lay.addWidget(self.rb_bin, 2, 3)
 
         #-hexa mode
-        self.rb_hexa = QRadioButton('Hexa mode')
+        self.rb_hexa = QRadioButton(tr('Hexa mode'))
         main_lay.addWidget(self.rb_hexa, 2, 4)
 
         #-bytes mode
-        self.rb_bytes = QRadioButton('Bytes mode')
+        self.rb_bytes = QRadioButton(tr('Bytes mode'))
         main_lay.addWidget(self.rb_bytes, 2, 5)
 
         self.rb_txt.toggled.connect(self.check_bytes)
@@ -171,7 +172,7 @@ class TextEditor(QWidget):
         '''Clear the text widget.'''
 
         if self.txt.toPlainText() != '':
-            sure = QMessageBox.question(self, 'Sure ?', '<h2>Are you sure ?</h2>', \
+            sure = QMessageBox.question(self, tr('Sure') + ' ?', '<h2>' + tr('Are you sure ?') + '</h2>', \
                 QMessageBox.Yes | QMessageBox.Cancel, QMessageBox.Yes)
 
             if sure != QMessageBox.Yes:
@@ -187,7 +188,7 @@ class TextEditor(QWidget):
         If no file is selected, launch select_fn.
         '''
 
-        if self.opt_fn.currentText() == '-- Select a file --':
+        if self.opt_fn.currentText() == '-- ' + tr('Select a file') + ' --':
             self.select_fn()
 
         self.rb_bytes.setChecked(True)
@@ -204,10 +205,10 @@ class TextEditor(QWidget):
         '''
 
         if fn == False:
-            fn = QFileDialog.getOpenFileName(self, 'Open file', getcwd())[0]
+            fn = QFileDialog.getOpenFileName(self, tr('Open file'), getcwd())[0]
 
         if fn in ((), ''): #cancel
-            fn = '-- Select a file --'
+            fn = '-- ' + tr('Select a file') + ' --'
             self.fn = fn
             self.rb_txt.setChecked(True)
             self.rb_fn.setChecked(False)
@@ -245,9 +246,9 @@ class TextEditor(QWidget):
 
         #self.fn = self.opt_fn.currentText()
 
-        if self.fn == '-- Select a file --':
-            QMessageBox.warning(QWidget(), '!!! No file selected !!!', \
-                '<h1>Please select a file !</h1>\nOr use the button "Select and load"')
+        if self.fn == '-- ' + tr('Select a file') + ' --':
+            QMessageBox.warning(QWidget(), '!!! ' + tr('No file selected') + ' !!!', \
+                '<h1>' + tr('Please select a file') + ' !</h1>\n' + tr('Or use the button "Select and load"'))
 
             return -3
 
@@ -269,20 +270,20 @@ class TextEditor(QWidget):
 
 
         except FileNotFoundError:
-            QMessageBox.critical(QWidget(), '!!! Error !!!', '<h2>The file was NOT found !!!</h2>')
+            QMessageBox.critical(QWidget(), '!!! ' + tr('Error') + ' !!!', '<h2>' + tr('The file was NOT found') + ' !!!</h2>')
             return -1 #stop
 
         except UnicodeDecodeError:
-            QMessageBox.critical(QWidget(), '!!! Encoding error !!!', \
-                '<h2>The file can\'t be decoded with this encoding !!!</h2>\nTry bytes mode')
+            QMessageBox.critical(QWidget(), '!!! ' + tr('Encoding error') + ' !!!', \
+                '<h2>' + tr('The file can\'t be decoded with this encoding') + ' !!!</h2>\n' + tr('Try bytes mode'))
 
             return -2 #stop
 
         txt = self.txt.toPlainText()
 
         if txt != '':
-            sure = QMessageBox.question(self, '!!! Erase Text data !!!', \
-                '<h2>Text is detected in the box ! Remplace by the file\'s data ?</h2>', \
+            sure = QMessageBox.question(self, '!!! ' + tr('Erase Text data') + ' !!!', \
+                '<h2>' + tr('Text is detected in the box ! Remplace by the file\'s data ?') + '</h2>', \
                 QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
             if sure != QMessageBox.Yes:
@@ -296,7 +297,7 @@ class TextEditor(QWidget):
                 self.txt.setPlainText(file_content.decode())
 
             except UnicodeDecodeError:
-                QMessageBox.critical(None, '!!! Decode error !!!', "<h2>The file can't be decoded in bytes mode !</h2>")
+                QMessageBox.critical(None, '!!! ' + tr('Decoding error') + ' !!!', '<h2>' + tr("The file can't be decoded in bytes mode") + '!</h2>')
                 return -2
 
 
@@ -310,8 +311,8 @@ class TextEditor(QWidget):
         return -3 if canceled or aborted, -2 if an encoding error occur, None otherwise.
         '''
 
-        if self.fn == '-- Select a file --':
-            filename = QFileDialog.getSaveFileName(self, 'Save file', getcwd())[0]
+        if self.fn == '-- ' + tr('Select a file') + ' --':
+            filename = QFileDialog.getSaveFileName(self, tr('Save file'), getcwd())[0]
 
             if filename in ((), ''):
                 return -3 #Canceled
@@ -335,8 +336,8 @@ class TextEditor(QWidget):
 
         else:
             if line not in ('', '\n'):
-                sure = QMessageBox.question(self, '!!! Erase file data !!!', \
-                    '<h2>The selected file is NOT empty !!!</h2>\n<h3>Overwrite with text data ?</h3>', \
+                sure = QMessageBox.question(self, '!!! ' + tr('Erase file data') + ' !!!', \
+                    '<h2>' + tr('The selected file is NOT empty') + ' !!!</h2>\n<h3>' + tr('Overwrite with text data ?') + '</h3>', \
                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
                 if sure != QMessageBox.Yes:
@@ -349,8 +350,8 @@ class TextEditor(QWidget):
             txt = data
 
         if txt == '':
-            emp = QMessageBox.question(self, 'Text is empty', \
-                '<h2>There is no text in the box.\nWrite anyway ?</h2>', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            emp = QMessageBox.question(self, tr('Text is empty'), \
+                '<h2>' + tr('There is no text in the box') + '.\n' + tr('Write anyway ?') + '</h2>', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
             if emp != QMessageBox.Yes:
                 return -3 #Aborted
@@ -368,8 +369,8 @@ class TextEditor(QWidget):
                 if not self.rb_bytes.isChecked():
                     if self.rb_bin.isChecked():
                         if len(txt) % 8 != 0:
-                            QMessageBox.critical(QWidget(), '!!! Value Error !!!', \
-                    "<h2>The number of binary digits is not a multiple of 8 !!!</h2>")
+                            QMessageBox.critical(QWidget(), '!!! ' + tr('Value Error') + ' !!!', \
+                    '<h2>' + tr('The number of binary digits is not a multiple of 8') + ' !!!</h2>')
                             return -2 #stop
 
                         else:
@@ -377,8 +378,8 @@ class TextEditor(QWidget):
                             txt2 = ""
                             for k in range(len(txt)//4):
                                 if txt[k*4:k*4+4] not in d:
-                                    QMessageBox.critical(QWidget(), '!!! Value Error !!!', \
-                                    "<h2>A binary number is composed only of 0 and 1 !!!</h2>")
+                                    QMessageBox.critical(QWidget(), '!!! ' + tr('Value Error') + ' !!!', \
+                                    '<h2>' + tr('A binary number is composed only of 0 and 1') + ' !!!</h2>')
                                     return -2 #stop
                                 else:
                                     txt2 += d[txt[k*4:k*4+4]]
@@ -386,13 +387,13 @@ class TextEditor(QWidget):
 
                     try:
                         if len(txt) % 2 != 0:
-                            QMessageBox.critical(QWidget(), '!!! Value Error !!!', \
+                            QMessageBox.critical(QWidget(), '!!! ' + tr('Value Error') + ' !!!', \
                     "<h2>The number of hexadecimal digits is not a multiple of 2 !!!</h2>")
                             return -2 #stop
                         txt = bytes.fromhex(txt)
                     except ValueError:
-                        QMessageBox.critical(QWidget(), '!!! Value Error !!!', \
-                    "<h2>Error in the conversion of hexadecimal to bytes !!!</h2>")
+                        QMessageBox.critical(QWidget(), '!!! ' + tr('Value Error') + ' !!!', \
+                    '<h2>' + tr('Error in the conversion of hexadecimal to bytes') + ' !!!</h2>')
                         return -2 #stop
 
                 with open(filename, mode='wb') as f:
@@ -403,13 +404,13 @@ class TextEditor(QWidget):
                         f.write(txt)
 
             except UnicodeEncodeError:
-                QMessageBox.critical(QWidget(), '!!! Encoding error !!!', \
-                    "<h2>The file can't be encoded with this encoding !!!</h2>")
+                QMessageBox.critical(QWidget(), '!!! ' + tr('Encoding error') + ' !!!', \
+                    '<h2>' + tr("The file can't be encoded with this encoding") + ' !!!</h2>')
                 return -2 #stop
 
 
         self.reload()
-        QMessageBox.about(QWidget(), 'Done !', '<h2>Your text has been be wrote !</h2>')
+        QMessageBox.about(QWidget(), tr('Done') + ' !', '<h2>' + tr('Your text has been be wrote') + ' !</h2>')
 
 
     #------read_file
@@ -439,14 +440,14 @@ class TextEditor(QWidget):
 
         except FileNotFoundError:
             if not silent:
-                QMessageBox.critical(QWidget(), '!!! File error !!!', \
-                    '<h2>The file "' + str(fn) + '" was NOT found !!!</h2>')
+                QMessageBox.critical(QWidget(), '!!! ' + tr('File error') + ' !!!', \
+                    '<h2>' + tr('The file') + ' "' + str(fn) + '"' + tr(' was NOT found') + ' !!!</h2>')
             return -1
 
         except UnicodeDecodeError:
             if not silent:
-                QMessageBox.critical(QWidget(), '!!! Encoding error !!!', \
-                    '<h2>The file can\'t be decoded with this encoding !!!</h2>')
+                QMessageBox.critical(QWidget(), '!!! ' + tr('Encoding error') + ' !!!', \
+                    '<h2>' + tr('The file can\'t be decoded with this encoding') + ' !!!</h2>')
             return -2
 
         return txt
@@ -458,10 +459,10 @@ class TextEditor(QWidget):
         It can be used if a new file was copied while running, for example.
         '''
 
-        self.lst_f = ('-- Select a file --', *list_files(), *self.lst_f_hist)
+        self.lst_f = ('-- ' + tr('Select a file') + ' --', *list_files(), *self.lst_f_hist)
 
         self.opt_fn.clear()
-        self.opt_fn.addItems(('-- Select a file --', *list_files()))
+        self.opt_fn.addItems(('-- ' + tr('Select a file') + ' --', *list_files()))
         self.opt_fn.insertSeparator(1)
         self.opt_fn.insertSeparator(10000)
         if len(self.lst_f_hist) > 0:
@@ -469,8 +470,8 @@ class TextEditor(QWidget):
             self.opt_fn.insertSeparator(20000)
 
         if self.fn not in self.lst_f:
-            self.fn = '-- Select a file --'
-            self.opt_fn.setCurrentText('-- Select a file --')
+            self.fn = '-- ' + tr('Select a file') + ' --'
+            self.opt_fn.setCurrentText('-- ' + tr('Select a file') + ' --')
 
         else:
             self.opt_fn.setCurrentText(self.fn)
@@ -506,11 +507,11 @@ class TextEditor(QWidget):
         '''
 
         if from_ not in (None, 'text', 'file'):
-            raise ValueError('Parameter "from_" should be None, "text" or "file", but "' + str(from_) + '" was found !!!')
+            raise ValueError(tr('Parameter "from_" should be None, "text" or "file", but') + ' "' + str(from_) + '" ' + tr('was found') + ' !!!')
 
         txt_t = self.txt.toPlainText()
 
-        if self.opt_fn.currentText() != '-- Select a file --':
+        if self.opt_fn.currentText() != '-- ' + tr('Select a file') + ' --':
             txt_f = self.read_file(self.opt_fn.currentText(), \
                 self.rb_bytes.isChecked(), self.opt_encod.currentText())
 
@@ -527,8 +528,8 @@ class TextEditor(QWidget):
 
         if self.rb_txt.isChecked(): # Text is in the text widget
             if txt_t == '' and txt_f not in (None, ''):
-                rep = QMessageBox.question(self, '!!! Text is empty !!!', \
-                    '<h3>The text widget seem to be empty.</h3>\n<h2>Read the file ?</h2>', \
+                rep = QMessageBox.question(self, '!!! ' + tr('Text is empty') + ' !!!', \
+                    '<h3>' + tr('The text widget seem to be empty') + '.</h3>\n<h2>' + tr('Read the file ?') + '</h2>', \
                     QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
 
                 if rep == QMessageBox.Yes:
@@ -539,8 +540,8 @@ class TextEditor(QWidget):
 
             elif txt_t == '':
                 if not silent:
-                    QMessageBox.critical(QWidget(), '!!! Text is empty !!!', \
-                        '<h2>The text widget is empty !!!</h2>')
+                    QMessageBox.critical(QWidget(), '!!! ' + tr('Text is empty') + ' !!!', \
+                        '<h2>' + tr('The text widget is empty') + ' !!!</h2>')
                 return -3 #Abort
 
             return txt_t
@@ -549,20 +550,20 @@ class TextEditor(QWidget):
         else: # Text is in the file
             if txt_f == -1:
                 if not silent:
-                    QMessageBox.critical(QWidget(), '!!! File error !!!', \
-                        '<h2>The file "' + str(fn) + '" was NOT found !!!</h2>')
+                    QMessageBox.critical(QWidget(), '!!! ' + tr('File error') + ' !!!', \
+                        '<h2>' + tr('The file') + ' "' + str(fn) + '" ' + tr('was NOT found') + ' !!!</h2>')
                 return -1
 
             elif txt_f == -2:
                 if not silent:
-                    QMessageBox.critical(QWidget(), '!!! Encoding error !!!', \
-                        "<h2>The file can't be decoded with this encoding !!!</h2>")
+                    QMessageBox.critical(QWidget(), '!!! ' + tr('Encoding error') + ' !!!', \
+                        '<h2>' + tr("The file can't be decoded with this encoding") + ' !!!</h2>')
                 return -2
 
 
             if txt_f == None and txt_t != '':
-                rep = QMessageBox.question(self, '!!! No file selected !!!', \
-                    '<h3>You did not select a file !!!</h3>\n<h2>Read the text widget ?</h2>', \
+                rep = QMessageBox.question(self, '!!! ' + tr('No file selected') + ' !!!', \
+                    '<h3>' + tr('You did not select a file') + ' !!!</h3>\n<h2>' + tr('Read the text widget ?') + '</h2>', \
                     QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
 
                 if rep == QMessageBox.Yes:
@@ -573,14 +574,14 @@ class TextEditor(QWidget):
 
             elif txt_f == None:
                 if not silent:
-                    QMessageBox.critical(QWidget(), '!!! No file selected !!!', \
-                        '<h2>Please select a file !</h2>')
+                    QMessageBox.critical(QWidget(), '!!! ' + tr('No file selected') + ' !!!', \
+                        '<h2>' + tr('Please select a file') + ' !</h2>')
                 return -3
 
 
             if txt_f in ('', b'') and txt_t != '':
-                rep = QMessageBox.question(self, '!!! File is empty !!!', \
-                    '<h3>The file seem to be empty.</h3>\n<h2>Read the text widget ?</h2>', \
+                rep = QMessageBox.question(self, '!!! ' + tr('File is empty') + ' !!!', \
+                    '<h3>' + tr('The file seem to be empty') + '.</h3>\n<h2>' + tr('Read the text widget ?') + '</h2>', \
                     QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
 
                 if rep == QMessageBox.Yes:
@@ -591,7 +592,7 @@ class TextEditor(QWidget):
 
             elif txt_f in ('', b''):
                 if not silent:
-                    QMessageBox.critical(QWidget(), '!!! File is empty !!!', '<h2>The file is empty !!!</h2>')
+                    QMessageBox.critical(QWidget(), '!!! ' + tr('File is empty') + ' !!!', '<h2>' + tr('The file is empty') + ' !!!</h2>')
                 return -3
 
             return txt_f
@@ -604,7 +605,7 @@ class TextEditor(QWidget):
 
         txt_t = self.txt.toPlainText()
 
-        if self.opt_fn.currentText() != '-- Select a file --':
+        if self.opt_fn.currentText() != '-- ' + tr('Select a file') + ' --':
             txt_f = self.read_file(self.opt_fn.currentText(), \
                 self.rb_bytes.isChecked(), self.opt_encod.currentText())
 
@@ -614,9 +615,8 @@ class TextEditor(QWidget):
 
         if self.rb_txt.isChecked(): # The text widget is chosen
             if txt_t != '' and txt_f == '':
-                rep = QMessageBox.question(self, '!!! Text is not empty !!!', \
-                    '''<h2>The text widget is not empty, but the file is.</h2>
-                    <h3>Write the file (Yes) or overwrite text (Ignore) ?</h3>''', \
+                rep = QMessageBox.question(self, '!!! ' + tr('Text is not empty') + ' !!!', \
+                    '<h2>' + tr('The text widget is not empty, but the file is') + '.</h2>\n<h3>' + tr('Write the file (Yes) or overwrite text (Ignore) ?') + '</h3>', \
                     QMessageBox.Yes | QMessageBox.Ignore | QMessageBox.Cancel, QMessageBox.Ignore)
 
                 if rep == QMessageBox.Yes:
@@ -634,8 +634,8 @@ class TextEditor(QWidget):
 
         else: # The file is chosen
             if txt_f == -1:
-                rep = QMessageBox.question(self, '!!! File error !!!', \
-                    '<h2>The file "' + str(fn) + '" was NOT found !!!</h2>\n<h3>Write in the text widget ?</h3>', \
+                rep = QMessageBox.question(self, '!!! ' + tr('File error') + ' !!!', \
+                    '<h2>' + tr('The file') + ' "' + str(fn) + '" ' + tr('was NOT found') + ' !!!</h2>\n<h3>' + tr('Write in the text widget ?') + '</h3>', \
                     QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
 
                 if rep == QMessageBox.Yes:
