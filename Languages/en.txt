@@ -69,3 +69,47 @@ Text is not empty
 The text widget is not empty, but the file is
 Write the file (Yes) or overwrite text (Ignore) ?
 Write in the text widget ?
+invisible
+orange
+blue
+green
+light_blue
+red
+pink
+yellow
+white
+none
+bold
+lite
+italics
+underline
+flaches
+norm
+reverse
+cross
+The input is not a color
+Enter new color of
+(0 to keep the color)
+The color was NOT founded
+program
+input
+output
+error
+wordlist
+succes
+ascii art
+Current colors
+Program color
+Input color
+Output color
+Error color
+Wordlists color
+Succes color
+Ascii art color
+Change colors ?
+(y/n)
+y
+n
+Restore default program colors (1) or change colors one by one (2) ?
+Back menu
+What you entered is NOT in list
