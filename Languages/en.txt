@@ -1,0 +1,12 @@
+Put the module
+back
+The file "version.txt" was not found. A version will be set but can be wrong.
+The file "version.txt" contain more than 16 characters, so it certainly doesn\'t contain the actual version. A version will be set but can be wrong.
+locked
+Enter your password
+remaining attempts
+Show password
+Last attempt
+Wrong password
+It was your last attempt
+passed

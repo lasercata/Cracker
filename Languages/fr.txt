@@ -1,0 +1,12 @@
+Remettre le module
+à sa place
+Le fichier "version.txt" est introuvable.
+Le fichier "version.txt' semble erroné.
+verrouillé
+Entrer votre mot de passe
+essais restants
+Montrer le mot de passe
+Dernier essai
+Mot de passe incorrect
+C'était votre dernier essai
+réussi
