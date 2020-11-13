@@ -1,10 +1,15 @@
 List of errors and bugs :
 
 Cracker_gui only :
-    - Bad keys for Fleissner cipher
+    - Bad keys for Fleissner cipher ;
+    - In the base convert tab with the base selectors :
+        * The two QSpinBox are not separated for the maximum base (i.e. if
+        alf_nb is '01' and alf_b is '0123456789', the max value of the two
+        is 2 or 10, depending on the last selected) ;
+        * The maximum is not set at sart ;
   
 Cracker_console only :
 /
-                                                       
+
 Cracker_console and Cracker_gui :
 /
