@@ -29,3 +29,5 @@ Version of Prima : 3.2
 Version of Base convert : 3.1
 Version of P@ssw0rd_Test0r : 1.0.2
 Version of Anamer0 : 1.1.2
+
+Version of lang : 1.0.2
