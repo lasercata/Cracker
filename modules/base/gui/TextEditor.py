@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 TextEditor__auth = 'lasercata'
-TextEditor__last_update = '11.11.2020'
-TextEditor__version = '1.3'
+TextEditor__last_update = '13.11.2020'
+TextEditor__version = '1.3.1'
 
 ##-import
 import sys
@@ -110,17 +110,20 @@ class TextEditor(QWidget):
         self.opt_encod.addItems(lst_encod)
         main_lay.addWidget(self.opt_encod, 2, 2)
 
+        rb_lay = QHBoxLayout()
+        main_lay.addLayout(rb_lay, 2, 3, 1, 3)
+
         #-binary mode
         self.rb_bin = QRadioButton(tr('Binary mode'))
-        main_lay.addWidget(self.rb_bin, 2, 3)
+        rb_lay.addWidget(self.rb_bin)
 
         #-hexa mode
         self.rb_hexa = QRadioButton(tr('Hexa mode'))
-        main_lay.addWidget(self.rb_hexa, 2, 4)
+        rb_lay.addWidget(self.rb_hexa)
 
         #-bytes mode
         self.rb_bytes = QRadioButton(tr('Bytes mode'))
-        main_lay.addWidget(self.rb_bytes, 2, 5)
+        rb_lay.addWidget(self.rb_bytes)
 
         self.rb_txt.toggled.connect(self.check_bytes)
         self.rb_fn.toggled.connect(self.check_bytes)
