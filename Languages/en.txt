@@ -70,6 +70,7 @@ The text widget is not empty, but the file is
 Write the file (Yes) or overwrite text (Ignore) ?
 Write in the text widget ?
 invisible
+black
 orange
 blue
 green
