@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 lang__auth = 'Elerias'
-lang__ver = '1.0.1'
+lang__ver = '1.0.2'
 lang__last_update = '13.11.2020'
 
 
@@ -18,10 +18,11 @@ D_langs = {}
 L_en = []
 
 try:
-    with open('lang.txt', 'r') as f:
+    with open('Data/lang.txt', 'r') as f:
         lang = f.read()
-    while lang[-1] == '\n':
-       lang = lang[:-1]
+
+    lang = lang.strip('\n')
+
 except FileNotFoundError:
     print('The file "lang.txt" was not found')
     lang = 'en'
