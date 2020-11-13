@@ -70,6 +70,7 @@ Le widget Text n'est pas vide mais le fichier l'est
 Ecrire dans le fichier (Yes) ou écraser le texte (Ignore) ?
 Ecrire dans le widget Text ?
 invisible
+noir
 orange
 bleu
 vert
