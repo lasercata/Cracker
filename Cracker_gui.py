@@ -4,8 +4,8 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '07.11.2020'
-Cracker_gui__version = '1.2.1'
+Cracker_gui__last_update = '13.11.2020'
+Cracker_gui__version = '1.2.2'
 
 
 ##-import/ini
@@ -636,7 +636,7 @@ class CrackerGui(QMainWindow):
                 self.cipher_nb_key.setRange(0, 10**9)
             else:
                 self.cipher_nb_key.setRange(-2**16, 2**16)
-                
+
             if cipher == 'Frequence analysis':
                 key_label.setText('Group :')
             else:
@@ -1659,8 +1659,8 @@ class CrackerGui(QMainWindow):
             self.resize(1090, 400)
 
         elif tab == 1: #Crack
-            self.setMinimumSize(1090, 565)
-            self.resize(1090, 565)
+            self.setMinimumSize(1090, 600)
+            self.resize(1090, 600)
 
         elif tab == 2: #Cipher
             self.setMinimumSize(1030, 730)
