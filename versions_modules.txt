@@ -1,4 +1,4 @@
-Version of Cracker_gui : 1.2.2
+Version of Cracker_gui : 1.2.3
 Version of Cracker_console : 1.2
 
 Version of base_functions : 2.3.1

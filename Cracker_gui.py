@@ -5,7 +5,7 @@
 
 Cracker_gui__auth = 'Lasercata'
 Cracker_gui__last_update = '13.11.2020'
-Cracker_gui__version = '1.2.2'
+Cracker_gui__version = '1.2.3'
 
 
 ##-import/ini
@@ -1090,8 +1090,8 @@ class CrackerGui(QMainWindow):
         def chk_alf(alf):
             '''Activated when alf is changed. Change the maximum of nb and b.'''
 
-            self.b_cvrt_nb.setMaximum(len(alf))
-            self.b_cvrt_b.setMaximum(len(alf))
+            spin_box = {'nb': self.b_cvrt_nb, 'b': self.b_cvrt_b}[self.sender().objectName()]
+            spin_box.setMaximum(len(alf)) #Choose the spin box that correspond to the alphabet selector..
 
             if len(alf) > 36:
                 if alf[:36] != b_cvrt_alf_list['alf_base36']:
@@ -1116,6 +1116,30 @@ class CrackerGui(QMainWindow):
                 self.b_cvrt_n_big_chk.setDisabled(False)
                 chk_big_n()
 
+
+        alf_count = 7
+        def chk_alf_share(index):
+            '''
+            Activated when alf combo box's index change.
+            Check if there is a new item, and if so, add it to the other combo box.
+            '''
+
+            nonlocal alf_count
+
+            sender = self.sender()
+
+            if sender.count() > alf_count:
+                alf_count = sender.count()
+
+                try:
+                    if sender is self.b_cvrt_opt_alf:
+                        self.b_cvrt_opt_alf_b.addItem(sender.itemText(alf_count - 1))
+
+                    else:
+                        self.b_cvrt_opt_alf.addItem(sender.itemText(alf_count - 1))
+
+                except AttributeError:
+                    pass
 
 
         #------widgets
@@ -1155,7 +1179,7 @@ class CrackerGui(QMainWindow):
         self.b_cvrt_nb = QSpinBox()
         self.b_cvrt_nb.setMaximumSize(55, 35)
         self.b_cvrt_nb.setMinimum(1)
-        self.b_cvrt_nb.setMaximum(140)
+        self.b_cvrt_nb.setMaximum(10)
         self.b_cvrt_nb.setValue(10)
         self.b_cvrt_nb.valueChanged.connect(chk_nb)
         nb_alf_lay.addWidget(self.b_cvrt_nb)
@@ -1163,8 +1187,11 @@ class CrackerGui(QMainWindow):
 
         #alf (in the same row that nb, but align right)
         self.b_cvrt_opt_alf = QComboBox()
+        self.b_cvrt_opt_alf.setObjectName('nb')
         self.b_cvrt_opt_alf.setEditable(True)
         self.b_cvrt_opt_alf.activated[str].connect(chk_alf)
+        self.b_cvrt_opt_alf.currentIndexChanged.connect(chk_alf_share)
+        #self.b_cvrt_opt_alf.currentIndexChanged.connect(lambda x: print(x, self.b_cvrt_opt_alf.itemText(x)))
         self.b_cvrt_opt_alf.addItems([alf for alf in list(b_cvrt_alf_list.values())])
         nb_alf_lay.addWidget(self.b_cvrt_opt_alf, Qt.AlignRight)
 
@@ -1176,15 +1203,17 @@ class CrackerGui(QMainWindow):
         self.b_cvrt_b = QSpinBox()
         self.b_cvrt_b.setMaximumSize(55, 35)
         self.b_cvrt_b.setMinimum(1)
-        self.b_cvrt_b.setMaximum(140)
-        self.b_cvrt_b.setValue(10)
+        self.b_cvrt_b.setMaximum(10)
+        self.b_cvrt_b.setValue(2)
         nb_alf_b_lay.addWidget(self.b_cvrt_b)
         nb_alf_b_lay.addWidget(QLabel(' '*5))
 
         #alf_b
         self.b_cvrt_opt_alf_b = QComboBox()
+        self.b_cvrt_opt_alf_b.setObjectName('b')
         self.b_cvrt_opt_alf_b.setEditable(True)
         self.b_cvrt_opt_alf_b.activated[str].connect(chk_alf)
+        self.b_cvrt_opt_alf_b.currentIndexChanged.connect(chk_alf_share)
         self.b_cvrt_opt_alf_b.addItems([alf for alf in list(b_cvrt_alf_list.values())])
         nb_alf_b_lay.addWidget(self.b_cvrt_opt_alf_b, Qt.AlignRight)
 
@@ -1207,7 +1236,7 @@ class CrackerGui(QMainWindow):
         self.b_cvrt_ret.setObjectName('orange_border_hover')
         tab_b_cvrt_lay.addWidget(self.b_cvrt_ret, 3, 0)
 
-        #---Crack button
+        #---Convert button
         self.b_cvrt_bt_c = QPushButton('Convert')
         self.b_cvrt_bt_c.setStyleSheet(self.style)
         self.b_cvrt_bt_c.setObjectName('main_obj')
