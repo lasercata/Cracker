@@ -3,8 +3,8 @@
 """Crypta is a cryptology program including cryptography and cryptanalysis functions."""
 
 crypta__auth = 'Elerias'
-crypta__last_update = '08.11.2020'
-crypta__ver = '3.4.5'
+crypta__last_update = '15.11.2020'
+crypta__ver = '3.5'
 
 sites = ("https://www.lama.univ-savoie.fr/pagesmembres/hyvernat/Enseignement/1920/info910/tp1.html", 'http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/expose_vigenere.html')
 
@@ -26,6 +26,13 @@ for k in range(3):
     except:
         pass
     chdir('..')
+
+try:
+    from Languages.lang import translate as tr
+except ModuleNotFoundError:
+    def tr(text):
+        return text
+
 try:
     from modules.base.console.color import color, cl_out, cl_inp, c_succes, c_output, c_wrdlt, c_error, c_prog, c_ascii
     from modules.base.base_functions import use_menu, inp_lst, inp_int, fact, space
@@ -35,7 +42,8 @@ try:
         
 except ModuleNotFoundError as ept:
     err = str(ept).strip("No module named")
-    print('Crypta : module {} not found, it could mean that Craker was not found, redefining the functions !'.format(err))
+
+    print(tr('Crypta : module {} not found, it could mean that Craker was not found, redefining the functions !').format(err))
 
     # If we can't import Cracker, functions have to be defined for the good working of program
     def color(arg):
@@ -342,7 +350,7 @@ def read_file_use():
     try:
         return read_file(f)
     except FileNotFoundError:
-        cl_out(c_error, 'The file was NOT found !!!')
+        cl_out(c_error, tr('The file was NOT found') + ' !!!')
         return read_file_use()
 
 def write_file(f, t):
@@ -355,43 +363,43 @@ def write_file(f, t):
 
 def write_file_use(t=""):
     """Use write_file."""
-    f = cl_inp('Name of the file to write the data : ')
+    f = cl_inp(tr('Name of the output file') + ' : ')
     if t == "":
         t = cl_inp('Text : ')
     write_file(f, t)
-    print('Operation successfully realised')
+    print(tr('Operation successfully realised'))
 
 def ask_text():
     """Use write_file or ask the text."""
-    f = inp_lst('Read text from file ? (y/n) : ', ('y', 'yes', 'Y', 'YES', 'Yes', 'o', 'O', 'oui', 'OUI', 'Oui', 'n', 'no', 'non', 'Non', 'No', 'N', 'NON', 'NO'))
-    if f in ('y', 'yes', 'Y', 'YES', 'Yes', 'o', 'O', 'oui', 'OUI', 'Oui'):
+    f = inp_lst(tr('Read text from file ?') + ' ' + tr('(y/n)') + ' : ', (tr('y'), tr('n'), tr('yes'), tr('no')))
+    if f in (tr('y'), tr('n'), tr('yes'), tr('no')):
         t = read_file_use()
     else:
-        t = cl_inp('Enter the text :')
+        t = cl_inp(tr('Enter the text') + ' :')
     return t
 
 def give_result(res):
     """Use write_file or print the result."""
-    r = cl_inp('Write the result in a file ? (y/n) : ')
-    if r in ('y', 'yes', 'Y', 'YES', 'o', 'O', 'oui', 'OUI'):
+    r = inp_lst(tr('Write the result in a file ?') + ' ' + tr('(y/n)') + ' : ', (tr('y'), tr('n'), tr('yes'), tr('no')))
+    if r in (tr('y'), tr('n'), tr('yes'), tr('no')):
         write_file_use(res)
     else:
-        print('Result :\n')
+        print(tr('Result') + ' :\n')
         print(res)
 
 
 ciph_types = { # Used in make_ciph
 
     'alf, verbose, interface': (
-        'Place of letters',
+        tr('Place of letters'),
     ),
     
     'verbose, interface': (
         'ASCII',
-        'Binary code',
+        tr('Binary code'),
         'Morse',
-        'Reverse code',
-        'Reverse code word',
+        tr('Reverse code'),
+        tr('Reverse code word'),
     ),
     
     'key, interface': (
@@ -413,7 +421,7 @@ ciph_types = { # Used in make_ciph
     ),
     
     'key, alf, verbose, interface': (
-        'Columnar transposition',
+        tr('Columnar transposition'),
         'UBCHI'
     ),
     
@@ -426,8 +434,8 @@ ciph_types = { # Used in make_ciph
     ),
     
     'key, alf, ignore, verbose, interface': (
-        'Caesar',
-        'Monoalphabetic substitution',
+        tr('Caesar'),
+        tr('Monoalphabetic substitution'),
         'Porta',
         'Vigenere',
         'Beaufort',
@@ -438,7 +446,7 @@ ciph_types = { # Used in make_ciph
     'key, key2, alf, interface': (
         'ADFGX',
         'ADFGVX',
-        'Four squares',
+        tr('Four squares'),
     ),
     
     'key, key2, alf, ignore, verbose, interface': (
@@ -446,7 +454,7 @@ ciph_types = { # Used in make_ciph
     ),
     
     'key, indexes, alf, space, verbose, interface': (
-        'Polybius',
+        tr('Polybius'),
     )
 }
 
@@ -454,11 +462,11 @@ ciph_types = { # Used in make_ciph
 ciph_sort = {
     '0_key': (
         'ASCII',
-        'Binary code',
+        tr('Binary code'),
         'Morse',
-        'Place of letters',
-        'Reverse code',
-        'Reverse code word',
+        tr('Place of letters'),
+        tr('Reverse code'),
+        tr('Reverse code word'),
         'Atbash',
         'Albam',
         'Achbi',
@@ -467,10 +475,10 @@ ciph_sort = {
     ),
     
     '1_key_str': (
-        'Columnar transposition',
+        tr('Columnar transposition'),
         'UBCHI',
-        'Polybius',
-        'Monoalphabetic substitution',
+        tr('Polybius'),
+        tr('Monoalphabetic substitution'),
         'Porta',
         'Vigenere',
         'Beaufort',
@@ -482,7 +490,7 @@ ciph_sort = {
     '1_key_int': (
         'Scytale',
         'Rail fence',
-        'Caesar',
+        tr('Caesar'),
         'Gronsfeld'
     ),
     
@@ -496,31 +504,31 @@ ciph_sort = {
     ),
     
     '2_key_str': (
-        'Four squares',
+        tr('Four squares'),
         'ADFGX',
         'ADFGVX'
     ),
 
     'alf': (
-        'Place of letters',
+        tr('Place of letters'),
         'Fleissner',
-        'Columnar transposition',
+        tr('Columnar transposition'),
         'UBCHI',
         'Atbash',
         'Albam',
         'Achbi',
         'Avgad',
-        'Caesar',
+        tr('Caesar'),
         'Affine',
-        'Polybius',
-        'Monoalphabetic substitution',
+        tr('Polybius'),
+        tr('Monoalphabetic substitution'),
         'Tritheme',
         'Porta',
         'Vigenere',
         'Beaufort',
         'Gronsfeld',
         'Autoclave',
-        'Four squares',
+        tr('Four squares'),
         'Hill',
         'ABC',
         'ADFGX',
@@ -541,7 +549,7 @@ def make_ciph(ciph, key=None, key2=None, alf=alf_az, ignore=False, verbose=True,
     #Todo: There is certainly a better way to do this.
     
     if ciph in ciph_types['verbose, interface']:
-        if ciph == 'Reverse code word':
+        if ciph == tr('Reverse code word'):
             return ReverseCode('word', verbose, interface)
             
         return get_ciph(ciph, verbose=verbose, interface=interface)
@@ -580,7 +588,7 @@ def make_ciph(ciph, key=None, key2=None, alf=alf_az, ignore=False, verbose=True,
         return get_ciph(ciph, key, alf=alf, verbose=verbose, interface=interface, **kargs)
     
     else:
-        raise NotImplemented('The cipher "{}" was NOT found !!!\nIf it exists, please add it to the dict "ciph_types".'.format(ciph))
+        raise NotImplemented(tr('The cipher "{}" was NOT found !!!').format(ciph) + '\n' + tr('If it exists, please add it to the dict "ciph_types".'))
     
     
     
@@ -602,7 +610,7 @@ class ASCII(BaseCipher):
         super().__init__('ASCII', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         self.verbose = verbose
     
@@ -665,10 +673,10 @@ class BinaryCode(BaseCipher):
         - verbose : A boolean. Print 'BinaryCode in `meaning` if True.
         """
         
-        super().__init__('Binary code', interface=interface)
+        super().__init__(tr('Binary code'), interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         self.verbose = verbose
     
@@ -709,7 +717,7 @@ class BinaryCode(BaseCipher):
         """Use the function 'ver_plain_text' which search if the text mean something."""
         
         if self.verbose:
-            print('Binary code')
+            print(tr('Binary code'))
         
         if brk == None:
             brk = self.break_(txt)
@@ -738,7 +746,7 @@ class Morse(BaseCipher):
         super().__init__('Morse', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         self.verbose = verbose
         
@@ -845,10 +853,10 @@ class Place_of_letters(BaseCipher):
     
     def __init__(self, alf=alf_az, verbose=True, interface=None):
         
-        super().__init__('Place of letters in alphabet', interface=interface)
+        super().__init__(tr('Place of letters in alphabet'), interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         self.verbose = verbose
         self.alf = alf
@@ -887,7 +895,7 @@ class Place_of_letters(BaseCipher):
         """Use the function 'ver_plain_text' which search if the text mean something."""
         
         if self.verbose:
-            print('Place of letters in alphabet')
+            print(tr('Place of letters in alphabet'))
         
         if brk == None:
             brk = self.break_(txt)
@@ -920,13 +928,13 @@ class ReverseCode(BaseCipher):
                 reverse the words.
         """
         
-        super().__init__('Reverse code', interface=interface)
+        super().__init__(tr('Reverse code'), interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         if mode not in ('all', 'word'):
-            raise ValueError('"mode" arg should be "all", or "word", but "{}" found !!!'.format(mode))
+            raise ValueError(tr('"mode" arg should be "all", or "word", but "{}" found !!!').format(mode))
         
         self.mode = mode
         self.verbose = verbose
@@ -966,7 +974,7 @@ class ReverseCode(BaseCipher):
         """Use the function 'ver_plain_text' which search if the text mean something."""
         
         if self.verbose:
-            print('Reverse code')
+            print(tr('Reverse code'))
         
         if brk == None:
             brk = self.break_(txt)
@@ -991,14 +999,14 @@ class Scytale(BaseCipher):
         super().__init__('Scytale', pb_mn=1, interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         if key != None:
             try:
                 self.key = int(key)
             
             except ValueError:
-                raise ValueError('"key" should be an int, but "{}" of type "{}" was found !!!'.format(key, type(key)))
+                raise ValueError(tr('"key" should be an int, but "{}" of type "{}" was found !!!').format(key, type(key)))
         
         else:
             self.key = None
@@ -1010,7 +1018,7 @@ class Scytale(BaseCipher):
         """Encrypt 'txt' with the Scytale cipher."""
         
         if self.key == None:
-            raise ValueError("Can't encrypt with an empty key !!!")
+            raise ValueError(tr("Can't encrypt with an empty key !!!"))
         
         T = write_columns_l(txt, self.key)
         return read_lines(T)
@@ -1019,13 +1027,13 @@ class Scytale(BaseCipher):
         """Decrypt 'txt' with the Scytale cipher."""
         
         if self.key == None:
-            raise ValueError("Can't decrypt with an empty key !!!")
+            raise ValueError(tr("Can't decrypt with an empty key !!!"))
         
         T = write_lines_l(txt, self.key)
         return read_columns(T)
     
     def brute_force(self, txt):
-        """Return a dict cointaining all the possibles decryptions, associated with their keys."""
+        """Return a dict containing all the possibles decryptions, associated with their keys."""
         
         lth = len(txt)
         
@@ -1043,7 +1051,7 @@ class Scytale(BaseCipher):
         """
         
         if self.verbose:
-            print('Scytale\nMethod : brute-force')
+            print('Scytale\n' + tr('Method : brute-force'))
         
         if brk == None:
             brk = self.brute_force(txt)
@@ -1074,7 +1082,7 @@ class RailFence(BaseCipher):
         super().__init__('Rail fence', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
             
         self.verbose = verbose
         
@@ -1083,7 +1091,7 @@ class RailFence(BaseCipher):
                 self.key = int(key)
             
             except ValueError:
-                raise ValueError('"key" should be an int, but "{}" of type "{}" was found !!!'.format(key, type(key)))
+                raise ValueError(tr('"key" should be an int, but "{}" of type "{}" was found !!!').format(key, type(key)))
             
             self.lst = []
             for k in range(key):
@@ -1098,7 +1106,7 @@ class RailFence(BaseCipher):
         """Encrypt 'txt' with the Rail fence cipher."""
         
         if self.key == None:
-            raise ValueError("Can't encrypt with an empty key !!!")
+            raise ValueError(tr("Can't encrypt with an empty key !!!"))
         
         if self.key == 1:
             return txt
@@ -1129,7 +1137,7 @@ class RailFence(BaseCipher):
         """Decrypt 'txt' with the Rail fence cipher."""
         
         if self.key == None:
-            raise ValueError("Can't decrypt with an empty key !!!")
+            raise ValueError(tr("Can't decrypt with an empty key !!!"))
         
         if self.key == 1:
             return txt
@@ -1177,7 +1185,7 @@ class RailFence(BaseCipher):
     
     
     def brute_force(self, txt):
-        """Return a dict cointaining all the possibles decryptions, associated with their keys."""
+        """Return a dict containing all the possibles decryptions, associated with their keys."""
         
         lth = len(txt)
         brk = {}
@@ -1195,7 +1203,7 @@ class RailFence(BaseCipher):
         """
         
         if self.verbose:
-            print('Rail fence\nMethod : brute-force')
+            print('Rail fence\n' + tr('Method : brute-force'))
         
         if brk == None:
             brk = self.brute_force(txt)
@@ -1232,16 +1240,16 @@ class Fleissner(BaseCipher):
         super().__init__('Fleissner', interface=interface)
         
         if type(key) not in (list, tuple, set):
-            raise ValueError('The argument "key" should be a list (a square matrix), but a "{}" was found !!!'.format(type(key)))
+            raise ValueError(tr('The argument "key" should be a list (a square matrix), but a "{}" was found !!!').format(type(key)))
         
         #------check if the key is a square matrix and get the size
         self.size = len(key)
         for j, k in enumerate(key):
             if type(k) not in (list, tuple, set):
-                raise ValueError('The argument "key" should be a list of lists (a square matrix), but "key[{}]" is a "{}" !!!'.format(j, type(k)))
+                raise ValueError(tr('The argument "key" should be a list of lists (a square matrix), but "key[{}]" is a "{}" !!!').format(j, type(k)))
             
             if len(k) != self.size:
-                raise ValueError('The argument "key" should be a square matrix (list of lists), but "key[{}]" has not the same size as "key" !!!'.format(j))
+                raise ValueError(tr('The argument "key" should be a square matrix (list of lists), but "key[{}]" has not the same size as "key" !!!').format(j))
         
         #------define the self values
         self.L_key = [key]
@@ -1313,7 +1321,7 @@ class Fleissner(BaseCipher):
         """Decrypt 'txt' using the Fleissner cipher."""
         
         if len(txt) % self.n != 0:
-            raise ValueError('The length of the text is not a square number !!!')
+            raise ValueError(tr('The length of the text is not a square number !!!'))
         
         txt_d = ""
         grid = ""
@@ -1337,7 +1345,7 @@ class Fleissner(BaseCipher):
         """
         
         if type(size) != int:
-            raise ValueError('The argument "size" should be an intenger, but "{}" of type "{}" was found !!!'.format(size, type(size)))
+            raise ValueError(tr('The argument "size" should be an intenger, but "{}" of type "{}" was found !!!').format(size, type(size)))
         
         key = []
         
@@ -1359,16 +1367,16 @@ class ColumnarTransposition(BaseCipher):
         - interface : the interface using the class (used in BaseCipher).
         """
         
-        super().__init__('Columnar transposition', interface=interface)
+        super().__init__(tr('Columnar transposition'), interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
             
         self.verbose = verbose
         self.alf = alf
         
         if type(key) not in (str, tuple, list, set) and key != None:
-            raise ValueError('The key should be a string, but "{}" of type "{}" was found !!!'.format(key, type(key)))
+            raise ValueError(tr('The key should be a string, but "{}" of type "{}" was found !!!').format(key, type(key)))
         
         if key == None:
             self.key = None
@@ -1387,7 +1395,7 @@ class ColumnarTransposition(BaseCipher):
         """Encrypt 'txt' using the columnar transposition cipher."""
         
         if self.key == None:
-            raise ValueError("Can't encrypt with an empty key !!!")
+            raise ValueError(tr("Can't encrypt with an empty key !!!"))
         
         T = write_lines_c(txt, self.nc)
         c = ""
@@ -1405,7 +1413,7 @@ class ColumnarTransposition(BaseCipher):
         """Decrypt 'txt' using the columnar transposition cipher."""
         
         if self.key == None:
-            raise ValueError("Can't decrypt with an empty key !!!")
+            raise ValueError(tr("Can't decrypt with an empty key !!!"))
         
         nl = len(txt) // self.nc
         r = len(txt) % self.nc
@@ -1440,8 +1448,8 @@ class ColumnarTransposition(BaseCipher):
         """
         
         if self.verbose:
-            print('Columnar transposition cipher')
-            print('Method : Brute force (on all the keys of 9 letters)')
+            print(tr('Columnar transposition cipher'))
+            print(tr('Method : Brute force (on all the keys of 9 letters)'))
         
         L = [0]
         brk = {}
@@ -1512,7 +1520,7 @@ class UBCHI(BaseCipher):
         super().__init__('UBCHI', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
             
         self.verbose = verbose
         self.alf = alf
@@ -1537,7 +1545,7 @@ class UBCHI(BaseCipher):
         
         if self.verbose:
             print('UBCHI cipher')
-            print('Method : Brute force (on all the keys of 9 letters)')
+            print(tr('Method : Brute force (on all the keys of 9 letters)'))
         
         L = [0]
         brk = {}
@@ -1567,7 +1575,7 @@ class UBCHI(BaseCipher):
         """
         
         if self.verbose:
-            print('UBCHI\nMethod : brute-force (on all the keys of 9 letters)')
+            print('UBCHI\n' + tr('Method : brute-force (on all the keys of 9 letters)'))
         
         if brk == None:
             brk = self.brute_force(txt)
@@ -1606,10 +1614,10 @@ class Atbash(BaseCipher):
         super().__init__('Atbash', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
 
         if ignore not in (0, 1):
-            raise ValueError('"ignore" arg should be a boolean !!!')
+            raise ValueError(tr('"ignore" arg should be a boolean !!!'))
             
         self.verbose = verbose
         self.ignore = ignore
@@ -1631,7 +1639,7 @@ class Atbash(BaseCipher):
                 msg_c += k
             
             elif self.verbose:
-                print('Omitting "{}" because it is not in the alphabet !'.format(k))
+                print(tr('Omitting "{}" because it is not in the alphabet !').format(k))
         
         return msg_c
     
@@ -1652,7 +1660,7 @@ class Atbash(BaseCipher):
         """
         
         if self.verbose:
-            print('Atbash code')
+            print(tr('Atbash code'))
         
         if brk == None:
             brk = self.break_(txt)
@@ -1676,7 +1684,7 @@ class Albam(BaseCipher):
         super().__init__('Albam', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
             
         self.verbose = verbose
         self.alf = alf
@@ -1709,7 +1717,7 @@ class Albam(BaseCipher):
         """
         
         if self.verbose:
-            print('Albam code')
+            print(tr('Albam code'))
         
         if brk == None:
             brk = self.break_(txt)
@@ -1730,10 +1738,10 @@ class Achbi(BaseCipher):
         super().__init__('Achbi', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         if ignore not in (0, 1):
-            raise ValueError('"ignore" arg should be a boolean !!!')
+            raise ValueError(tr('"ignore" arg should be a boolean !!!'))
             
         self.verbose = verbose
         self.ignore = ignore
@@ -1765,7 +1773,7 @@ class Achbi(BaseCipher):
         """
         
         if self.verbose:
-            print('Achbi code')
+            print(tr('Achbi code'))
         
         if brk == None:
             brk = self.break_(txt)
@@ -1789,7 +1797,7 @@ class Avgad(BaseCipher):
         super().__init__('Avgad', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
             
         self.verbose = verbose
         self.alf = alf
@@ -1822,7 +1830,7 @@ class Avgad(BaseCipher):
         """
         
         if self.verbose:
-            print('Achbi code')
+            print(tr('Avgad code'))
         
         if brk == None:
             brk = self.break_(txt)
@@ -1855,10 +1863,10 @@ class Caesar(BaseCipher):
         super().__init__('Caesar', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         if ignore not in (0, 1):
-            raise ValueError('"ignore" arg should be a boolean !!!')
+            raise ValueError(tr('"ignore" arg should be a boolean !!!'))
             
         self.verbose = verbose
         self.ignore = ignore
@@ -1866,14 +1874,14 @@ class Caesar(BaseCipher):
         
         if key != None:
             if type(key) not in (int, str):
-                raise ValueError('The key must be either a string or an intenger, but "{}", of type "{}" was found !!!'.format(key, type(key)))
+                raise ValueError(tr('The key must be either a string or an intenger, but "{}", of type "{}" was found !!!').format(key, type(key)))
             
             elif type(key) == str:
                 if len(key) != 1:
-                    raise ValueError('The key, if a string, must have a length of one, but "{}", of length {} was found !!!'.format(key, len(key)))
+                    raise ValueError(tr('The key, if a string, must have a length of one, but "{}", of length {} was found !!!').format(key, len(key)))
                 
                 elif key not in alf:
-                    raise ValueError('The key, if a string, should be contained in the alphabet !!!')
+                    raise ValueError(tr('The key, if a string, should be contained in the alphabet !!!'))
                 
                 self.key = alf.index(key)
             
@@ -1890,7 +1898,7 @@ class Caesar(BaseCipher):
         """Encrypt 'txt' using the Caesar cipher."""
         
         if self.key == None:
-            raise ValueError("Can't encrypt with an empty key !!!")
+            raise ValueError(tr("Can't encrypt with an empty key !!!"))
             
         txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         
@@ -1904,7 +1912,7 @@ class Caesar(BaseCipher):
                 msg_c += k
             
             elif self.verbose:
-                print('Omitting "{}" because it is not in the alphabet !'.format(k))
+                print(tr('Omitting "{}" because it is not in the alphabet !').format(k))
         
         return msg_c
     
@@ -1912,7 +1920,7 @@ class Caesar(BaseCipher):
         """Decrypt 'txt' using the Caesar cipher."""
         
         if self.key == None:
-            raise ValueError("Can't decrypt with an empty key !!!")
+            raise ValueError(tr("Can't decrypt with an empty key !!!"))
         
         key_d = self.lalf - self.key
         
@@ -1926,8 +1934,8 @@ class Caesar(BaseCipher):
         """
         
         if self.verbose:
-            print('Caesar cipher')
-            print('Method : brute-force')
+            print(tr('Caesar cipher'))
+            print(tr('Method : brute-force'))
         
         brk = {'alf' : self.alf}
         for k in range(1, len(self.alf) + 1):
@@ -1942,7 +1950,7 @@ class Caesar(BaseCipher):
         """
         
         if self.verbose:
-            print('Caesar cipher')
+            print(tr('Caesar cipher'))
         
         if brk == None:
             brk = self.brute_force(txt)
@@ -1984,10 +1992,10 @@ class Affine(BaseCipher):
         super().__init__('Affine', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         if ignore not in (0, 1):
-            raise ValueError('"ignore" arg should be a boolean !!!')
+            raise ValueError(tr('"ignore" arg should be a boolean !!!'))
             
         self.verbose = verbose
         self.ignore = ignore
@@ -1999,13 +2007,13 @@ class Affine(BaseCipher):
             self.keyB = None
         
         elif keyA != keyB == None or keyB != keyA == None:
-            raise ValueError('The keys `a` and `b` should be both None (to brute-force a message), or both intengers, but only one was None !!!')
+            raise ValueError(tr('The keys `a` and `b` should be both None (to brute-force a message), or both intengers, but only one was None !!!'))
         
         elif type(keyA) != int or type(keyB) != int:
-            raise ValueError('The keys should be intengers (or None to brute-force a message) !!!')
-        
+            raise ValueError(tr('The keys should be intengers (or None to brute-force a message) !!!'))
+
         elif gcd(keyA, self.lalf) != 1:
-            raise ValueError("the key `a` must be co-prime with the alphabet's length !!!")
+            raise ValueError(tr("The key `a` must be co-prime with the alphabet's length !!!"))
         
         else:
             self.keyA = keyA
@@ -2016,7 +2024,7 @@ class Affine(BaseCipher):
         """Encrypt 'txt' using the Affine cipher."""
         
         if None in (self.keyA, self.keyB):
-            raise ValueError("Can't encrypt with empty keys !!!")
+            raise ValueError(tr("Can't encrypt with empty keys !!!"))
         
         txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         
@@ -2030,7 +2038,7 @@ class Affine(BaseCipher):
                 msg_c += k
             
             elif self.verbose:
-                print('Omitting "{}" because it is not in the alphabet !'.format(k))
+                print(tr('Omitting "{}" because it is not in the alphabet !').format(k))
         
         return msg_c
     
@@ -2080,8 +2088,8 @@ class Affine(BaseCipher):
         """
         
         if self.verbose:
-            print('Affine cipher')
-            print('Method : brute-force')
+            print(tr('Affine cipher'))
+            print(tr('Method : brute-force'))
         
         lth = self._get_bf_lth(self.lalf)
         i = 0
@@ -2105,7 +2113,7 @@ class Affine(BaseCipher):
         """
         
         if self.verbose:
-            print('Affine cipher\nMethod : brute-force')
+            print(tr('Affine cipher') + '\n' + tr('Method : brute-force'))
         
         if brk == None:
             brk = self.brute_force(txt)
@@ -2149,15 +2157,15 @@ class Polybius(BaseCipher):
         - space : a boolean which indicate if there is spaces between the encoded letters.
         """
         
-        super().__init__('Polybius', interface=interface)
+        super().__init__(tr('Polybius'), interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
             
         self.verbose = verbose
         
         if len(indexes) not in (5, 6):
-            raise ValueError('The length of "indexes" should be of 5 or 6, but it has a length of "{}" !!!'.format(len(indexes)))
+            raise ValueError(tr('The length of "indexes" should be of 5 or 6, but it has a length of "{}" !!!').format(len(indexes)))
 
         if len(alf) == 36 and indexes == '12345':
             indexes = '123456'
@@ -2192,7 +2200,7 @@ class Polybius(BaseCipher):
             if k in self.d_e:
                 msg_c += self.d_e[k]       
             elif self.verbose:
-                print('Omitting "{}" because it is not in the alphabet !'.format(k))
+                print(tr('Omitting "{}" because it is not in the alphabet !').format(k))
         
         if self.space:
             msg_c = space(msg_c, 2)
@@ -2214,7 +2222,7 @@ class Polybius(BaseCipher):
             if k in self.d_d:
                 msg_d += self.d_d[k]            
             else:
-                print('Unknown encrypted group "{}" !'.format(k))
+                print(tr('Unknown encrypted group "{}" !').format(k))
     
         return msg_d
     
@@ -2244,20 +2252,20 @@ class MonoSub(BaseCipher):
             else, don't add the character to the return.
         """
         
-        super().__init__('Monoalphabetic substitution', interface=interface)
+        super().__init__(tr('Monoalphabetic substitution'), interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         if ignore not in (0, 1):
-            raise ValueError('"ignore" arg should be a boolean !!!')
+            raise ValueError(tr('"ignore" arg should be a boolean !!!'))
             
         self.verbose = verbose
         self.ignore = ignore
         
         if key != None:
             if type(key) not in (str, list, tuple, set):
-                raise ValueError('The key should be a string, or a list, but "{}" of type "{}" was found !!!'.format(key, type(key)))
+                raise ValueError(tr('The key should be a string, or a list, but "{}" of type "{}" was found !!!').format(key, type(key)))
 
             self.alf_c = generate_alphabet_word(key, alf)
         
@@ -2271,7 +2279,7 @@ class MonoSub(BaseCipher):
         """Encrypt 'txt' using the Monoalphabetic substitution cipher."""
         
         if self.key == None:
-            raise ValueError("Can't encrypt with an empty key !!!")
+            raise ValueError(tr("Can't encrypt with an empty key !!!"))
             
         txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         
@@ -2285,7 +2293,7 @@ class MonoSub(BaseCipher):
                 msg_c += k
             
             elif self.verbose:
-                print('Omitting "{}" because it is not in the alphabet !'.format(k))
+                print(tr('Omitting "{}" because it is not in the alphabet !').format(k))
         
         return msg_c
     
@@ -2293,7 +2301,7 @@ class MonoSub(BaseCipher):
         """Decrypt 'txt' using the Monoalphabetic substitution cipher."""
         
         if self.key == None:
-            raise ValueError("Can't decrypt with an empty key !!!")
+            raise ValueError(tr("Can't decrypt with an empty key !!!"))
         
         txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         
@@ -2307,7 +2315,7 @@ class MonoSub(BaseCipher):
                 msg_d += k
             
             elif self.verbose:
-                print('Unknown "{}" ! (try ignore=False)'.format(k))
+                print(tr('Unknown "{}" ! (try ignore=False)').format(k))
         
         return msg_d
     
@@ -2335,8 +2343,8 @@ class MonoSub(BaseCipher):
         """
         
         if self.verbose:
-            print('Monoalphabetic substitution cipher')
-            print('Method : Hill-climbing')
+            print(tr('Monoalphabetic substitution cipher'))
+            print(tr('Method : Hill-climbing'))
         
         f_ana = FreqAna().ana(txt)
         key = list(alf_az)
@@ -2369,7 +2377,7 @@ class MonoSub(BaseCipher):
             s2 = prob_plain_text(txt3)
             
             if s2 > score:
-                print(f'score : {score}')
+                print('score : {score}')
                 key = key_2
                 score = s2
                 txt2 = txt3
@@ -2417,10 +2425,10 @@ class Tritheme(BaseCipher):
         super().__init__('Tritheme', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         if ignore not in (0, 1):
-            raise ValueError('"ignore" arg should be a boolean !!!')
+            raise ValueError(tr('"ignore" arg should be a boolean !!!'))
             
         self.verbose = verbose
         self.ignore = ignore
@@ -2445,7 +2453,7 @@ class Tritheme(BaseCipher):
                 i += 1
             
             elif self.verbose:
-                print('Omitting "{}" because it is not in the alphabet !'.format(k))
+                print(tr('Omitting "{}" because it is not in the alphabet !').format(k))
         
         return msg_c
 
@@ -2485,7 +2493,7 @@ class Tritheme(BaseCipher):
         """
         
         if self.verbose:
-            print('Tritheme cipher')
+            print(tr('Tritheme cipher'))
         
         if brk == None:
             brk = self.break_(txt)
@@ -2515,16 +2523,16 @@ class Porta(BaseCipher):
         super().__init__('Porta', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         if ignore not in (0, 1):
-            raise ValueError('"ignore" arg should be a boolean !!!')
+            raise ValueError(tr('"ignore" arg should be a boolean !!!'))
             
         self.verbose = verbose
         self.ignore = ignore
         
         if type(key) != str:
-            raise ValueError('The key must be a string, but "{}", of type "{}" was found !!!'.format(key, type(key)))
+            raise ValueError(tr('The key must be a string, but "{}", of type "{}" was found !!!').format(key, type(key)))
         
         self.key = key
         self.lkey = len(key)
@@ -2559,7 +2567,7 @@ class Porta(BaseCipher):
                 i += 1
             
             elif self.verbose:
-                print('Omitting "{}" because it is not in the alphabet !'.format(k))
+                print(tr('Omitting "{}" because it is not in the alphabet !').format(k))
         
         return msg_c
     
@@ -2599,21 +2607,21 @@ class Vigenere(BaseCipher):
         super().__init__('Vigenere', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         if ignore not in (0, 1):
-            raise ValueError('"ignore" arg should be a boolean !!!')
+            raise ValueError(tr('"ignore" arg should be a boolean !!!'))
             
         self.verbose = verbose
         self.ignore = ignore
         
         if key != None:
             if type(key) != str:
-                raise ValueError('The key must be a string, but "{}", of type "{}" was found !!!'.format(key, type(key)))
+                raise ValueError(tr('The key must be a string, but "{}", of type "{}" was found !!!').format(key, type(key)))
             
             for j, k in enumerate(key):
                 if k not in alf:
-                    raise ValueError('Invalid character "{}" at position {} in the key !!! (it is not in the alphabet)'.format(k, j, key))
+                    raise ValueError(tr('Invalid character "{}" at position {} in the key !!! (it is not in the alphabet)').format(k, j, key))
 
             self.lkey = len(key)
         
@@ -2627,7 +2635,7 @@ class Vigenere(BaseCipher):
         """Encrypt 'txt' using the Vigenere cipher."""
         
         if self.key == None:
-            raise ValueError("Can't encrypt with an empty key !!!")
+            raise ValueError(tr("Can't encrypt with an empty key !!!"))
         
         txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         
@@ -2645,7 +2653,7 @@ class Vigenere(BaseCipher):
                 i += 1
             
             elif self.verbose:
-                print('Omitting "{}" because it is not in the alphabet !'.format(k))
+                print(tr('Omitting "{}" because it is not in the alphabet !').format(k))
         
         return msg_c
     
@@ -2654,7 +2662,7 @@ class Vigenere(BaseCipher):
         """Decrypt 'txt' using the Vigenere cipher."""
         
         if self.key == None:
-            raise ValueError("Can't decrypt with an empty key !!!")
+            raise ValueError(tr("Can't decrypt with an empty key !!!"))
         
         txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         
@@ -2672,7 +2680,7 @@ class Vigenere(BaseCipher):
                 i += 1
             
             elif self.verbose:
-                print('Unknown character "{}" ! It is not in the alphabet ! (try ignore=False)'.format(k))
+                print(tr('Unknown character "{}" ! It is not in the alphabet ! (try ignore=False)').format(k))
         
         return msg_d
     
@@ -2720,7 +2728,7 @@ class Vigenere(BaseCipher):
 
         #---GCD
         if len(dis) == 0:
-            raise Exception('Impossible to determine the key') #todo: improve this error message
+            raise Exception(tr('Impossible to determine the key')) #todo: improve this error message
 
         elif len(dis) == 1:
             return dis[0]
@@ -2751,13 +2759,13 @@ class Vigenere(BaseCipher):
         """
         
         if type(mfl) != str:
-            raise ValueError('The argument "mfl" should be a string !!!')
+            raise ValueError(tr('The argument "mfl" should be a string !!!'))
         
         elif len(mfl) != 1:
-            raise ValueError('The argument "mfl" should have a length of 1 !!!')
+            raise ValueError(tr('The argument "mfl" should have a length of 1 !!!'))
         
         elif mfl not in self.alf:
-            raise ValueError('The argument "mfl" should be in the alphabet !!!')
+            raise ValueError(tr('The argument "mfl" should be in the alphabet !!!'))
 
         key = ''
         for k in range(lth):
@@ -2799,7 +2807,7 @@ class Vigenere(BaseCipher):
         """
         
         if self.verbose:
-            print('Vigenere cipher')
+            print(tr('Vigenere cipher'))
         
         
         if Ic(True).calc(txt) > 0.065:
@@ -2847,17 +2855,17 @@ class Beaufort(BaseCipher):
         super().__init__('Beaufort', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         if ignore not in (0, 1):
-            raise ValueError('"ignore" arg should be a boolean !!!')
+            raise ValueError(tr('"ignore" arg should be a boolean !!!'))
             
         self.verbose = verbose
         self.ignore = ignore
         
         if key != None:
             if type(key) != str:
-                raise ValueError('The key must be a string, but "{}", of type "{}" was found !!!'.format(key, type(key)))
+                raise ValueError(tr('The key must be a string, but "{}", of type "{}" was found !!!').format(key, type(key)))
             
             self.lkey = len(key)
         
@@ -2871,7 +2879,7 @@ class Beaufort(BaseCipher):
         """Encrypt 'txt' using the Beaufort cipher."""
         
         if self.key == None:
-            raise ValueError("Can't encrypt with an empty key !!!")
+            raise ValueError(tr("Can't encrypt with an empty key !!!"))
         
         txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         
@@ -2889,7 +2897,7 @@ class Beaufort(BaseCipher):
                 i += 1
             
             elif self.verbose:
-                print('Omitting "{}" because it is not in the alphabet !'.format(k))
+                print(tr('Omitting "{}" because it is not in the alphabet !').format(k))
             
         return msg_c
     
@@ -2927,17 +2935,17 @@ class Gronsfeld(BaseCipher):
         super().__init__('Gronsfeld', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         if ignore not in (0, 1):
-            raise ValueError('"ignore" arg should be a boolean !!!')
+            raise ValueError(tr('"ignore" arg should be a boolean !!!'))
             
         self.verbose = verbose
         self.ignore = ignore
         
         if key != None:
             if type(key) != int:
-                raise ValueError('The key must be an int, but "{}", of type "{}" was found !!!'.format(key, type(key)))
+                raise ValueError(tr('The key must be an int, but "{}", of type "{}" was found !!!').format(key, type(key)))
             
             self.lkey = len(str(key))
         
@@ -2951,7 +2959,7 @@ class Gronsfeld(BaseCipher):
         """Encrypt 'txt' using the Gronsfeld cipher."""
         
         if self.key == None:
-            raise ValueError("Can't encrypt with an empty key !!!")
+            raise ValueError(tr("Can't encrypt with an empty key !!!"))
         
         txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         
@@ -2969,7 +2977,7 @@ class Gronsfeld(BaseCipher):
                 i += 1
             
             elif self.verbose:
-                print('Omitting "{}" because it is not in the alphabet !'.format(k))
+                print(tr('Omitting "{}" because it is not in the alphabet !').format(k))
             
         return msg_c
     
@@ -2978,7 +2986,7 @@ class Gronsfeld(BaseCipher):
         """Decrypt 'txt' using the Gronsfeld cipher."""
         
         if self.key == None:
-            raise ValueError("Can't decrypt with an empty key !!!")
+            raise ValueError(tr("Can't decrypt with an empty key !!!"))
         
         txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
         
@@ -2996,7 +3004,7 @@ class Gronsfeld(BaseCipher):
                 i += 1
             
             elif self.verbose:
-                print('Unknown character "{}" ! It is not in the alphabet ! (try ignore=False)'.format(k))
+                print(tr('Unknown character "{}" ! It is not in the alphabet ! (try ignore=False)').format(k))
             
         return msg_d
     
@@ -3027,17 +3035,17 @@ class Autoclave(BaseCipher):
         super().__init__('Autoclave', interface=interface)
         
         if verbose not in (0, 1):
-            raise ValueError('"verbose" arg should be a boolean !!!')
+            raise ValueError(tr('"verbose" arg should be a boolean !!!'))
         
         if ignore not in (0, 1):
-            raise ValueError('"ignore" arg should be a boolean !!!')
+            raise ValueError(tr('"ignore" arg should be a boolean !!!'))
             
         self.verbose = verbose
         self.ignore = ignore
         
         if key != None:
             if type(key) != str:
-                raise ValueError('The key must be a string, but "{}", of type "{}" was found !!!'.format(key, type(key)))
+                raise ValueError(tr('The key must be a string, but "{}", of type "{}" was found !!!').format(key, type(key)))
         
         self.key = key
         
@@ -3049,7 +3057,7 @@ class Autoclave(BaseCipher):
         """Encrypt 'txt' using the Autoclave cipher."""
         
         if self.key == None:
-            raise ValueError("Can't encrypt with an empty key !!!")
+            raise ValueError(tr("Can't encrypt with an empty key !!!"))
         
         key = self.key + txt
         
@@ -3062,7 +3070,7 @@ class Autoclave(BaseCipher):
         """Decrypt 'txt' using the Autoclave cipher."""
         
         if self.key == None:
-            raise ValueError("Can't decrypt with an empty key !!!")
+            raise ValueError(tr("Can't decrypt with an empty key !!!"))
         
         msg_d = ''
         txt = msgform(txt, 'all', not(self.ignore), not(self.ignore), self.alf, not(self.ignore))
@@ -3111,7 +3119,7 @@ class Playfair(BaseCipher):
         super().__init__('Playfair', interface=interface)
         
         if type(key) != str and key != None:
-                raise ValueError('The key must be a string, but "{}", of type "{}" was found !!!'.format(key, type(key)))
+                raise ValueError(tr('The key must be a string, but "{}", of type "{}" was found !!!').format(key, type(key)))
         
         self.key = key
         self.square = word_to_square(key)
@@ -3121,7 +3129,7 @@ class Playfair(BaseCipher):
         """Encrypt or decrypt 'txt' using the Playfair cipher."""
         
         if a not in (-1, 1):
-            raise ValueError('The arg "a" must be 1 or -1, but "{}" was found !!!'.format(a))
+            raise ValueError(tr('The arg "a" must be 1 or -1, but "{}" was found !!!').format(a))
             
         txt = msgform(txt, 'min', space=False, number=False)
         
@@ -3163,7 +3171,7 @@ class Playfair(BaseCipher):
         """Encrypt 'txt' with the Playfair cipher."""
         
         if self.key == None:
-            raise ValueError("Can't encrypt with an empty key !!!")
+            raise ValueError(tr("Can't encrypt with an empty key !!!"))
         
         return self._crypt(txt, a=1)
     
@@ -3172,7 +3180,7 @@ class Playfair(BaseCipher):
         """Decrypt 'txt' with the Playfair cipher."""
         
         if self.key == None:
-            raise ValueError("Can't decrypt with an empty key !!!")
+            raise ValueError(tr("Can't decrypt with an empty key !!!"))
         
         return self._crypt(txt, a=-1)
     
@@ -3202,10 +3210,10 @@ class FourSquares(BaseCipher):
         super().__init__('Four squares', interface=interface)
         
         if key1 != key2 == None or key2 != key1 == None:
-            raise ValueError('The keys 1 and 2 should be both None, or both intengers, but only one was None !!!')
+            raise ValueError(tr('The keys 1 and 2 should be both None, or both intengers, but only one was None !!!'))
         
         elif (type(key1) != str or type(key2) != str) and not (key1 == key2 == None):
-            raise ValueError('The keys should be strings (or None) !!!')
+            raise ValueError(tr('The keys should be strings (or None) !!!'))
         
         self.key1 = key1
         self.key2 = key2
@@ -3239,7 +3247,7 @@ class FourSquares(BaseCipher):
         """Encrypt 'txt' using the Four square cipher."""
         
         if None in (self.key1, self.key2):
-            raise ValueError("Can't encrypt with empty key !!!")
+            raise ValueError(tr("Can't encrypt with an empty key !!!"))
         
         msg_c = ''
         txt = msgform(txt, 'all', False, False, self.alf, False)
@@ -3259,7 +3267,7 @@ class FourSquares(BaseCipher):
         """Decrypt 'txt' using the Four square cipher."""
         
         if None in (self.key1, self.key2):
-            raise ValueError("Can't decrypt with empty key !!!")
+            raise ValueError(tr("Can't decrypt with an empty key !!!"))
         
         msg_d = ''
         txt = msgform(txt, 'all', False, False, self.alf, False)
@@ -3350,7 +3358,7 @@ class Hill(BaseCipher):
         """Encrypt 'txt' using the Hill cipher."""
         
         if self.key == None:
-            raise ValueError("Can't encrypt with an empty key !!!")
+            raise ValueError(tr("Can't encrypt with an empty key !!!"))
         
         txt = msgform(txt, 'all', False, False, self.alf, False)
         
@@ -3361,7 +3369,7 @@ class Hill(BaseCipher):
         """Decrypt 'txt' using the Hill cipher."""
         
         if self.key == None:
-            raise ValueError("Can't decrypt with an empty key !!!")
+            raise ValueError(tr("Can't decrypt with an empty key !!!"))
         
         txt = msgform(txt, 'all', False, False, self.alf, False)
         
@@ -3375,48 +3383,6 @@ class Hill(BaseCipher):
         key = Matrix(key)
         
         return key
-
-
-class hill:
-    def hill(M, text, mode, alphabet='abcdefghijklmnopqrstuvwxyz') :
-        if type(M) != Matrix:
-            M = Matrix(M)
-        la = len(alphabet)
-        if mode == 1 :
-            M = M.inverse(la)
-        dimension = len(M[0])
-        text = text + 'x' * ((dimension - len(text) % dimension) % dimension)
-        text_c = ""
-        for k in range(len(text) // dimension):
-            C = []    # column vector
-            for l in text[k * dimension:(k+1) * dimension]:
-                C.append([alphabet.index(l)])
-            C2 = Matrix(C)
-            C2 = M * C2
-            C2 = C2 % la
-            for l in C2:
-                text_c = text_c + alphabet[int(l[0])]
-        return text_c
-    def use():
-        print('\nHill cipher')
-        alf = cl_inp('Alphabet (let empty to use normal) :')
-        if alf == "":
-            alf = 'abcdefghijklmnopqrstuvwxyz'
-        m = int(inp_lst('Mode (crypt : 0 ; decrypt : 1) :', ('0', '1')))
-        t = ask_text()
-        tM = inp_int("Dimension of the sqare matrix :")
-        M = []
-        for k in range(tM):
-            L = []
-            for l in range(tM):
-                t = cl_inp('Line ' + str(k + 1) + ' column ' + str(l + 1) + ' : ')
-                L.append(int(t))
-            M.append(L)
-        print(M)
-        M = Matrix(M)
-        print(M)
-        res = hill.hill(M, t, m, alf)
-        give_result(res)
 
 
 ##---substitution and transposition
@@ -3585,16 +3551,16 @@ class FreqAna:
         """
         
         if wprocess not in (0, 1):
-            raise ValueError('The arg "wprocess" should be a boolean, but "{}" of type "{}" was found !!!'.format(wprocess, type(wprocess)))
+            raise ValueError(tr('The arg "wprocess" should be a boolean, but "{}" of type "{}" was found !!!').format(wprocess, type(wprocess)))
         
         if type(n) != int:
-            raise ValueError('The argument "n" should be an intenger, but "{}" of type "{}" was found !!!'.format(n, type(n)))
+            raise ValueError(tr('The argument "n" should be an intenger, but "{}" of type "{}" was found !!!').format(n, type(n)))
         
         elif n < 1:
-            raise ValueError('The arg "n" should be a positive intenger different from 0 !!!')
+            raise ValueError(tr('The arg "n" should be a positive intenger different from 0 !!!'))
         
         if sort not in (None, 'char', 'occ'):
-            raise ValueError('The arg "sort" should be None, "char", or "occ", but "{}" was found !!!'.format(sort))
+            raise ValueError(tr('The arg "sort" should be None, "char", or "occ", but "{}" was found !!!').format(sort))
         
         self.wprocess = wprocess
         self.n = n
@@ -3649,8 +3615,8 @@ class FreqAna:
         if self.sort == 'occ': #sort by occurences (dict's values)
             lst = sorted(
                 [(k, d_ana_s0[k]) for k in d_ana_s0],
-                key=lambda x: x[1],
-                reverse=True
+                key = lambda x: x[1],
+                reverse = True
             ) #List of tuples : {c0 : n0, ...} -> [(c0, n0), ...]
             
             for k in lst:
@@ -3688,7 +3654,7 @@ class FreqAna:
         """
         
         if self.n != 1:
-            raise ValueError('To get the comparaison, "n" should be 1 !!!')
+            raise ValueError(tr('To get the comparaison, "n" should be 1 !!!'))
         
         ana = FreqAna(True, sort='occ').ana(txt)
         
@@ -3706,7 +3672,7 @@ class FreqAna:
         
         d_ana_comp = self.comp(txt)
         
-        ret = 'Character correspondance (Text : English - French) :'
+        ret = tr('Character correspondance (Text : English - French) :')
         for k in d_ana_comp:
             ret += "\n\t'{}' : '{}' - '{}'".format(k, d_ana_comp[k][0], d_ana_comp[k][1])
         
@@ -3723,19 +3689,19 @@ class FreqAna:
         ret=''
         
         if verbose:
-            ret = 'Number of total characters : {}'.format(len(txt))
+            ret = tr('Number of total characters : {}').format(len(txt))
             if self.wprocess:
-                ret += '\nNumber of characters (after word processing) : {}'.format(len(msgform(txt, 'min')))
-            ret += '\nNumber of total occurences : {}\n\n'.format(occ)
+                ret += '\n' + tr('Number of characters (after word processing) : {}').format(len(msgform(txt, 'min')))
+            ret += '\n' + tr('Number of total occurences : {}').format(occ) + '\n\n'
         
         if self.sort == None:
-            ret += 'Occurences count :'
+            ret += tr('Occurences count :')
         
         elif self.sort == 'char':
-            ret += 'Occurences count (by character) :'
+            ret += tr('Occurences count (by character) :')
         
         else:
-            ret += 'Occurences count (by occurence) :'
+            ret += tr('Occurences count (by occurence) :')
             
         for k in d_ana:
             ret += "\n\t'{}' : {} % ({} occ)".format(k, d_ana_pr[k], d_ana[k])
@@ -3763,7 +3729,7 @@ class Ic:
         """Initiate the Ic class."""
         
         if wprocess not in (0, 1):
-            raise ValueError('The arg "wprocess" should be a boolean, but "{}" of type "{}" was found !!!'.format(wprocess, type(wprocess)))
+            raise ValueError(tr('The arg "wprocess" should be a boolean, but "{}" of type "{}" was found !!!').format(wprocess, type(wprocess)))
         
         self.wprocess = wprocess
     
@@ -3802,7 +3768,7 @@ class Kasiki:
         """Initiate the Kasiki object."""
         
         if wprocess not in (0, 1):
-            raise ValueError('The arg "wprocess" should be a boolean, but "{}" of type "{}" was found !!!'.format(wprocess, type(wprocess)))
+            raise ValueError(tr('The arg "wprocess" should be a boolean, but "{}" of type "{}" was found !!!').format(wprocess, type(wprocess)))
         
         self.wprocess = wprocess
     
@@ -3851,7 +3817,7 @@ class Kasiki:
         
         ana = self.ana(txt)
         
-        ret = 'Kasiki examination :\n'
+        ret = tr('Kasiki examination') + ' :\n'
         
         for i in ana:
             lst = ana[i]
@@ -3884,7 +3850,7 @@ class Friedman:
         """
         
         if wprocess not in (0, 1):
-            raise ValueError('The arg "wprocess" should be a boolean, but "{}" of type "{}" was found !!!'.format(wprocess, type(wprocess)))
+            raise ValueError(tr('The arg "wprocess" should be a boolean, but "{}" of type "{}" was found !!!').format(wprocess, type(wprocess)))
         
         self.wprocess = wprocess
         self.prec = prec
@@ -3930,12 +3896,12 @@ class Friedman:
         """Return the analysis in a readable string."""
         
         ana = self.ana(txt)
-        ret = "Friedman's test :"
+        ret = tr("Friedman's test") + ' :'
         
         for j, k in enumerate(ana[1]):
             ret += '\n\t{} : {}'.format(j + 1, k)
         
-        ret += '\n\tMax : {}, for length of {}.'.format(ana[1][ana[0] - 1], ana[0])
+        ret += '\n\t' + tr('Max : {}, for length of {}.').format(ana[1][ana[0] - 1], ana[0])
         
         return ret
 
@@ -3944,7 +3910,7 @@ def textana(txt, wprocess=False, prec=3):
     
     ret = ''
     ret += freqana_str(txt, wprocess, prec=prec)
-    ret += '\n\nIndex of coincidence : {}\n\n'.format(round(Ic(wprocess).calc(txt), 3))
+    ret += '\n\n' + tr('Index of coincidence') + ' : {}\n\n'.format(round(Ic(wprocess).calc(txt), 3))
     ret += Kasiki(wprocess).analyse(txt)
     ret += '\n'
     ret += Friedman(wprocess).analyse(txt)
@@ -3958,16 +3924,16 @@ class Assist_cryptanalysis:
         text = ask_text()
         t2 = ""
         D = {} # Dictionnary of susbsitution
-        alf = cl_inp('Alphabet (let empty to use normal) : ')
+        alf = cl_inp(tr('Alphabet (let empty to use normal) : '))
         if alf == "":
             alf = 'abcdefghijklmnopqrstuvwxyz'
-        c = cl_inp('Text in majuscule ? [yn ] ')
-        if c == 'y':
+        c = cl_inp(tr('Text in majuscule ? [yn ] '))
+        if c == tr('y'):
             alf = alf.upper()
             text = text.upper()
         alf = alf.upper()
-        print("Put ! to quit")
-        print("Examples : B -> E transform all B in E\nf gives you the frequences of the letters")
+        print(tr('Put ! to quit'))
+        print(tr('Example : B -> E transform all B in E') + '\n' + tr('f gives you the frequences of the letters'))
         c = ''
         while c != '!':
             print()
@@ -3985,7 +3951,7 @@ class Assist_cryptanalysis:
                     for k in range(len(c[0])):
                         D[c[0][k]] = c[1][k]
                 except:
-                    print('Error')
+                    print(tr('Error'))
             t2 = ''
             for k in text:
                 c2 = D.get(k)
@@ -4000,8 +3966,8 @@ class Assist_cryptanalysis:
                 print(text[k], end='')
                 l2 = l2 + t2[k]
             print('\n'+l2)
-            print("Plain alphabet :  " + alf)
-            print('Cipher alphabet : ', end='')
+            print(tr('Plain alphabet') + ' :  ' + alf)
+            print(tr('Cipher alphabet') + ' : ', end='')
             D2 = {}
             for k in D:
                 D2[D[k]] = k
@@ -4022,8 +3988,8 @@ def correct(M, com):
     if M[0]:
         if com:
             print(True, M[1], M[2])
-            a = input('Correct text ? [yn] ')
-            if a == 'y':
+            a = input(tr('Correct text ? [yn] '))
+            if a == tr('y'):
                 return True
         else:
             return True
@@ -4049,8 +4015,8 @@ def open_D_quad(interface=None):
                 D_quad[quad] = int(nb) / 2_456_316 # Number of tetragrams
     
     except FileNotFoundError:
-        msg = 'File "quad_f.wrdlst" was not found !\nYour may have forgotten to unzip it.\nIt is in Data/Crack.'
-        msg += "\n\nThe software can't start until the file is not unziped."
+        msg = tr('File "quad_f.wrdlst" was not found !') + '\n' + tr('Your may have forgotten to unzip it.') + '\n' + tr('It is in Data/Crack.')
+        msg += '\n\n' + tr("The software can't start until the file is not unziped.")
         
         if interface == None:
             print(msg)
@@ -4061,10 +4027,10 @@ def open_D_quad(interface=None):
         else:
             from PyQt5.QtWidgets import QApplication, QMessageBox
             app = QApplication([])
-            QMessageBox.critical(None, 'Fatal error !!!', '<h2>{}</h2>'.format(msg))
+            QMessageBox.critical(None, tr('Fatal error !!!'), '<h2>{}</h2>'.format(msg))
         
         import sys
-        sys.exit('File "quad_f.wrdlst" was not found.')
+        sys.exit(tr('File "quad_f.wrdlst" was not found.'))
         
         
 
@@ -4081,7 +4047,7 @@ def crack(text, com=True): #todo: move this in modules/crack ; add GUI com, ...
         try:
             a = open('modules/crypta/quad.wrdlst', 'r', encoding='latin-1')
         except:
-            print(path, "Can't import quad.wrdlst")
+            print(path, tr("Can't import quad.wrdlst"))
             a = False
     if a != False:
         c = a.readline()
@@ -4115,24 +4081,24 @@ def crack_use():
 
 crypta_ciphers = {
     'ASCII': ASCII,
-    'Binary code': BinaryCode,
+    tr('Binary code'): BinaryCode,
     'Morse': Morse,
-    'Place of letters': Place_of_letters,
-    'Reverse code': ReverseCode,
-    'Reverse code word': ReverseCode,
+    tr('Place of letters'): Place_of_letters,
+    tr('Reverse code'): ReverseCode,
+    tr('Reverse code word'): ReverseCode,
     'Scytale': Scytale,
     'Rail fence': RailFence,
     'Fleissner': Fleissner,
-    'Columnar transposition': ColumnarTransposition,
+    tr('Columnar transposition'): ColumnarTransposition,
     'UBCHI': UBCHI,
     'Atbash': Atbash,
     'Albam': Albam,
     'Achbi': Achbi,
     'Avgad': Avgad,
-    'Caesar': Caesar,
+    tr('Caesar'): Caesar,
     'Affine': Affine,
-    'Polybius': Polybius,
-    'Monoalphabetic substitution': MonoSub,
+    tr('Polybius'): Polybius,
+    tr('Monoalphabetic substitution'): MonoSub,
     'Tritheme': Tritheme,
     'Porta': Porta,
     'Vigenere': Vigenere,
@@ -4140,7 +4106,7 @@ crypta_ciphers = {
     'Gronsfeld': Gronsfeld,
     'Autoclave': Autoclave,
     'Playfair': Playfair,
-    'Four squares': FourSquares,
+    tr('Four squares'): FourSquares,
     'Hill': Hill,
     'ABC': ABC,
     'ADFGX': ADFGX,
@@ -4148,8 +4114,8 @@ crypta_ciphers = {
 }
 
 crypta_ana = {
-    'Frequency analysis': freqana_str,
-    'Index of coincidence': Ic,
+    tr('Frequence analysis'): freqana_str,
+    tr('Index of coincidence'): Ic,
     'Kasiki': Kasiki,
     'Friedman': Friedman,
     
