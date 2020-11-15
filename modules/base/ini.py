@@ -4,8 +4,8 @@
 '''Initiate Cracker's needed data.'''
 
 ini__auth = 'Lasercata'
-ini__last_update = '08.11.2020'
-ini__version = '1.1.4'
+ini__last_update = '13.11.2020'
+ini__version = '1.2'
 
 ##-import
 #---------packages
@@ -55,15 +55,17 @@ try:
     from modules.password_testor import pwd_testor
     from modules.anamer0 import anamer0
 
+    from Languages.lang import translate as tr
+
 
 except ModuleNotFoundError as ept:
     err = str(ept).strip("No module named")
 
     try:
-        cl_out(c_error, 'Put the module ' + err + ' back !!!')
+        cl_out(c_error, tr('Put the module {} back !!!').format(err))
 
     except NameError:
-        print('\nPut the module ' + err + ' back !!!')
+        print('\n' + tr('Put the module {} back !!!').format(err))
 
     sys.exit()
 
@@ -79,12 +81,12 @@ try:
             cracker_version += k
 
 except FileNotFoundError:
-    cl_out(c_error, 'The file "version.txt" was not found. A version will be set but can be wrong.')
+    cl_out(c_error, tr('The file "version.txt" was not found. A version will be set but can be wrong.'))
     cracker_version = '3.0.0 ?'
 
 else:
     if len(cracker_version) > 16:
-        cl_out(c_error, 'The file "version.txt" contain more than 16 characters, so it certainly doesn\'t contain the actual version. A version will be set but can be wrong.')
+        cl_out(c_error, tr('The file "version.txt" contain more than 16 characters, so it certainly doesn\'t contain the actual version. A version will be set but can be wrong.'))
         cracker_version = '3.0.0 ?'
 
 #---------modules_ver
@@ -93,7 +95,7 @@ try:
         modules_ver = f_.read()
 
 except FileNotFoundError: #todo: if not found, use the headers var (i.g. crypta__ver)
-    cl_out(c_error, 'The file "versions_modules.txt" was NOT found !!!')
+    cl_out(c_error, tr('The file "versions_modules.txt" was NOT found') + ' !!!')
     modules_ver = ''
 
 #---------update_notes (histrory)
@@ -102,7 +104,7 @@ try:
         update_notes = f_.read()
 
 except FileNotFoundError:
-    cl_out(c_error, 'The file "history.txt" was NOT found !!!')
+    cl_out(c_error, tr('The file "history.txt" was NOT found') + ' !!!')
     update_notes = ''
 
 
@@ -129,10 +131,10 @@ try:
 except FileNotFoundError:
     pwd = '0c0bf58bf97b83c9dd7c260ff3eefea72455d6c7768810cefb41697f266d97f8db06b9bfcce0dd1fa9f3c656b01876bd837f201c9e605ed4d357a22f7aa94cff'
 
-# pwd_h = 'sha512'
+# pwd_h = 'sha512'
 # pwd = '6a0cc613e360caf70250b1ddbe169554ddfe9f6edc8b0ec33d61d80d9d0b11090434fcf27d24b40f710bc81e01c05efd78a0086b4673bd042b213e8c7afb4b0c'
 
-#pwd = 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec'
+# pwd = 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec'
 
 admin_h = 'SecHash'
 admin_loop = 512
@@ -169,26 +171,26 @@ ciphers_list = {
 
     'AES' : ('AES-256', 'AES-192', 'AES-128'),
 
-    'RSA' : ('RSA', 'RSA signature'),
+    'RSA' : ('RSA', tr('RSA signature')),
 
     'Crypta' : tuple(crypta.crypta_ciphers.keys()),
 
-    'analysis' : ('Text analysis', 'Frequence analysis', 'Index of coincidence', \
-        'Kasiki examination', "Friedman's test"),
+    tr('analysis') : (tr('Text analysis'), tr('Frequence analysis'), tr('Index of coincidence'), \
+        tr('Kasiki examination'), tr("Friedman's test")),
 
     'hash' : hasher.h_str + ('SecHash',)
 }
 
-crack_method_list = ('Brute-force', 'Dictionary attack', 'Advanced brute-force', 'Code break')
+crack_method_list = (tr('Brute-force'), tr('Dictionary attack'), tr('Advanced brute-force'), tr('Code break'))
 
 
 prima_algo_list = {
-    'Decomposition' : ('Trial division', 'Wheel factorization', "Fermat's factorization", \
-    "Pollard's rho", 'p - 1'),
+    tr('Decomposition') : (tr('Trial division'), tr('Wheel factorization'), tr("Fermat's factorization"), \
+    tr("Pollard's rho"), 'p - 1'),
 
-    'Probabilistic' : ("Fermat's test", "Miller-Rabin's test"),
+    tr('Probabilistic') : (tr("Fermat's test"), tr("Miller-Rabin's test")),
 
-    'Sieves' : ('Sieve of Erathostenes', 'Segmented sieve of Erathostenes')
+    tr('Sieves') : (tr('Sieve of Erathostenes'), tr('Segmented sieve of Erathostenes'))
 }
 
 b_cvrt_alf_list = {
