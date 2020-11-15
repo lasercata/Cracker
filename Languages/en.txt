@@ -2,6 +2,8 @@ Put the module
 back
 The file "version.txt" was not found. A version will be set but can be wrong.
 The file "version.txt" contain more than 16 characters, so it certainly doesn\'t contain the actual version. A version will be set but can be wrong.
+The file "versions_modules.txt" was NOT found
+The file "history.txt" was NOT found
 locked
 Enter your password
 remaining attempts
@@ -114,3 +116,124 @@ n
 Restore default program colors (1) or change colors one by one (2) ?
 Back menu
 What you entered is NOT in list
+RSA signature
+analysis
+Text analysis
+Frequence analysis
+Index of coincidence
+Kasiki examination
+Friedman's test
+Brute-force
+Dictionary attack
+Advanced brute-force
+Code break
+Decomposition
+Trial division
+Wheel factorization
+Fermat's factorization
+Pollard's rho
+Probabilistic
+Fermat's test
+Miller-Rabin's test
+Sieves
+Sieve of Erathostenes
+Segmented sieve of Erathostenes
+Crypta : module {} not found, it could mean that Craker was not found, redefining the functions !
+Operation successfully realised
+Enter the text
+Result
+Name of the output file
+Read text from file ?
+yes
+no
+Write the result in a file ?
+Place of letters
+Binary code
+Reverse code
+Reverse code word
+Columnar transposition
+Caesar
+Monoalphabetic substitution
+Four squares
+Polybius
+The cipher "{}" was NOT found !!!
+If it exists, please add it to the dict "ciph_types".
+"verbose" arg should be a boolean !!!
+Place of letters in alphabet
+"mode" arg should be "all", or "word", but "{}" found !!!
+"key" should be an int, but "{}" of type "{}" was found !!!
+Can't encrypt with an empty key !!!
+Can't decrypt with an empty key !!!
+Method : brute-force
+The argument "key" should be a list (a square matrix), but a "{}" was found !!!
+The argument "key" should be a list of lists (a square matrix), but "key[{}]" is a "{}" !!!
+The argument "key" should be a square matrix (list of lists), but "key[{}]" has not the same size as "key" !!!
+The length of the text is not a square number !!!
+The argument "size" should be an intenger, but "{}" of type "{}" was found !!!
+The key should be a string, but
+Method : Brute force (on all the keys of 9 letters)
+Method : brute-force (on all the keys of 9 letters)
+Omitting "{}" because it is not in the alphabet !
+Atbash code
+Albam code
+Achbi code
+Avgad code
+"ignore" arg should be a boolean !!!
+The key must be either a string or an intenger, but "{}", of type "{}" was found !!!
+The key, if a string, must have a length of one, but "{}", of length {} was found !!!
+The key, if a string, should be contained in the alphabet !!!
+Caesar cipher
+Method : brute-force
+The keys `a` and `b` should be both None (to brute-force a message), or both intengers, but only one was None !!!
+The keys should be intengers (or None to brute-force a message) !!!
+The key `a` must be co-prime with the alphabet's length !!!
+Can't encrypt with empty keys !!!
+Affine cipher
+The length of "indexes" should be of 5 or 6, but it has a length of "{}" !!!
+Unknown encrypted group "{}" !
+The key should be a string, or a list, but "{}" of type "{}" was found !!!
+Unknown "{}" ! (try ignore=False)
+Monoalphabetic substitution cipher
+Method : Hill-climbing
+Tritheme cipher
+The key must be a string, but "{}", of type "{}" was found !!!
+Invalid character "{}" at position {} in the key !!! (it is not in the alphabet)
+Unknown character "{}" ! It is not in the alphabet ! (try ignore=False)
+Impossible to determine the key
+The argument "mfl" should be a string !!!
+The argument "mfl" should have a length of 1 !!!
+The argument "mfl" should be in the alphabet !!!
+Vigenere cipher
+The key must be an int, but "{}", of type "{}" was found !!!
+The arg "a" must be 1 or -1, but "{}" was found !!!
+The keys 1 and 2 should be both None, or both intengers, but only one was None !!!
+The keys should be strings (or None) !!!
+The arg "wprocess" should be a boolean, but "{}" of type "{}" was found !!!
+The argument "n" should be an intenger, but "{}" of type "{}" was found !!!
+The arg "n" should be a positive intenger different from 0 !!!
+The arg "sort" should be None, "char", or "occ", but "{}" was found !!!
+To get the comparaison, "n" should be 1 !!!
+Character correspondance (Text : English - French) :
+Number of total characters : {}
+Number of characters (after word processing) : {}
+Number of total occurences : {}
+Occurences count :
+Occurences count (by character) :
+Occurences count (by occurence) :
+Max : {}, for length of {}.
+Alphabet (let empty to use normal) : 
+Text in majuscule ? [yn ] 
+Put ! to quit
+Example : B -> E transform all B in E
+f gives you the frequences of the letters
+Plain alphabet
+Cipher alphabet
+Correct text ? [yn] 
+File "quad_f.wrdlst" was not found !
+Your may have forgotten to unzip it.
+It is in Data/Crack.
+The software can't start until the file is not unziped.
+Fatal error !!!
+File "quad_f.wrdlst" was not found.
+Can't import quad.wrdlst
+Put the module {} back !!!
