@@ -13,7 +13,7 @@ Mot de passe incorrect
 C'était votre dernier essai
 réussi
 Texte
-Sélectionner un fichier
+Sélectionnez un fichier
 Effacer
 Fichier
 Sélectionner et charger
@@ -27,7 +27,7 @@ Mode bytes
 Certain
 Êtes-vous certain ?
 Ouvrir un fichier
-Sélectionner un fichier
+Sélectionnez un fichier
 Aucun fichier sélectionné
 Veuillez sélectionner un fichier
 Ou utilisez le bouton "Sélectionner et charger"
@@ -231,9 +231,28 @@ Alphabet chiffré
 Texte correct ? [on] 
 Le fichier "quad_f.wrdlst" est introuvable !
 Vous avez peut-être oublié de le décompresser.
-Il est dans Data/Crack.
+Il se trouve dans Data/Crack.
 Le logiciel ne peut pas démarrer tant que le fichier n'est pas décompressé.
 Erreur fatale !!!
 Le fichier "quad_f.wrdlst" est introuvable.
 Le module quad.wrdlst ne peut-être importé.
 Remettez le module {} !!!
+analyse
+Analys&er ↓
+Si&gner ↓
+Vérif&ier
+C&alculer l'empreinte ↓
+&Chiffrer ↓
+&Déchiffrer ↑
+&Quitter
+Ch&iffrement
+Groupe :
+Clé :
+-- Sélectionnez une clé --
+-- Sélectionnez un alphabet --
+-- Sélectionner un chiffre --
+Générer des clés
+Exporter des clés publiques
+S'informer sur des clés
+Renommer des clés
+Convertir des clés
