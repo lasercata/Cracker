@@ -237,3 +237,22 @@ Fatal error !!!
 File "quad_f.wrdlst" was not found.
 Can't import quad.wrdlst
 Put the module {} back !!!
+analysis
+Analys&e ↓
+Si&gn ↓
+Chec&k
+H&ash ↓
+&Encrypt ↓
+&Decrypt ↑
+&Quit
+C&ipher
+Group :
+Key :
+-- Select a key --
+-- Select an alphabet --
+-- Select a cipher --
+Generate keys
+Export public keys
+Show info about keys
+Rename keys
+Convert keys
