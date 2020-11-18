@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 lang__auth = 'Elerias'
-lang__ver = '1.0.2'
-lang__last_update = '13.11.2020'
+lang__ver = '1.0.3'
+lang__last_update = '18.11.2020'
 
 
 ##-import
@@ -28,7 +28,7 @@ except FileNotFoundError:
     lang = 'en'
 
 try:
-    with open('Languages/en.txt', 'r') as f:
+    with open('Languages/en.txt', 'r', encoding='utf-8') as f:
         for k in f:
             L_en.append(k[:-1])
 except FileNotFoundError:
