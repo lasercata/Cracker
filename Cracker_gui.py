@@ -4,8 +4,8 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '13.11.2020'
-Cracker_gui__version = '1.2.3'
+Cracker_gui__last_update = '18.11.2020'
+Cracker_gui__version = '1.2.'
 
 
 ##-import/ini
@@ -500,7 +500,7 @@ class CrackerGui(QMainWindow):
         self.crack_wlst_alf = QComboBox()
         self.crack_wlst_alf.setMaximumSize(200, 35)
         self.crack_wlst_alf.setEditable(True)
-        self.crack_wlst_alf.addItem('-- Select an alphabet --')
+        self.crack_wlst_alf.addItem(tr('-- Select an alphabet --'))
         self.crack_wlst_alf.insertSeparator(1)
         self.crack_wlst_alf.addItems(w_gen.alfs.values())
         crack_wlst_permut_lay.addWidget(self.crack_wlst_alf, 1, 1, Qt.AlignLeft)
@@ -576,7 +576,7 @@ class CrackerGui(QMainWindow):
                 self.cipher_db_ledit_key.setHidden(True)
                 self.cipher_db_nb_key.setHidden(True)
 
-            elif cipher in (*crypta.ciph_sort['1_key_int'], 'Frequence analysis', 'SecHash'): #QSpinBox
+            elif cipher in (*crypta.ciph_sort['1_key_int'], tr('Frequence analysis'), 'SecHash'): #QSpinBox
                 self.cipher_nb_key.setHidden(False)
                 self.cipher_ledit_keys.setHidden(True)
                 self.cipher_opt_keys.setHidden(True)
@@ -605,22 +605,22 @@ class CrackerGui(QMainWindow):
                 self.cipher_db_nb_key.setHidden(True)
 
 
-            if cipher in ciphers_list['analysis']:
-                self.cipher_bt_enc.setText('Analys&e ↓')
+            if cipher in ciphers_list[tr('analysis')]:
+                self.cipher_bt_enc.setText(tr('Analys&e ↓'))
 
             elif cipher == 'RSA signature':
-                self.cipher_bt_enc.setText('Si&gn ↓')
-                self.cipher_bt_dec.setText('Chec&k')
+                self.cipher_bt_enc.setText(tr('Si&gn ↓'))
+                self.cipher_bt_dec.setText(tr('Chec&k'))
 
             elif cipher in ciphers_list['hash']:
-                self.cipher_bt_enc.setText('H&ash ↓')
+                self.cipher_bt_enc.setText(tr('H&ash ↓'))
 
             else:
-                self.cipher_bt_enc.setText('&Encrypt ↓')
-                self.cipher_bt_dec.setText('&Decrypt ↑')
+                self.cipher_bt_enc.setText(tr('&Encrypt ↓'))
+                self.cipher_bt_dec.setText(tr('&Decrypt ↑'))
 
 
-            dis = (cipher in (*ciphers_list['hash'][:-1], *ciphers_list['analysis'], *crypta.ciph_sort['0_key'])) ^ (cipher == 'Frequence analysis')
+            dis = (cipher in (*ciphers_list['hash'][:-1], *ciphers_list[tr('analysis')], *crypta.ciph_sort['0_key'])) ^ (cipher == tr('Frequence analysis'))
             self.cipher_opt_keys.setDisabled(dis)
             self.cipher_ledit_keys.setDisabled(dis)
             self.cipher_nb_key.setDisabled(dis)
@@ -628,19 +628,19 @@ class CrackerGui(QMainWindow):
             self.cipher_db_nb_key.setDisabled(dis)
 
             self.cipher_opt_alf.setDisabled(cipher not in crypta.ciph_sort['alf'])
-            self.cipher_bt_dec.setDisabled(cipher in (*ciphers_list['hash'], *ciphers_list['analysis']))
+            self.cipher_bt_dec.setDisabled(cipher in (*ciphers_list['hash'], *ciphers_list[tr('analysis')]))
 
-            if cipher in ('Frequence analysis', 'Scytale', 'Rail fence'):
+            if cipher in (tr('Frequence analysis'), 'Scytale', 'Rail fence'):
                 self.cipher_nb_key.setMinimum(1)
             elif cipher == 'Gronsfeld':
                 self.cipher_nb_key.setRange(0, 10**9)
             else:
                 self.cipher_nb_key.setRange(-2**16, 2**16)
 
-            if cipher == 'Frequence analysis':
-                key_label.setText('Group :')
+            if cipher == tr('Frequence analysis'):
+                key_label.setText(tr('Group :'))
             else:
-                key_label.setText('Key :')
+                key_label.setText(tr('Key :'))
 
 
         #------path bar
@@ -659,7 +659,7 @@ class CrackerGui(QMainWindow):
         keys_grp.setLayout(keys_lay)
         tab_cipher_lay.addWidget(keys_grp, 2, 0, 1, 2, alignment=Qt.AlignCenter)
 
-        key_label = QLabel('Key :')
+        key_label = QLabel(tr('Key :'))
         keys_lay.addWidget(key_label, 0, 0)
 
         #-RSA keys' box
@@ -667,7 +667,7 @@ class CrackerGui(QMainWindow):
         self.cipher_opt_keys.setStyleSheet(self.style)
         self.cipher_opt_keys.setObjectName('sec_obj')
         self.cipher_opt_keys.setMinimumSize(200, 0)
-        self.cipher_opt_keys.addItem('-- Select a key --')
+        self.cipher_opt_keys.addItem(tr('-- Select a key --'))
         self.cipher_opt_keys.insertSeparator(1)
         self.cipher_opt_keys.addItems(RSA.list_keys('all'))
         keys_lay.addWidget(self.cipher_opt_keys, 0, 1)#, alignment=Qt.AlignLeft)
@@ -726,7 +726,7 @@ class CrackerGui(QMainWindow):
         #-Alphabets' box
         self.cipher_opt_alf = QComboBox()
         self.cipher_opt_alf.setEditable(True)
-        self.cipher_opt_alf.addItem('-- Select an alphabet --')
+        self.cipher_opt_alf.addItem(tr('-- Select an alphabet --'))
         self.cipher_opt_alf.insertSeparator(1)
         self.cipher_opt_alf.addItems(list(crypta_alf_list.values()))
         keys_lay.addWidget(self.cipher_opt_alf, 0, 5)
@@ -736,7 +736,7 @@ class CrackerGui(QMainWindow):
         #-Ciphers' box
         self.cipher_opt_ciphs = QComboBox()
         self.cipher_opt_ciphs.activated[str].connect(chk_ciph)
-        self.cipher_opt_ciphs.addItem('-- Select a cipher --')
+        self.cipher_opt_ciphs.addItem(tr('-- Select a cipher --'))
         for k in ciphers_list:
             self.cipher_opt_ciphs.insertSeparator(500)
             self.cipher_opt_ciphs.addItems(ciphers_list[k])
@@ -756,38 +756,38 @@ class CrackerGui(QMainWindow):
 
         bt_lay.addWidget(QLabel('')) # Spacing
 
-        bt_gen = QPushButton('Generate keys')
+        bt_gen = QPushButton(tr('Generate keys'))
         bt_gen.setStyleSheet(self.style)
         bt_gen.setObjectName('orange_border_hover')
         bt_gen.clicked.connect(lambda: GenKeyWin.use(self.style, parent=self))
         bt_lay.addWidget(bt_gen, alignment=Qt.AlignRight)
 
-        bt_exp = QPushButton('Export public keys')
+        bt_exp = QPushButton(tr('Export public keys'))
         bt_exp.setStyleSheet(self.style)
         bt_exp.setObjectName('orange_border_hover')
         bt_exp.clicked.connect(lambda: ExpKeyWin.use(self.style, parent=self))
         bt_lay.addWidget(bt_exp, alignment=Qt.AlignRight)
 
-        bt_info_k = QPushButton('Show info about keys')
+        bt_info_k = QPushButton(tr('Show info about keys'))
         bt_info_k.setStyleSheet(self.style)
         bt_info_k.setObjectName('orange_border_hover')
         bt_info_k.clicked.connect(lambda: InfoKeyWin.use(self.style, parent=self))
         bt_lay.addWidget(bt_info_k, alignment=Qt.AlignRight)
 
-        bt_rn_k = QPushButton('Rename keys')
+        bt_rn_k = QPushButton(tr('Rename keys'))
         bt_rn_k.setStyleSheet(self.style)
         bt_rn_k.setObjectName('orange_border_hover')
         bt_rn_k.clicked.connect(lambda: RenKeyWin.use(self.style, parent=self))
         bt_lay.addWidget(bt_rn_k, alignment=Qt.AlignRight)
 
-        bt_rn_k = QPushButton('Convert keys')
+        bt_rn_k = QPushButton(tr('Convert keys'))
         bt_rn_k.setStyleSheet(self.style)
         bt_rn_k.setObjectName('orange_border_hover')
         bt_rn_k.clicked.connect(lambda: CvrtKeyWin.use(self.style, parent=self))
         bt_lay.addWidget(bt_rn_k, alignment=Qt.AlignRight)
 
 
-        bt_quit = QPushButton('&Quit')
+        bt_quit = QPushButton(tr('&Quit'))
         bt_quit.setObjectName('bt_quit')
         bt_quit.setStyleSheet(self.style)
         bt_quit.setMaximumSize(QSize(50, 35))
@@ -813,9 +813,9 @@ class CrackerGui(QMainWindow):
 
 
         #------show
-        chk_ciph('-- Select a cipher --')
+        chk_ciph(tr('-- Select a cipher --'))
 
-        self.app_widget.addTab(tab_cipher, 'C&ipher')
+        self.app_widget.addTab(tab_cipher, tr('C&ipher'))
 
 
 
@@ -859,7 +859,7 @@ class CrackerGui(QMainWindow):
         self.wrdlst_alf_opt = QComboBox()
         #self.wrdlst_alf_opt.setMaximumSize(300, 35)
         self.wrdlst_alf_opt.setEditable(True)
-        self.wrdlst_alf_opt.addItem('-- Select an alphabet --')
+        self.wrdlst_alf_opt.addItem(tr('-- Select an alphabet --'))
         self.wrdlst_alf_opt.insertSeparator(1)
         self.wrdlst_alf_opt.addItems(w_gen.alfs.values())
         gen_col_1.addRow('Alphabet :', self.wrdlst_alf_opt)
@@ -1637,7 +1637,7 @@ class CrackerGui(QMainWindow):
 
         self.cipher_opt_keys.clear()
 
-        self.cipher_opt_keys.addItem('-- Select a key --')
+        self.cipher_opt_keys.addItem(tr('-- Select a key --'))
         self.cipher_opt_keys.insertSeparator(1)
         self.cipher_opt_keys.addItems(keys_list)
 
@@ -1841,7 +1841,7 @@ class GenKeyWin(QMainWindow):
         self.cipher_box = QComboBox()
         self.cipher_box.setMaximumSize(150, 35)
         self.cipher_box.activated[str].connect(self._chk)
-        self.cipher_box.addItems(['-- Select a cipher --', 'RSA', 'AES-256', 'AES-192', 'AES-128'])
+        self.cipher_box.addItems([tr('-- Select a cipher --'), 'RSA', 'AES-256', 'AES-192', 'AES-128'])
         self.cipher_box.insertSeparator(1)
         self.cipher_box.insertSeparator(3)
         for k in (
@@ -1964,13 +1964,13 @@ class GenKeyWin(QMainWindow):
 
         self.w_lst = (self.RSA_wid, self.sp_wid, self.int2_wid)
         self._chk('RSA')
-        self._chk('-- Select a cipher --')
+        self._chk(tr('-- Select a cipher --'))
 
 
     def _chk(self, ciph):
         '''Changes the generation box.'''
 
-        if ciph == '-- Select a cipher --':
+        if ciph == tr('-- Select a cipher --'):
             for w in self.w_lst:
                 w.setDisabled(True)
 
@@ -2035,7 +2035,7 @@ class GenKeyWin(QMainWindow):
 
         ciph = self.cipher_box.currentText()
 
-        if ciph == '-- Select a cipher --':
+        if ciph == tr('-- Select a cipher --'):
             QMessageBox.critical(None, '!!! No cipher selected !!!', '<h2>Please select a cipher !!!</h2>')
             return -3
 
@@ -2167,7 +2167,7 @@ class ExpKeyWin(QMainWindow):
         self.keys_opt.setStyleSheet(style)
         self.keys_opt.setObjectName('sec_obj')
         self.keys_opt.setMinimumSize(200, 0)
-        self.keys_opt.addItem('-- Select a key --')
+        self.keys_opt.addItem(tr('-- Select a key --'))
         self.keys_opt.insertSeparator(1)
         self.keys_opt.addItems(RSA.list_keys('pvk_without_pbk'))
         main_lay.addWidget(self.keys_opt, 0, 1)
@@ -2198,7 +2198,7 @@ class ExpKeyWin(QMainWindow):
         k_name = self.keys_opt.currentText()
         md_st = ('dec', 'hexa')[self.chbt_h.isChecked()]
 
-        if k_name == '-- Select a key --':
+        if k_name == tr('-- Select a key --'):
             QMessageBox.critical(None, '!!! No selected key !!!', '<h2>Please select a key !!!</h2>')
             return -3
 
@@ -2248,7 +2248,7 @@ class InfoKeyWin(QMainWindow):
         self.keys_opt.setStyleSheet(style)
         self.keys_opt.setObjectName('sec_obj')
         self.keys_opt.setMinimumSize(200, 0)
-        self.keys_opt.addItem('-- Select a key --')
+        self.keys_opt.addItem(tr('-- Select a key --'))
         self.keys_opt.insertSeparator(1)
         self.keys_opt.addItems(RSA.list_keys('all'))
         main_lay.addWidget(self.keys_opt, 0, 1)
@@ -2271,7 +2271,7 @@ class InfoKeyWin(QMainWindow):
         '''Collect the infos and get infos on RSA keys.'''
 
         k_name = self.keys_opt.currentText()
-        if k_name == '-- Select a key --':
+        if k_name == tr('-- Select a key --'):
             QMessageBox.critical(None, '!!! No selected key !!!', '<h2>Please select a key !!!</h2>')
             return -3
 
@@ -2343,7 +2343,7 @@ class RenKeyWin(QMainWindow):
         self.keys_opt.setStyleSheet(style)
         self.keys_opt.setObjectName('sec_obj')
         self.keys_opt.setMinimumSize(200, 0)
-        self.keys_opt.addItem('-- Select a key --')
+        self.keys_opt.addItem(tr('-- Select a key --'))
         self.keys_opt.insertSeparator(1)
         self.keys_opt.addItems(RSA.list_keys('all'))
         main_lay.addWidget(self.keys_opt, 0, 1)
@@ -2377,7 +2377,7 @@ class RenKeyWin(QMainWindow):
         k_name = self.keys_opt.currentText()
         new_name = self.ledit.text()
 
-        if k_name == '-- Select a key --':
+        if k_name == tr('-- Select a key --'):
             QMessageBox.critical(None, '!!! No selected key !!!', '<h2>Please select a key !!!</h2>')
             return -3
 
@@ -2447,7 +2447,7 @@ class CvrtKeyWin(QMainWindow):
         self.keys_opt.setStyleSheet(style)
         self.keys_opt.setObjectName('sec_obj')
         self.keys_opt.setMinimumSize(200, 0)
-        self.keys_opt.addItem('-- Select a key --')
+        self.keys_opt.addItem(tr('-- Select a key --'))
         self.keys_opt.insertSeparator(1)
         self.keys_opt.addItems(keys_lst)
         main_lay.addWidget(self.keys_opt, 1, 1)
@@ -2478,7 +2478,7 @@ class CvrtKeyWin(QMainWindow):
             self.bt_cvrt.setText('Convert in decimal')
 
         self.keys_opt.clear()
-        self.keys_opt.addItem('-- Select a key --')
+        self.keys_opt.addItem(tr('-- Select a key --'))
         self.keys_opt.insertSeparator(1)
         self.keys_opt.addItems(keys_lst)
 
@@ -2489,7 +2489,7 @@ class CvrtKeyWin(QMainWindow):
         k_name = self.keys_opt.currentText()
         exp = ('hexadecimal', 'decimal')[self.rb_dec.isChecked()]
 
-        if k_name == '-- Select a key --':
+        if k_name == tr('-- Select a key --'):
             QMessageBox.critical(None, '!!! No selected key !!!', '<h2>Please select a key !!!</h2>')
             return -3
 
@@ -2548,7 +2548,7 @@ class UseCrackTab:
             return -3
 
 
-        if self.opt_meth.currentText() == 'Brute-force' and self.wlst_alf.currentText() == '-- Select an alphabet --':
+        if self.opt_meth.currentText() == 'Brute-force' and self.wlst_alf.currentText() == tr('-- Select an alphabet --'):
             QMessageBox.critical(None, '!!! No alphabet selected !!!', '<h2>Please select an alphabet !!!</h2>')
             return -3
 
@@ -2826,18 +2826,18 @@ class UseCipherTab:
 
         ciph = self.cipher.currentText()
 
-        if ciph == '-- Select a cipher --':
+        if ciph == tr('-- Select a cipher --'):
             QMessageBox.critical(None, 'No cipher selected !!!', '<h2>Please select a cipher !</h2>')
             return -3
 
         if ciph in (*ciphers_list['KRIS'], *ciphers_list['RSA']):
-            if self.key_opt.currentText() == '-- Select a key --':
+            if self.key_opt.currentText() == tr('-- Select a key --'):
                 QMessageBox.critical(None, 'No key selected !!!', '<h2>Please select a key !</h2>')
                 return -3
 
         elif ciph not in (
             *ciphers_list['hash'],
-            *ciphers_list['analysis'],
+            *ciphers_list[tr('analysis')],
             *crypta.ciph_sort['0_key']
         ):
             key = self._get_key(md)
@@ -2853,7 +2853,7 @@ class UseCipherTab:
                 QMessageBox.critical(None, 'No key entered !!!', '<h2>Please enter a key !</h2>')
                 return -3
 
-        if ciph in crypta.ciph_sort['alf'] and self.alf.currentText() == '-- Select an alphabet --':
+        if ciph in crypta.ciph_sort['alf'] and self.alf.currentText() == tr('-- Select an alphabet --'):
             QMessageBox.critical(None, 'No alphabet selected !!!', '<h2>Please select an alphabet !<h2>')
             return -3
 
@@ -3001,7 +3001,7 @@ class UseCipherTab:
             msg_c = C.encrypt(txt)
 
 
-        elif ciph in ciphers_list['analysis']:
+        elif ciph in ciphers_list[tr('analysis')]:
             if ciph == 'Frequence analysis':
                 msg_c = crypta.freqana_str(txt, True, n=key)
 
@@ -3123,7 +3123,7 @@ class UseWordlistsGenTab:
     def generate(self):
         '''Generate a wordlist using the form informations.'''
 
-        if self.alf.currentText() == '-- Select an alphabet --':
+        if self.alf.currentText() == tr('-- Select an alphabet --'):
             QMessageBox.critical(None, '!!! No alphabet !!!', '<h2>Please select an alphabet !!!</h2>')
             return -3 #Abort
 
@@ -3162,7 +3162,7 @@ class UseWordlistsGenTab:
         if alf == None:
             alf = self.alf.currentText()
 
-        if alf == '-- Select an alphabet --':
+        if alf == tr('-- Select an alphabet --'):
             return -3 #Abort
 
 
