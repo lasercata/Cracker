@@ -256,3 +256,17 @@ Exporter des clés publiques
 S'informer sur des clés
 Renommer des clés
 Convertir des clés
+Entrer un ou plusieurs numéros de téléphone français ("," entre) :
+Numéro :
+Non attribué ou non reconnu
+Téléphone fixe
+Île-de-France
+Région nord-ouest
+Région nord-est
+Région sud-est
+Région sud-ouest ou territoires d'outre-mer
+Téléphone portable
+Bloc
+Zone
+Opérateur
+Date d'attribution
