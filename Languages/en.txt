@@ -1,273 +1,273 @@
-Put the module
-back
-The file "version.txt" was not found. A version will be set but can be wrong.
-The file "version.txt" contain more than 16 characters, so it certainly doesn\'t contain the actual version. A version will be set but can be wrong.
-The file "versions_modules.txt" was NOT found
-The file "history.txt" was NOT found
-locked
-Enter your password
-remaining attempts
-Show password
-Last attempt
-Wrong password
-It was your last attempt
-passed
-Text
-Select a file
-Clear
-File
-Select and load
-Load
-Save
-Reload
-Text encoding
-Binary mode
-Hexa mode
-Bytes mode
-Sure
-Are you sure ?
-Open file
-Select a file
-No file selected
-Please select a file
-Or use the button "Select and load"
-Error
-The file was NOT found
-Encoding error
-The file can't be decoded with this encoding
-Try bytes mode
-Erase Text data
-Text is detected in the box ! Remplace by the file's data ?
-Decoding error
-The file can't be decoded in bytes mode
-Save file
-Erase file data
-The selected file is NOT empty
-Overwrite with text data ?
-Text is empty
-There is no text in the box
-Write anyway ?
-Value Error
-The number of binary digits is not a multiple of 8
-A binary number is composed only of 0 and 1
-Error in the conversion of hexadecimal to bytes
-The file can't be encoded with this encoding
-Done
-Your text has been be wrote
-File error
-The file
-was NOT found
-Parameter "from_" should be None, "text" or "file", but
-was found
-The text widget seem to be empty
-Read the file ?
-The text widget is empty
-You did not select a file
-File is empty
-The file seem to be empty
-Read the text widget ?
-The file is empty
-Text is not empty
-The text widget is not empty, but the file is
-Write the file (Yes) or overwrite text (Ignore) ?
-Write in the text widget ?
+Remettre le module
+à sa place
+Le fichier "version.txt" est introuvable.
+Le fichier "version.txt' semble erroné.
+Le fichier "versions_modules.txt" est introuvable
+Le fichier "history.txt" est introuvable
+verrouillé
+Entrer votre mot de passe
+essais restants
+Montrer le mot de passe
+Dernier essai
+Mot de passe incorrect
+C'était votre dernier essai
+réussi
+Texte
+Sélectionnez un fichier
+Effacer
+Fichier
+Sélectionner et charger
+Charger
+Sauvegarder
+Actualiser
+Encodage du texte
+Mode binaire
+Mode hexa
+Mode bytes
+Certain
+Êtes-vous certain ?
+Ouvrir un fichier
+Sélectionnez un fichier
+Aucun fichier sélectionné
+Veuillez sélectionner un fichier
+Ou utilisez le bouton "Sélectionner et charger"
+Erreur
+Le fichier est introuvable
+Erreur d'encodage
+Le fichier ne peut être décodé avec cette norme d'encodage
+Essayez le mode bytes
+Supprimer les données du widget Text
+Il y a du texte dans le widget Text, le remplacer par les données du fichier ?
+Erreur de décodage
+Le fichier ne peut pas être décodé en mode bytes
+Sauvegarder le fichier
+Supprimer les données du fichier
+Le fichier sélectionner n'est pas vide
+Ecraser avec les données du widget Text ?
+Le widget Text est vide
+Pas de texte dans le widget Text
+Ecrire quand même ?
+Erreur de valeur
+Le nombre de chiffres binaires n'est pas un multiple de 8
+Un nombre en binaire est composé seulement de 0 et de 1
+Erreur lors de la conversion de l'hexadécimal en bytes
+Le fichier ne peut pas être encodé avec cette norme d'encodage
+Fait
+Votre texte a été écrit
+Erreur de fichier
+Le fichier
+est introuvable
+Le paramètre "from_" devrait être None, "text" ou "file", mais
+a été trouvé
+Le widget Text semble vide
+Lire le fichier ?
+Le widget Text est vide
+Vous n'avez pas sélectionné un fichier
+Le fichier est vide
+Le fichier semble vide
+Lire le widget Text ?
+Le fichier est vide
+Le widget Text n'est pas vide
+Le widget Text n'est pas vide mais le fichier l'est
+Ecrire dans le fichier (Yes) ou écraser le texte (Ignore) ?
+Ecrire dans le widget Text ?
 invisible
-black
+noir
 orange
-blue
-green
-light_blue
-red
-pink
-yellow
-white
-none
-bold
-lite
-italics
-underline
+bleu
+vert
+bleu_clair
+rouge
+rose
+jaune
+blanc
+aucune
+gras
+léger
+italique
+souligné
 flaches
-norm
-reverse
-cross
-The input is not a color
-Enter new color of
-(0 to keep the color)
-The color was NOT founded
-program
-input
-output
-error
+normé
+inversé
+barré
+L'entrée n'est pas une couleur
+Entrer une nouvelle couleur de
+(0 pour garder la couleur)
+La couleur est introuvable
+programme
+entrée
+sortie
+erreur
 wordlist
-succes
-ascii art
-Current colors
-Program color
-Input color
-Output color
-Error color
-Wordlists color
-Succes color
-Ascii art color
-Change colors ?
-(y/n)
-y
+succès
+art ascii
+Couleurs actuelles
+Couleur du programme
+Couleur des entrées
+Couleur des sorties
+Couleur des erreurs
+Couleur des wordlists
+Couleur des actions réussites
+Couleur de l'art ascii
+Changer les couleurs ?
+(o/n)
+o
 n
-Restore default program colors (1) or change colors one by one (2) ?
-Back menu
-What you entered is NOT in list
-RSA signature
-analysis
-Text analysis
-Frequence analysis
-Index of coincidence
-Kasiki examination
-Friedman's test
-Brute-force
-Dictionary attack
-Advanced brute-force
-Code break
-Decomposition
-Trial division
-Wheel factorization
-Fermat's factorization
-Pollard's rho
-Probabilistic
-Fermat's test
-Miller-Rabin's test
-Sieves
-Sieve of Erathostenes
-Segmented sieve of Erathostenes
-Crypta : module {} not found, it could mean that Craker was not found, redefining the functions !
-Operation successfully realised
-Enter the text
-Result
-Name of the output file
-Read text from file ?
-yes
-no
-Write the result in a file ?
-Place of letters
-Binary code
-Reverse code
-Reverse code word
-Columnar transposition
-Caesar
-Monoalphabetic substitution
-Four squares
-Polybius
-The cipher "{}" was NOT found !!!
-If it exists, please add it to the dict "ciph_types".
-"verbose" arg should be a boolean !!!
-Place of letters in alphabet
-"mode" arg should be "all", or "word", but "{}" found !!!
-"key" should be an int, but "{}" of type "{}" was found !!!
-Can't encrypt with an empty key !!!
-Can't decrypt with an empty key !!!
-Method : brute-force
-The argument "key" should be a list (a square matrix), but a "{}" was found !!!
-The argument "key" should be a list of lists (a square matrix), but "key[{}]" is a "{}" !!!
-The argument "key" should be a square matrix (list of lists), but "key[{}]" has not the same size as "key" !!!
-The length of the text is not a square number !!!
-The argument "size" should be an intenger, but "{}" of type "{}" was found !!!
-The key should be a string, but
-Method : Brute force (on all the keys of 9 letters)
-Method : brute-force (on all the keys of 9 letters)
-Omitting "{}" because it is not in the alphabet !
-Atbash code
-Albam code
-Achbi code
-Avgad code
-"ignore" arg should be a boolean !!!
-The key must be either a string or an intenger, but "{}", of type "{}" was found !!!
-The key, if a string, must have a length of one, but "{}", of length {} was found !!!
-The key, if a string, should be contained in the alphabet !!!
-Caesar cipher
-Method : brute-force
-The keys `a` and `b` should be both None (to brute-force a message), or both intengers, but only one was None !!!
-The keys should be intengers (or None to brute-force a message) !!!
-The key `a` must be co-prime with the alphabet's length !!!
-Can't encrypt with empty keys !!!
-Affine cipher
-The length of "indexes" should be of 5 or 6, but it has a length of "{}" !!!
-Unknown encrypted group "{}" !
-The key should be a string, or a list, but "{}" of type "{}" was found !!!
-Unknown "{}" ! (try ignore=False)
-Monoalphabetic substitution cipher
-Method : Hill-climbing
-Tritheme cipher
-The key must be a string, but "{}", of type "{}" was found !!!
-Invalid character "{}" at position {} in the key !!! (it is not in the alphabet)
-Unknown character "{}" ! It is not in the alphabet ! (try ignore=False)
-Impossible to determine the key
-The argument "mfl" should be a string !!!
-The argument "mfl" should have a length of 1 !!!
-The argument "mfl" should be in the alphabet !!!
-Vigenere cipher
-The key must be an int, but "{}", of type "{}" was found !!!
-The arg "a" must be 1 or -1, but "{}" was found !!!
-The keys 1 and 2 should be both None, or both intengers, but only one was None !!!
-The keys should be strings (or None) !!!
-The arg "wprocess" should be a boolean, but "{}" of type "{}" was found !!!
-The argument "n" should be an intenger, but "{}" of type "{}" was found !!!
-The arg "n" should be a positive intenger different from 0 !!!
-The arg "sort" should be None, "char", or "occ", but "{}" was found !!!
-To get the comparaison, "n" should be 1 !!!
-Character correspondance (Text : English - French) :
-Number of total characters : {}
-Number of characters (after word processing) : {}
-Number of total occurences : {}
-Occurences count :
-Occurences count (by character) :
-Occurences count (by occurence) :
-Max : {}, for length of {}.
-Alphabet (let empty to use normal) : 
-Text in majuscule ? [yn ] 
-Put ! to quit
-Example : B -> E transform all B in E
-f gives you the frequences of the letters
-Plain alphabet
-Cipher alphabet
-Correct text ? [yn] 
-File "quad_f.wrdlst" was not found !
-Your may have forgotten to unzip it.
-It is in Data/Crack.
-The software can't start until the file is not unziped.
-Fatal error !!!
-File "quad_f.wrdlst" was not found.
-Can't import quad.wrdlst
-Put the module {} back !!!
-analysis
-Analys&e ↓
-Si&gn ↓
-Chec&k
-H&ash ↓
-&Encrypt ↓
-&Decrypt ↑
-&Quit
-C&ipher
-Group :
-Key :
--- Select a key --
--- Select an alphabet --
--- Select a cipher --
-Generate keys
-Export public keys
-Show info about keys
-Rename keys
-Convert keys
-Enter french phone number(s) ("," between) :
-Number :
-Unassigned or unrecognized
-Home phone
-Ile-de-France
-Northwest region
-Northeast region
-Southeast region
-Southwest region or oversea territories
-Cellphone
-Block
-Area
-Operator
-Allocation date
-Get infos
+Restaurer les couleurs par défaut (1) ou les changer une par une (2) ?
+Retour au menu
+Ce que vous avez entré n'est pas dans la liste
+Signature RSA
+analyse
+Analyse du texte
+Analyse des fréquences
+Indice de coïncidence
+Test de Kasiki
+Test de Friedman
+Force brute
+Attaque par dictionnaire
+Force brute avancée
+Cassage du chiffre
+Décomposition
+Divisions successives
+Factorisation par roue
+Factorisation de Fermat
+Algorithme rho de Pollard
+Probabilistique
+Test de Fermat
+Test de Miller-Rabin
+Cribles
+Crible d'Erathostenes
+Crible d'Erathostenes par segment
+Crypta : Le module {} est introuvable, Craker pourrait donc être introuvable, redéfinition des fonctions !
+Opération réalisée avec succès
+Entrer le texte
+Résultat
+Nom du fichier dans lequel écrire les données
+Lire le texte depuis un fichier ?
+oui
+non
+Ecrire le résultat dans une fichier ?
+Rang dans l'alphabet
+Code binaire
+Code inversé
+Mots inversés
+Transposition de colonnes
+César
+Substitution monoalphabétique
+Quatre carrés
+Polybe
+Le chiffre "{}" est introuvable !!!
+Si il existe, veuillez l'ajouter au dictionnaire "ciph_types".
+L'argument "verbose" devrait être un booléen !!!
+Rang dans l'alphabet
+L'argument "mode" devrait être "all", ou "word", mais est "{}" !!!
+"key" devrait être un int, mais "{}" est de type "{}" !!!
+Le texte ne peut pas être chiffré avec une clé vide !!!
+Le texte ne peut pas être déchiffré avec une clé vide !!!
+Méthode : force brute
+L'argument "key" devrait être une liste (une matrice carrée), mais est de type "{}" !!!
+L'argument "key" devrait être une liste de listes (une matrice carrée), mais "key[{}]" est de type "{}" !!!
+L'argument "key" devrait être une matrice carrée (liste de listes), mais "key[{}]" n'a pas la même taille que "key" !!!
+La longueur du texte n'est pas égale au carré d'un nombre entier !!!
+L'argument "size" devrait être un int, mais "{}" est de type "{}" !!!
+La clé devrait être un str mais "{}" est de type "{}" !!!
+Methode : force brute (test de toutes les clés de 9 lettres)
+Methode : force brute (test de toutes les clés de 9 lettres)
+"{}" omis car n'est pas présent dans l'alphabet
+Code Atbash
+Code Albam
+Code Achbi
+Code Avgad
+L'argument "ignore" devrait être un booléen !!!
+La clé doit être soit un str soit un int, mais "{}" est de type "{}" !!!
+Si la clé est un str, elle doit avoir une longueur de 1, mais "{}" est de longueur {} !!!
+Si la clé est un str, elle doit appartenir à l'alphabet !!!
+Chiffre de César
+Methode : force brute
+Les clés `a` et `b` devraient être toutes deux None, ou int, mais une seule est None !!!
+Les clés devraient des int (ou None) !!!
+La clé `a` doit être un nombre premier avec la longueur de l'alphabet !!!
+Impossible de chiffres avec des clés vides !!!
+Chiffre affine
+La longueur des "indexes" devraient être de 5 ou 6, alors qu'ils ont une longueur de "{}" !!!
+Groupe inconnu "{}" !
+La clé devrait être un str, ou une list, mais "{}" est de type "{}" !!!
+"{}" inconnu ! (essayer ignore=False)
+Chiffrement par substitution monoalphabétique
+Methode : Hill-climbing
+Chiffre de Tritheme
+La clé devrait être un str, ou une list, mais "{}" est de type "{}" !!!
+Caractère invalide "{}" à la position {} dans la clé !!! (il n'est pas dans l'alphabet)
+Caractère inconnu "{}" ! Il n'est pas dans l'alphabet ! (essayer ignore=False)
+Clé indéterminable
+L'argument "mfl" doit être un str !!!
+L'argument "mfl" doit avoir une longueur de 1 !!!
+L'argument "mfl" doit être dans l'alphabet !!!
+Chiffre de Vigenère
+La clé devrait être un int, mais "{}" est de type "{}" !!!
+L'argument "a" doit être égal à 1 ou -1, mais est égal à "{}" !!!
+Les clés 1 et 2 doivent être toutes deux None, ou des int, mais un seul est None !!!
+Les clés devraient être des str (ou None) !!!
+L'argument "wprocess" devrait être un bool, mais "{}" est de type "{}" !!!
+L'argument "n" devrait être un integer, mais "{}" est de type "{}" !!!
+L'argument "n" doit être un nombre positif différent de 0 !!!
+L'argument "sort" devrait être None, "char", ou "occ", mais est de type "{}" !!!
+Pour avoir la comparaison, "n" devrait être égal à 1 !!!
+Correspondance des caractères (Texte : Englais - Français) :
+Nombre total de caractères : {}
+Nombre de caractères (après traitement du texte) : {}
+Nombre total d'occurences : {}
+Occurences :
+Occurences (par caractère) :
+Occurences (par occurence) :
+Max : {}, pour une longueur de {}.
+Alphabet (ne rien mettre pour utiliser le normal) : 
+Texte en majuscule ? [on ] 
+Mettre ! pour quitter
+Exemple : B -> E transforme tous les B en E
+f donne la fréquence des lettres
+Alphabet en clair
+Alphabet chiffré
+Texte correct ? [on] 
+Le fichier "quad_f.wrdlst" est introuvable !
+Vous avez peut-être oublié de le décompresser.
+Il se trouve dans Data/Crack.
+Le logiciel ne peut pas démarrer tant que le fichier n'est pas décompressé.
+Erreur fatale !!!
+Le fichier "quad_f.wrdlst" est introuvable.
+Le module quad.wrdlst ne peut-être importé.
+Remettez le module {} !!!
+analyse
+Analys&er ↓
+Si&gner ↓
+Vérif&ier
+C&alculer l'empreinte ↓
+&Chiffrer ↓
+&Déchiffrer ↑
+&Quitter
+Ch&iffrement
+Groupe :
+Clé :
+-- Sélectionnez une clé --
+-- Sélectionnez un alphabet --
+-- Sélectionner un chiffre --
+Générer des clés
+Exporter des clés publiques
+S'informer sur des clés
+Renommer des clés
+Convertir des clés
+Entrer un ou des numéros de téléphone français ("," entre) :
+Numéro :
+Non attribué ou non reconnu
+Téléphone fixe
+Île-de-France
+Région nord-ouest
+Région nord-est
+Région sud-est
+Région sud-ouest ou territoires d'outre-mer
+Téléphone portable
+Bloc
+Zone
+Opérateur
+Date d'attribution
+Chercher
