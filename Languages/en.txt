@@ -256,3 +256,17 @@ Export public keys
 Show info about keys
 Rename keys
 Convert keys
+Enter french phone number(s) ("," between) :
+Number :
+Unassigned or unrecognized
+Home phone
+Ile-de-France
+Northwest region
+Northeast region
+Southeast region
+Southwest region or oversea territories
+Cellphone
+Block
+Area
+Operator
+Allocation date
