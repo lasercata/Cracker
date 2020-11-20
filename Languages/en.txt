@@ -270,3 +270,4 @@ Block
 Area
 Operator
 Allocation date
+Get infos
