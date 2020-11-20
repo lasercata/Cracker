@@ -4,7 +4,7 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '18.11.2020'
+Cracker_gui__last_update = '20.11.2020'
 Cracker_gui__version = '1.2.'
 
 
@@ -1362,7 +1362,7 @@ class CrackerGui(QMainWindow):
 
         #------widgets
         #---label
-        tab_anamer0_lay.addWidget(QLabel('Enter french phone number(s) ("," between) :'), 0, 0)
+        tab_anamer0_lay.addWidget(QLabel(tr('Enter french phone number(s) ("," between) :')), 0, 0)
 
         #---pwd_entry
         self.anamer0_inp = QLineEdit()
@@ -1371,7 +1371,7 @@ class CrackerGui(QMainWindow):
         tab_anamer0_lay.addWidget(self.anamer0_inp, 0, 1)
 
         #---button
-        self.anamer0_bt_get = QPushButton('Get infos')
+        self.anamer0_bt_get = QPushButton(tr('Get infos'))
         self.anamer0_bt_get.setStyleSheet(self.style)
         self.anamer0_bt_get.setObjectName('main_obj')
         self.anamer0_bt_get.clicked.connect(get_info)
