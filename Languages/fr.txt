@@ -256,7 +256,7 @@ Exporter des clés publiques
 S'informer sur des clés
 Renommer des clés
 Convertir des clés
-Entrer un ou plusieurs numéros de téléphone français ("," entre) :
+Entrer un ou des numéros de téléphone français ("," entre) :
 Numéro :
 Non attribué ou non reconnu
 Téléphone fixe
@@ -270,3 +270,4 @@ Bloc
 Zone
 Opérateur
 Date d'attribution
+Chercher
