@@ -5,7 +5,7 @@
 
 auth = 'Elerias'
 date = '20.11.2020'
-version = '1.2'
+version = '1.2.1'
 update_notes = """
 1.1.2 <- 1.1 Stable :
     - Including this script in Cracker
@@ -122,7 +122,7 @@ def use(phoneNumbers=[]):
         else:
           ret += '\n' + tr('Unassigned or unrecognized')
 
-    return ret
+    return ret[1:]
 
 
 # ##-start
