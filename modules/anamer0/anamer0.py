@@ -4,8 +4,8 @@
 ##-head
 
 auth = 'Elerias'
-date = '06.11.2020'
-version = '1.1.2'
+date = '20.11.2020'
+version = '1.2'
 update_notes = """
 1.1.2 <- 1.1 Stable :
     - Including this script in Cracker
@@ -29,6 +29,7 @@ from sys import argv
 
 #---------Cracker's modules
 from modules.base.console.color import cl_inp
+from Languages.lang import translate as tr
 
 
 ##-main
@@ -81,19 +82,14 @@ def analyze(phoneNumbers):
     f_op.close()
     return L
 
-def use(phoneNumbers=[], lang='en'):
-
-    if lang in ('fr', 'french', 'francais', 'français'):
-        T = {0: 'Entrer un ou plusieurs numéros de téléphone français ("," entre) :', 1: 'Numéro :', 2: 'Non attribué ou non reconnu', 3: 'Téléphone fixe', 'Ile-de-France': 'Île-de-France', 'Northwest region': 'Région nord-ouest', 'Northeast region': 'Région nord-est', 'Southeast region': 'Région sud-est', 'Southwest region or oversea territories': "Région sud-ouest ou territoires d'outre-mer", 4: 'Téléphone portable', 5: 'Bloc', 6: 'Zone', 7: 'Opérateur', 8: "Date d'attribution"}
-    else:
-        T = {0: 'Enter french phone number(s) ("," between) :', 1: 'Number :', 2: 'Unassigned or unrecognized', 3: 'Home phone', 'Ile-de-France': 'Ile-de-France', 'Northwest region': 'Northwest region', 'Northeast region': 'Northeast region', 'Southeast region': 'Southeast region', 'Southwest region or oversea territories': 'Southwest region or oversea territories', 4: 'Cellphone', 5: 'Block', 6: 'Area', 7: 'Operator', 8: 'Allocation date'}
+def use(phoneNumbers=[]):
 
     lr = False # Line return
 
     ret = ''
 
     if phoneNumbers == []:
-        answer = cl_inp(T[0])
+        answer = cl_inp(tr('Enter french phone number(s) ("," between) :'))
         phoneNumbers = answer.split(',')
         lr = True
 
@@ -107,24 +103,24 @@ def use(phoneNumbers=[], lang='en'):
             lr = True
 
         if len(k['Phone number']) != 10:
-            ret += '\n' + T[1] + ' ' + k['Phone number']
+            ret += '\n' + tr('Number :') + ' ' + k['Phone number']
         else:
-            ret += '\n' + T[1] + ' ' + k['Phone number'][0:2] + ' ' + k['Phone number'][2:4] + ' ' + k['Phone number'][4:6] + ' ' + k['Phone number'][6:8] + ' ' + k['Phone number'][8:10]
+            ret += '\n' + tr('Number :') + ' ' + k['Phone number'][0:2] + ' ' + k['Phone number'][2:4] + ' ' + k['Phone number'][4:6] + ' ' + k['Phone number'][6:8] + ' ' + k['Phone number'][8:10]
 
         if k['Recognized']:
             if k['Phone type'] == 'Home phone':
-                ret += '\n' +  T[3]
-                ret += '\n' + T[k['Big area']]
+                ret += '\n' +  tr('Home phone')
+                ret += '\n' + tr(k['Big area'])
 
             elif k['Phone type'] == 'Cellphone':
-                ret += '\n' + T[4]
+                ret += '\n' + tr('Cellphone')
 
-            ret += '\n' + T[5] + ' : ' + k['Block']
-            ret += '\n' + T[6] + ' : ' + k['Area']
-            ret += '\n' + T[7] + ' : ' + k['Operator']
-            ret += '\n' + T[8] + ' : ' + k['Allocation date']
+            ret += '\n' + tr('Block') + ' : ' + k['Block']
+            ret += '\n' + tr('Area') + ' : ' + k['Area']
+            ret += '\n' + tr('Operator') + ' : ' + k['Operator']
+            ret += '\n' + tr('Allocation date') + ' : ' + k['Allocation date']
         else:
-          ret += '\n' + T[2]
+          ret += '\n' + tr('Unassigned or unrecognized')
 
     return ret
 
