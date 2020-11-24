@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 lang__auth = 'Elerias'
-lang__ver = '1.0.3'
-lang__last_update = '18.11.2020'
+lang__ver = '1.0.4'
+lang__last_update = '24.11.2020'
 
 
 ##-import
@@ -16,6 +16,11 @@ import os
 global D_langs
 D_langs = {}
 L_en = []
+
+global langs_lst
+langs_lst = [] #List of the available languages (i.g. ['en', 'fr']).
+
+global lang
 
 try:
     with open('Data/lang.txt', 'r') as f:
@@ -36,6 +41,8 @@ except FileNotFoundError:
 
 for i in os.listdir('Languages'):
     if i[-4:] == '.txt' and i != 'lang.txt':
+        langs_lst.append(i.strip('.txt'))
+
         D_langs[i[:-4]] = {}
         n = 0
         with open('Languages/'+i, 'r', encoding='utf-8') as f:
