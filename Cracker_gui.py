@@ -4,8 +4,8 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '20.11.2020'
-Cracker_gui__version = '1.2.'
+Cracker_gui__last_update = '24.11.2020'
+Cracker_gui__version = '1.2.4'
 
 
 ##-import/ini
@@ -1456,7 +1456,7 @@ class CrackerGui(QMainWindow):
         stng_pwd_lay = QGridLayout()
         self.stng_pwd_grp.setLayout(stng_pwd_lay)
 
-        tab_stng_lay.addWidget(self.stng_pwd_grp, 0, 1)#, Qt.AlignRight)
+        tab_stng_lay.addWidget(self.stng_pwd_grp, 0, 1, 2, 1)#, Qt.AlignRight)
 
         #-form widgets (ask for pwd)
         stng_pwd_form_lay = QFormLayout()
@@ -1509,6 +1509,58 @@ class CrackerGui(QMainWindow):
 
         self.stng_pwd_bt.clicked.connect(lambda: use_c_pwd.change_pwd())
         self.stng_pwd2.returnPressed.connect(lambda: use_c_pwd.change_pwd())
+
+
+        #---Change language
+        #-function
+        def chg_lang():
+            '''
+            Changing the language (in the text file). The user need to
+            close the app and relaunch it manually to apply the new lang.
+            '''
+
+            new_lang = self.stng_lang_box.currentText()
+
+            #---test
+            if new_lang == lang:
+                return -3
+
+            #---write
+            with open('Data/lang.txt', 'w') as f:
+                f.write(new_lang)
+
+            #---close
+            rep = QMessageBox.question(
+                None, 'Done !',
+                '<h2>The new lang will apply the next time you launch Cracker.</h2>\n<h2>Quit now ?</h2>',
+                QMessageBox.No | QMessageBox.Yes,
+                QMessageBox.Yes
+            )
+
+            if rep == QMessageBox.Yes:
+                self.quit()
+
+
+        #-ini
+        self.stng_lang_grp = QGroupBox('Change Language')
+        self.stng_lang_grp.setMaximumSize(200, 130)
+        # self.stng_lang_grp.setMinimumSize(500, 200)
+        stng_lang_lay = QGridLayout()
+        self.stng_lang_grp.setLayout(stng_lang_lay)
+
+        tab_stng_lay.addWidget(self.stng_lang_grp, 1, 0)#, Qt.AlignRight)
+
+        #-Langs combo box
+        self.stng_lang_box = QComboBox()
+        self.stng_lang_box.setMaximumWidth(50)
+        self.stng_lang_box.addItems(langs_lst)
+        self.stng_lang_box.setCurrentText(lang)
+        stng_lang_lay.addWidget(self.stng_lang_box, 0, 0, Qt.AlignLeft)
+
+        #-Button
+        self.stng_lang_bt = QPushButton('Apply')
+        stng_lang_lay.addWidget(self.stng_lang_bt, 1, 0, Qt.AlignRight)
+        self.stng_lang_bt.clicked.connect(chg_lang)
 
         #------show
         self.app_widget.addTab(tab_stng, 'Setti&ngs')
