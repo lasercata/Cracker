@@ -4,8 +4,8 @@
 '''Initiate Cracker's needed data.'''
 
 ini__auth = 'Lasercata'
-ini__last_update = '13.11.2020'
-ini__version = '1.2'
+ini__last_update = '24.11.2020'
+ini__version = '1.2.1'
 
 ##-import
 #---------packages
@@ -56,6 +56,7 @@ try:
     from modules.anamer0 import anamer0
 
     from Languages.lang import translate as tr
+    from Languages.lang import langs_lst, lang
 
 
 except ModuleNotFoundError as ept:
