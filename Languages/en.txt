@@ -257,7 +257,7 @@ Show info about keys
 Rename keys
 Convert keys
 Enter french phone number(s) ("," between) :
-Number :
+Phone number :
 Unassigned or unrecognized
 Home phone
 Ile-de-France
@@ -271,3 +271,39 @@ Area
 Operator
 Allocation date
 Get infos
+n has to be an integer
+n cannot be negative
+0 is not factorizable
+Prime
+Not prime
+Probably prime
+prime numbers
+is likely a prime number
+is a prime number
+is a composite number
+List of prime factors :
+exit
+Prima menu :
+Main menu
+Exit
+Decomposition of a number as a product of prime factors
+Probabilistic primality's test
+Sieves to find prime numbers
+Your choice : 
+is NOT an option of this menu !
+Enter the integer number : 
+Number of tests (Error = 0.25 ^ number of tests) : 
+Limit : 
+Realised in 
+Length of the list :
+Write the prime numbers in a file ? 
+Name of the file (a file of the same name will be erase) :
+Print the list on the screen ? 
+---End---
+Y
+Yes
+YES
+Algorithm :
+-- Select an algorithm --
+C&alculate
+Number :
