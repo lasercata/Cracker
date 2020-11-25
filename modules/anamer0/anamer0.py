@@ -4,8 +4,8 @@
 ##-head
 
 auth = 'Elerias'
-date = '20.11.2020'
-version = '1.2.1'
+date = '25.11.2020'
+version = '1.2.2'
 update_notes = """
 1.1.2 <- 1.1 Stable :
     - Including this script in Cracker
@@ -103,9 +103,9 @@ def use(phoneNumbers=[]):
             lr = True
 
         if len(k['Phone number']) != 10:
-            ret += '\n' + tr('Number :') + ' ' + k['Phone number']
+            ret += '\n' + tr('Phone number :') + ' ' + k['Phone number']
         else:
-            ret += '\n' + tr('Number :') + ' ' + k['Phone number'][0:2] + ' ' + k['Phone number'][2:4] + ' ' + k['Phone number'][4:6] + ' ' + k['Phone number'][6:8] + ' ' + k['Phone number'][8:10]
+            ret += '\n' + tr('Phone number :') + ' ' + k['Phone number'][0:2] + ' ' + k['Phone number'][2:4] + ' ' + k['Phone number'][4:6] + ' ' + k['Phone number'][6:8] + ' ' + k['Phone number'][8:10]
 
         if k['Recognized']:
             if k['Phone type'] == 'Home phone':
