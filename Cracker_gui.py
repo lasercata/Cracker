@@ -4,8 +4,8 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '24.11.2020'
-Cracker_gui__version = '1.2.4'
+Cracker_gui__last_update = '25.11.2020'
+Cracker_gui__version = '1.2.5'
 
 
 ##-import/ini
@@ -1018,7 +1018,7 @@ class CrackerGui(QMainWindow):
 
         #------widgets
         #---number
-        self.prima_nb = TextEditor(820, 100, 'Number :')
+        self.prima_nb = TextEditor(820, 100, tr('Number :'))
         self.lst_txt.append(self.prima_nb) # used to reload when changing directory.
         tab_prima_lay.addWidget(self.prima_nb, 1, 0, 1, -1)
 
@@ -1028,18 +1028,18 @@ class CrackerGui(QMainWindow):
         algo_lay = QHBoxLayout()
         tab_prima_lay.addLayout(algo_lay, 3, 0)
 
-        algo_lay.addWidget(QLabel('Algorithm :'))
+        algo_lay.addWidget(QLabel(tr('Algorithm :')))
 
         self.prima_algo_opt = QComboBox()
         self.prima_algo_opt.setMaximumSize(400, 35)
-        self.prima_algo_opt.addItem('-- Select an algorithm --')
+        self.prima_algo_opt.addItem(tr('-- Select an algorithm --'))
         for k in prima_algo_list:
             self.prima_algo_opt.insertSeparator(500)
             self.prima_algo_opt.addItems(prima_algo_list[k])
         algo_lay.addWidget(self.prima_algo_opt, Qt.AlignLeft)
 
         #-calc bt
-        self.prima_calc_bt = QPushButton('C&alculate')
+        self.prima_calc_bt = QPushButton(tr('C&alculate'))
         self.prima_calc_bt.setStyleSheet(self.style)
         self.prima_calc_bt.setObjectName('main_obj')
         tab_prima_lay.addWidget(self.prima_calc_bt, 4, 2)
