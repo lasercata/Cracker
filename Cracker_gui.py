@@ -5,7 +5,7 @@
 
 Cracker_gui__auth = 'Lasercata'
 Cracker_gui__last_update = '26.11.2020'
-Cracker_gui__version = '1.2.6'
+Cracker_gui__version = '1.2.7'
 
 
 ##-import/ini
@@ -26,7 +26,7 @@ class AboutCracker(QMainWindow):
 
         #------ini
         super(AboutCracker, self).__init__(parent)
-        self.setWindowTitle('Cracker ― About')
+        self.setWindowTitle(tr('Cracker ― About'))
 
         main_wid = QWidget()
         main_wid_lay = QGridLayout()
@@ -46,34 +46,11 @@ class AboutCracker(QMainWindow):
         about = QWidget()
         about.setLayout(about_lay)
 
-        self.about_msg = '''
-Cracker is a software developed and updated by Lasercata and by Elerias. It is written in Python 3 and in C.
-
-
-
-This software is a toolbox application that allow you to do many things : you can encrypt
-securely a secret message using one of the many ciphers presents in Cracker (KRIS, AES, RSA, ...),
-sign it with a hash function, decrypt it.
-
-If you have a message without the key, but you need to read the content, you can try to
-crack it using a wordlist that you made with Cracker, or let the algorithm try to crack
-it using its wordlist bank.
-
-You don't remember which was your favourite wordlist ? Don't worry ! You can analyze
-them with the wordlist tab to get numerous informations on them.
-
-You need to convert a number from binary to hexadecimal ? You need to do a special convertion
-using your own base alphabet ? Check the "Base convert" tab.
-
-Like you can see, there is a lot of functions, often about cracking. But Cracker
-can also help to improve your security : if you need a strong password, hard to be
-cracked by brute-force, the "P@ssw0rd_Test0r" tab is for you ! It gives a lot of informations
-about the password you entered, like its entropy.
-        '''
+        self.about_msg = '\n' + tr('Cracker is a software developed and updated by Lasercata and by Elerias. It is written in Python 3 and in C.') + '\n\n\n' + tr('This software is a toolbox application that enables you to do many things : you can encrypt securely a secret message using one of the many ciphers present in Cracker (KRIS, AES, RSA, ...), sign it with a hash function, decrypt it.') + '\n\n' + tr('If you have a message without the key, but you need to read the content, you can try to crack it using a wordlist that you made with Cracker, or let the algorithm try to crack it using its wordlist bank.') + '\n\n' + tr("You don't remember which was your favourite wordlist ? Don't worry ! You can analyze them with the wordlist tab to get numerous informations on them.") + '\n\n' + tr('You need to convert a number from binary to hexadecimal ? You need to do a special conversion using your own base alphabet ? Check the "Base convert" tab.') + '\n\n' + tr('As you can see, there is a lot of functions, often about cracking. But Cracker can also help to improve your security : if you need a strong password, hard to be cracked by brute-force, the "P@ssw0rd_Test0r" tab is for you ! It gives a lot of informations about the password you entered, like its entropy.') + '\n'
 
         about_lay.addWidget(QLabel(self.about_msg), 0, 0)
 
-        self.m.addTab(about, '&About')
+        self.m.addTab(about, tr('&About'))
 
         #------versions tab
         ver = QTextEdit()
@@ -81,7 +58,7 @@ about the password you entered, like its entropy.
         if modules_ver != '':
             ver.setPlainText('Cracker : v{}\n{}'.format(cracker_version, modules_ver))
 
-        self.m.addTab(ver, '&Version')
+        self.m.addTab(ver, tr('&Version'))
 
         #------updates tab
         up_lay = QGridLayout()
@@ -94,14 +71,14 @@ about the password you entered, like its entropy.
         self.txt.setPlainText(update_notes)
         up_lay.addWidget(self.txt, 0, 0)
 
-        self.m.addTab(up, '&Updates')
+        self.m.addTab(up, tr('&Updates'))
 
         #------authors tab
         auth_lay = QGridLayout()
         auth = QWidget()
         auth.setLayout(auth_lay)
 
-        auth_lay.addWidget(QLabel('By <h3>Lasercata</h3><h3>Elerias</h3>', alignment=Qt.AlignCenter), 0, 0, Qt.AlignCenter)
+        auth_lay.addWidget(QLabel(tr('By <h3>Lasercata</h3><h3>Elerias</h3>'), alignment=Qt.AlignCenter), 0, 0, Qt.AlignCenter)
 
         lasercata_logo = QLabel(self)
         lasercata_l_pixmap = QPixmap('Style/lasercata_logo_fly_curve.png')
@@ -109,7 +86,7 @@ about the password you entered, like its entropy.
         lasercata_logo.setPixmap(lasercata_l_pixmap.scaledToHeight(150))
         auth_lay.addWidget(lasercata_logo, 1, 0, alignment=Qt.AlignCenter)
 
-        self.m.addTab(auth, 'Au&thors')
+        self.m.addTab(auth, tr('Au&thors'))
 
 
     #---------use
@@ -139,13 +116,13 @@ class DoubleInput(QWidget):
         '''
 
         if type_ not in (QLineEdit, QSpinBox):
-            raise ValueError('The arg "type_" should be QLineEdit or QSpinBox, but "{}" was found !!!'.format(type_))
+            raise ValueError(tr('The arg "type_" should be QLineEdit or QSpinBox, but "{}" was found !!!').format(type_))
 
         if type(n) != int:
-            raise ValueError('The arg "n" should be an int !!!')
+            raise ValueError(tr('The arg "n" should be an int !!!'))
 
         elif n < 1:
-            raise ValueError('The arg "n" should be greater or equal to 1 !!!')
+            raise ValueError(tr('The arg "n" should be greater or equal to 1 !!!'))
 
         #------ini
         super().__init__(parent)
@@ -241,10 +218,10 @@ class CrackerGui(QMainWindow):
 
         self.lst_wrdlst_opt = {} #List of all the ComboBox selecting the wordlists, by sender text.
         self.lst_selected_wrdlst = {
-            'Select a wordlist ...' : [],
-            'Select a location ...' : []
+            tr('Select a wordlist ...') : [],
+            tr('Select a location ...') : []
             } #Dict which contain all the selected wordlists, by sender text.
-        self.lst_selected_wrdlst['Select a file ...'] = self.lst_selected_wrdlst['Select a wordlist ...']
+        self.lst_selected_wrdlst[tr('Select a file ...')] = self.lst_selected_wrdlst[tr('Select a wordlist ...')]
 
         #self.style = style_test
         self.app_style = GuiStyle()
@@ -252,15 +229,15 @@ class CrackerGui(QMainWindow):
 
         #------create the tabs
         self.tabs = {
-            0 : 'Home',
+            0 : tr('Home'),
             1 : 'Crack',
-            2 : 'Ciphers',
+            2 : tr('Ciphers'),
             3 : 'Wordlists',
             4 : 'Prima',
             5 : 'Base convert',
             6 : 'P@ssw0rd_Test0r',
             7 : 'Anamer0',
-            8 : 'Settings'
+            8 : tr('Settings')
         }
 
         self.create_home()
@@ -303,33 +280,33 @@ class CrackerGui(QMainWindow):
         logo.setPixmap(l_pixmap)
         tab_home_lay.addWidget(logo, 0, 0, alignment=Qt.AlignCenter)
 
-        bt_info = QPushButton('&About ...')
+        bt_info = QPushButton(tr('&About ...'))
         bt_info.setObjectName('bt_info')
         bt_info.setStyleSheet(self.style)
-        bt_info.setMaximumSize(QSize(90, 35))
+        bt_info.setMaximumSize(QSize((len(tr('&About ...'))-1)*13, 35))
         bt_info.clicked.connect(self.show_infos)
         tab_home_lay.addWidget(bt_info, 0, 0, Qt.AlignLeft | Qt.AlignBottom)
 
         bt_lay = QHBoxLayout()
         tab_home_lay.addLayout(bt_lay, 0, 0, alignment=Qt.AlignRight | Qt.AlignBottom)
 
-        bt_lock = QPushButton('&Lock')
+        bt_lock = QPushButton(tr('&Lock'))
         bt_lock.setObjectName('bt_lock')
         bt_lock.setStyleSheet(self.style)
-        bt_lock.setMaximumSize(QSize(50, 35))
+        bt_lock.setMaximumSize(QSize((len(tr('&Lock'))-1)*13, 35))
         bt_lock.clicked.connect(self.lock)
         bt_lay.addWidget(bt_lock)
 
-        bt_quit = QPushButton('&Quit')
+        bt_quit = QPushButton(tr('&Quit'))
         bt_quit.setObjectName('bt_quit')
         bt_quit.setStyleSheet(self.style)
-        bt_quit.setMaximumSize(QSize(50, 35))
+        bt_quit.setMaximumSize(QSize((len(tr('&Quit'))-1)*13, 35))
         bt_quit.clicked.connect(self.quit)
         bt_lay.addWidget(bt_quit)
 
 
         #------show
-        self.app_widget.addTab(tab_home, '&Home')
+        self.app_widget.addTab(tab_home, tr('&Home'))
 
 
 
@@ -1585,7 +1562,7 @@ class CrackerGui(QMainWindow):
         path_bar.setLayout(path_bar_lay)
 
         #------widgets
-        path_bar_lay.addWidget(QLabel('Current directory :'), 0 ,0)
+        path_bar_lay.addWidget(QLabel(tr('Current directory :')), 0 ,0)
 
         self.path_ent[tab] = QLineEdit()
         self.path_ent[tab].setObjectName('path_entry')
@@ -1602,13 +1579,13 @@ class CrackerGui(QMainWindow):
         bt_up.setStyleSheet(self.style)
         path_bar_lay.addWidget(bt_up, 0, 2)
 
-        bt_apply = QPushButton('Apply')
+        bt_apply = QPushButton(tr('Apply'))
         bt_apply.clicked.connect(self.change_dir)
         bt_apply.setObjectName('path_bt')
         bt_apply.setStyleSheet(self.style)
         path_bar_lay.addWidget(bt_apply, 0, 3)
 
-        bt_gui = QPushButton('File dialog')
+        bt_gui = QPushButton(tr('Search'))
         bt_gui.clicked.connect(self.change_dir)
         bt_gui.setObjectName('path_bt')
         bt_gui.setStyleSheet(self.style)
@@ -1630,7 +1607,7 @@ class CrackerGui(QMainWindow):
 
         except FileNotFoundError:
             self.path_ent[self.app_widget.currentIndex()].setText(getcwd())
-            QMessageBox.about(QWidget(), '!!! Directory error !!!', 'The directory was NOT found !!!')
+            QMessageBox.about(QWidget(), tr('!!! Directory error !!!'), tr('The directory was NOT found !!!'))
             return False
 
         for tab in range(5):
@@ -1659,7 +1636,7 @@ class CrackerGui(QMainWindow):
         '''Change the current directory by asking to the user with a popup'''
 
 
-        new_dir = QFileDialog.getExistingDirectory(self, 'Select directory')
+        new_dir = QFileDialog.getExistingDirectory(self, tr('Select directory'))
 
         if new_dir:
             try:
@@ -1667,7 +1644,7 @@ class CrackerGui(QMainWindow):
 
             except FileNotFoundError:
                 self.path_ent[self.app_widget.currentIndex()].setText(getcwd())
-                QMessageBox.about(QWidget(), '!!! Directory error !!!', 'The directory was NOT found !!!')
+                QMessageBox.about(QWidget(), tr('!!! Directory error !!!'), tr('The directory was NOT found !!!'))
                 return False
 
             for tab in range(5):
