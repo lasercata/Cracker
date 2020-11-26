@@ -307,3 +307,48 @@ Algorithm :
 -- Select an algorithm --
 C&alculate
 Number :
+Only one var should be None !!!
+At least 1 var should be None !!!
+"word" argument should be a string, but "{}", of type "{}" was found !
+You should enter something !!!
+ret_entro should be a boolean !!!
+Return for : 
+Alphabets : 
+Your word's lenth : 
+Number of differents characters : 
+Lenth of the alphabet containing your word : 
+uncrackable
+very strong
+strong
+medium
+weak
+very weak
+too much weak
+so bad
+Your password is in the top 25 weakest passwords !!!
+It has an entropy of ~
+bits.
+You should choose an other password.
+Your password contain only
+differents characters !!!
+You should add more differents characters.
+Your password is a PIN took from a date in [1900 : 2100] !!!
+Your password is
+of weakness
+To get a
+password
+of weakness, with an entropy of
+you can add
+characters to your password.
+password (4/9 of weakness, with an entropy of 82), you can add
+Enter the password to test :
+Hexadecimal
+Decimal
+Binary
+Alphabetic uppercases
+Alphabetic lowercases
+Specials
+Enter the password to try :
+Show password
+Get strenth
+Return for
