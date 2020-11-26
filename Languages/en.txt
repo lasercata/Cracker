@@ -12,15 +12,15 @@ Last attempt
 Wrong password
 It was your last attempt
 passed
-Text
-Select a file
+Text :
+-- Select a file --
 Clear
 File
 Select and load
 Load
 Save
 Reload
-Text encoding
+Text encoding :
 Binary mode
 Hexa mode
 Bytes mode
@@ -352,3 +352,34 @@ Enter the password to try :
 Show password
 Get strenth
 Return for
+Cracker ― About
+&About
+&Version
+&Updates
+By <h3>Lasercata</h3><h3>Elerias</h3>
+Au&thors
+Cracker is a software developed and updated by Lasercata and by Elerias. It is written in Python 3 and in C.
+This software is a toolbox application that enables you to do many things : you can encrypt securely a secret message using one of the many ciphers present in Cracker (KRIS, AES, RSA, ...), sign it with a hash function, decrypt it.
+If you have a message without the key, but you need to read the content, you can try to crack it using a wordlist that you made with Cracker, or let the algorithm try to crack it using its wordlist bank.
+You don't remember which was your favourite wordlist ? Don't worry ! You can analyze them with the wordlist tab to get numerous informations on them.
+You need to convert a number from binary to hexadecimal ? You need to do a special conversion using your own base alphabet ? Check the "Base convert" tab.
+As you can see, there is a lot of functions, often about cracking. But Cracker can also help to improve your security : if you need a strong password, hard to be cracked by brute-force, the "P@ssw0rd_Test0r" tab is for you ! It gives a lot of informations about the password you entered, like its entropy.
+The arg "type_" should be QLineEdit or QSpinBox, but "{}" was found !!!
+The arg "n" should be an int !!!
+The arg "n" should be greater or equal to 1 !!!
+Select a wordlist ...
+Select a location ...
+Select a file ...
+Home
+Settings
+&About ...
+&Lock
+&Quit
+&Home
+Ciphers
+Current directory :
+Apply
+Search
+!!! Directory error !!!
+The directory was NOT found !!!
+Select directory
