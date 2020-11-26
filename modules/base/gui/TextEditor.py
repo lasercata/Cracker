@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 TextEditor__auth = 'lasercata'
-TextEditor__last_update = '13.11.2020'
-TextEditor__version = '1.3.1'
+TextEditor__last_update = '26.11.2020'
+TextEditor__version = '1.3.2'
 
 ##-import
 import sys
@@ -28,13 +28,13 @@ lst_encod = ('utf-8', 'ascii', 'latin-1')
 class TextEditor(QWidget):
     '''Class creating a TextEditor object.'''
 
-    def __init__(self, txt_width=500, txt_height=220, txt_text=tr('Text') + ' :', parent=None):
+    def __init__(self, txt_width=500, txt_height=220, txt_text=tr('Text :'), parent=None):
         '''Create the text.'''
 
         #------ini
         super().__init__(parent)
 
-        self.fn = '-- ' + tr('Select a file') + ' --'
+        self.fn = tr('-- Select a file --')
         self.lst_f_hist = []
 
         self.style = GuiStyle().style_sheet
@@ -59,7 +59,7 @@ class TextEditor(QWidget):
 
         #---clear
         self.bt_clear = QPushButton(tr('Clear'))
-        self.bt_clear.setMaximumSize(65, 50)
+        self.bt_clear.setMaximumSize(len(tr('Clear'))*13, 50)
         self.bt_clear.clicked.connect(self.clear)
         main_lay.addWidget(self.bt_clear, 0, 0, alignment=Qt.AlignTop)
 
@@ -70,7 +70,7 @@ class TextEditor(QWidget):
         main_lay.addWidget(self.rb_fn, 1, 0)
 
         #-option menu files
-        self.lst_f = ('-- ' + tr('Select a file') + ' --', *list_files())
+        self.lst_f = (tr('-- Select a file --'), *list_files())
         self.opt_fn = QComboBox()
         self.opt_fn.addItems(self.lst_f)
         self.opt_fn.insertSeparator(1)
@@ -78,33 +78,33 @@ class TextEditor(QWidget):
         main_lay.addWidget(self.opt_fn, 1, 1, 1, 2)
 
         #-buttons
-        self.bt_select = QPushButton(tr('Select a file') + ' ...')
-        self.bt_select.setMaximumSize(100, 50)
+        self.bt_select = QPushButton(tr('Select a file ...'))
+        self.bt_select.setMaximumSize(len(tr('Select a file ...'))*13, 50)
         self.bt_select.clicked.connect(self.select_fn)
         main_lay.addWidget(self.bt_select, 1, 3)
 
         self.bt_select_load = QPushButton(tr('Select and load') + ' ▲')
-        self.bt_select_load.setMaximumSize(135, 50)
+        self.bt_select_load.setMaximumSize((len(tr('Select and load'))+2)*13, 50)
         self.bt_select_load.clicked.connect(self.select_load_fn)
         main_lay.addWidget(self.bt_select_load, 1, 4)
 
         self.bt_load = QPushButton(tr('Load') + ' ▲')
-        self.bt_load.setMaximumSize(65, 50)
+        self.bt_load.setMaximumSize((len(tr('Load'))+2)*13, 50)
         self.bt_load.clicked.connect(self.load_fn)
         main_lay.addWidget(self.bt_load, 1, 5)
 
         self.bt_save = QPushButton(tr('Save') + ' ▼')
-        self.bt_save.setMaximumSize(65, 50)
+        self.bt_save.setMaximumSize((len(tr('Save'))+2)*13, 50)
         self.bt_save.clicked.connect(self.save_fn)
         main_lay.addWidget(self.bt_save, 1, 6)
 
         self.bt_reload = QPushButton(tr('Reload'))
-        self.bt_reload.setMaximumSize(65, 50)
+        self.bt_reload.setMaximumSize(len(tr('Reload'))*13, 50)
         self.bt_reload.clicked.connect(self.reload)
         main_lay.addWidget(self.bt_reload, 1, 7, alignment=Qt.AlignRight)
 
         #-encoding
-        self.rb_encod = QRadioButton(tr('Text encoding') + ' :')
+        self.rb_encod = QRadioButton(tr('Text encoding :'))
         main_lay.addWidget(self.rb_encod, 2, 1)
         self.opt_encod = QComboBox()
         self.opt_encod.addItems(lst_encod)
@@ -191,7 +191,7 @@ class TextEditor(QWidget):
         If no file is selected, launch select_fn.
         '''
 
-        if self.opt_fn.currentText() == '-- ' + tr('Select a file') + ' --':
+        if self.opt_fn.currentText() == tr('-- Select a file --'):
             self.select_fn()
 
         self.rb_bytes.setChecked(True)
@@ -211,7 +211,7 @@ class TextEditor(QWidget):
             fn = QFileDialog.getOpenFileName(self, tr('Open file'), getcwd())[0]
 
         if fn in ((), ''): #cancel
-            fn = '-- ' + tr('Select a file') + ' --'
+            fn = tr('-- Select a file --')
             self.fn = fn
             self.rb_txt.setChecked(True)
             self.rb_fn.setChecked(False)
@@ -249,7 +249,7 @@ class TextEditor(QWidget):
 
         #self.fn = self.opt_fn.currentText()
 
-        if self.fn == '-- ' + tr('Select a file') + ' --':
+        if self.fn == tr('-- Select a file --'):
             QMessageBox.warning(QWidget(), '!!! ' + tr('No file selected') + ' !!!', \
                 '<h1>' + tr('Please select a file') + ' !</h1>\n' + tr('Or use the button "Select and load"'))
 
@@ -314,7 +314,7 @@ class TextEditor(QWidget):
         return -3 if canceled or aborted, -2 if an encoding error occur, None otherwise.
         '''
 
-        if self.fn == '-- ' + tr('Select a file') + ' --':
+        if self.fn == tr('-- Select a file --'):
             filename = QFileDialog.getSaveFileName(self, tr('Save file'), getcwd())[0]
 
             if filename in ((), ''):
@@ -462,10 +462,10 @@ class TextEditor(QWidget):
         It can be used if a new file was copied while running, for example.
         '''
 
-        self.lst_f = ('-- ' + tr('Select a file') + ' --', *list_files(), *self.lst_f_hist)
+        self.lst_f = (tr('-- Select a file --'), *list_files(), *self.lst_f_hist)
 
         self.opt_fn.clear()
-        self.opt_fn.addItems(('-- ' + tr('Select a file') + ' --', *list_files()))
+        self.opt_fn.addItems((tr('-- Select a file --'), *list_files()))
         self.opt_fn.insertSeparator(1)
         self.opt_fn.insertSeparator(10000)
         if len(self.lst_f_hist) > 0:
@@ -473,8 +473,8 @@ class TextEditor(QWidget):
             self.opt_fn.insertSeparator(20000)
 
         if self.fn not in self.lst_f:
-            self.fn = '-- ' + tr('Select a file') + ' --'
-            self.opt_fn.setCurrentText('-- ' + tr('Select a file') + ' --')
+            self.fn = tr('-- Select a file --')
+            self.opt_fn.setCurrentText(tr('-- Select a file --'))
 
         else:
             self.opt_fn.setCurrentText(self.fn)
@@ -514,7 +514,7 @@ class TextEditor(QWidget):
 
         txt_t = self.txt.toPlainText()
 
-        if self.opt_fn.currentText() != '-- ' + tr('Select a file') + ' --':
+        if self.opt_fn.currentText() != tr('-- Select a file --'):
             txt_f = self.read_file(self.opt_fn.currentText(), \
                 self.rb_bytes.isChecked(), self.opt_encod.currentText())
 
@@ -608,7 +608,7 @@ class TextEditor(QWidget):
 
         txt_t = self.txt.toPlainText()
 
-        if self.opt_fn.currentText() != '-- ' + tr('Select a file') + ' --':
+        if self.opt_fn.currentText() != tr('-- Select a file --'):
             txt_f = self.read_file(self.opt_fn.currentText(), \
                 self.rb_bytes.isChecked(), self.opt_encod.currentText())
 
