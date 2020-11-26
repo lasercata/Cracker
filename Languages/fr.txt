@@ -12,15 +12,15 @@ Dernier essai
 Mot de passe incorrect
 C'était votre dernier essai
 réussi
-Texte
-Sélectionnez un fichier
+Texte :
+-- Sélectionnez un fichier --
 Effacer
 Fichier
 Sélectionner et charger
 Charger
 Sauvegarder
 Actualiser
-Encodage du texte
+Encodage du texte :
 Mode binaire
 Mode hexa
 Mode bytes
@@ -352,3 +352,34 @@ Entrez le mot de passe à tester :
 Montrer le mot de passe
 Tester
 Retour pour
+A propos de Cracker ...
+A p&ropos
+&Version
+&Mises à jour
+Par <h3>Lasercata</h3><h3>Elerias</h3>
+Au&teurs
+Cracker est un logiciel developpé et mis à jour par Lasercata et Elerias. Il est programmé en Python 3 et en C.
+Ce logiciel vous permet de faire beaucoup de choses : vous pouvez chiffrer de façon sécurisée un message que vous voulez garder secret en utilisant un des nombreux algorithmes de chiffrements proposés (KRIS, AES, RSA, ...), y apposer une signature avec une fonction de hachage, et le déchiffrer.
+Si vous êtes en possession d'un message chiffré dont vous ignorez la clé, mais que vous avez besoin de lire le content, vous pouvez essayer de le décrypter en utilisant une wordlist que vous avez créée avec Cracker, ou laisser l'algorithme essayer de le décrypter en utilisant sa banque de wordlists. 
+Vous ne vous souvenez plus quelle était votre wordlist favorite ? Ne vous inquiétez pas ! Vous pouvez analyser des wordlist avec le menu wordlist afin d'obtenir des informations sur elles. 
+Vous désirez convertir un nombre écrit en binaire en hexadécimal ? Ou d'une conversion particulière en utilisant votre propre alphabet ? Allez voir le menu "Base convert".
+Comme vous pouvez le voir, il y a de nombreuses fonction, souvent en rapport avec le hacking. Mais Cracker possède également des fonctionnalités qui vous permettent d'améliorer votre sécurité : si vous cherchez un mot de passe résistant aux différentes attaques par force-brute, le menu "@Passw0rd_Test0r" vous sera très utile ! Il donne beaucoup d'informations sur le mot de passe que vous voulez tester, comme son entropie par exemple.
+L'argument "type_" devrait être QLineEdit ou QSpinBox, mais est de type "{}" !!!
+L'argument "n" doit être un int !!!
+L'argument "n" doit être supérieur ou égal à 1 !!!
+Sélectionnez une wordlist ...
+Sélectionnez un emplacement ...
+Sélectionnez un fichier ...
+Accueil
+Paramètres
+&A propos ...
+&Verrouiller
+&Quitter
+&Accueil
+Chiffrements
+Répertoire courant :
+Appliquer
+Chercher
+!!! Erreur de répertoire !!!
+Le répertoire est introuvable !!!
+Sélectionnez un répertoire
