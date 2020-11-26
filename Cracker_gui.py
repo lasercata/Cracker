@@ -4,8 +4,8 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '25.11.2020'
-Cracker_gui__version = '1.2.5'
+Cracker_gui__last_update = '26.11.2020'
+Cracker_gui__version = '1.2.6'
 
 
 ##-import/ini
@@ -1294,16 +1294,16 @@ class CrackerGui(QMainWindow):
                 self.pwd_t_ret.setPlainText('')
 
             elif self.pwd_t_show.isChecked():
-                self.pwd_t_ret.setPlainText('Return for "' + \
+                self.pwd_t_ret.setPlainText(tr('Return for') + ' "' + \
                     self.pwd_t_inp.text() + '"\n' + pwd_testor.get_sth(self.pwd_t_inp.text()))
 
             else:
-                self.pwd_t_ret.setPlainText('Return for "' + \
+                self.pwd_t_ret.setPlainText(tr('Return for') + ' "' + \
                     '*'*len(self.pwd_t_inp.text()) + '"\n' + pwd_testor.get_sth(self.pwd_t_inp.text()))
 
         #------widgets
         #---label
-        tab_pwd_t_lay.addWidget(QLabel('Enter the password to try :'), 0, 0)
+        tab_pwd_t_lay.addWidget(QLabel(tr('Enter the password to try :')), 0, 0)
 
         #---pwd_entry
         self.pwd_t_inp = QLineEdit()
@@ -1313,12 +1313,12 @@ class CrackerGui(QMainWindow):
         tab_pwd_t_lay.addWidget(self.pwd_t_inp, 0, 1)
 
         #---check box
-        self.pwd_t_show = QCheckBox('Show password')
+        self.pwd_t_show = QCheckBox(tr('Show password'))
         self.pwd_t_show.toggled.connect(chk_show)
         tab_pwd_t_lay.addWidget(self.pwd_t_show, 1, 0, 1, 2, Qt.AlignCenter | Qt.AlignTop)
 
         #---button
-        self.pwd_t_bt_get = QPushButton('Get strenth')
+        self.pwd_t_bt_get = QPushButton(tr('Get strenth'))
         self.pwd_t_bt_get.setStyleSheet(self.style)
         self.pwd_t_bt_get.setObjectName('main_obj')
         self.pwd_t_bt_get.clicked.connect(get_sth_)
