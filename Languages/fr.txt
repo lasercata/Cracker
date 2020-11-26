@@ -307,3 +307,48 @@ Algorithme :
 -- Sélectionnez un algorithme --
 C&alculer
 Nombre :
+Une seule variable doit être None !!!
+Au moins une variable doit être None !!!
+L'argument "word" devrait être un str, mais "{}" est de type "{}" !
+Vous devez entrer quelque chose !!!
+ret_entro doit être un booléen !!!
+Retour pour : 
+Alphabets : 
+Longueur de votre mot : 
+Nombre de caractères différents : 
+Longueur de l'alphabet contenant votre mot : 
+incassable
+très fort
+fort
+moyen
+faible
+très faible
+extrêmement faible
+si mauvais
+Votre mot de passe fait parmi des 25 pires mots de passe !!!
+Il a une entropie de ~
+bits.
+Vous devriez choisir un autre mot de passe.
+Votre mot de passe contient seulement
+caractères différents !!!
+Vous devriez ajouter plus de caractères différents.
+Votre mot de passe est un ensemble de 4 chiffres provenant d'une date [1900 : 2100] !!!
+Votre mot de passe est
+de faiblesse
+Pour avoir un
+mot de passe
+de faiblesse, avec une entropie de
+vous pouvez ajouter
+caractères à votre mot de passe.
+mot de passe (4/9 de faiblesse, avec une entropie de 82), vous pouvez ajouter
+Entrez le mot de passe à tester :
+Hexadecimal
+Décimal
+Binaire
+Alphabet majuscule
+Alphabet minuscule
+Caractères spéciaux
+Entrez le mot de passe à tester :
+Montrer le mot de passe
+Tester
+Retour pour
