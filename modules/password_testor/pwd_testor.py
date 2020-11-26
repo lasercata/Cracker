@@ -3,8 +3,8 @@
 '''Module including P@ssw0rd_Test0r functions.'''
 
 pwd_testor__auth = 'lasercata'
-pwd_testor__date = '03.11.2020'
-pwd_testor__version = '1.0.2'
+pwd_testor__date = '26.11.2020'
+pwd_testor__version = '1.1'
 
 ##-import
 from math import *
@@ -13,6 +13,7 @@ from time import sleep
 
 from modules.base.console.color import color, c_prog, c_input, c_output
 from modules.base.base_functions import set_prompt
+from Languages.lang import translate as tr
 
 ##-ini
 alf_0_1 = ('0', '1')
@@ -85,7 +86,7 @@ def pwd_entro(H=None, N=None, L=None):
     
     a = None
     if (H == a and N == a) or (H == a and L == a) or (N == a and L == a) or (H == a and N == a and L == a):
-        return '\nOnly one var should be None !!!'
+        return '\n' + tr('Only one var should be None !!!')
         
     elif H == a:
         return log2(N **L)
@@ -97,7 +98,7 @@ def pwd_entro(H=None, N=None, L=None):
         return round(2 **(H / L))
         
     else:
-        return '\nAt least 1 var should be None !!!'
+        return '\n' + tr('At least 1 var should be None !!!')
     
 
 #---------------------------------------------------------------------------wlth
@@ -105,7 +106,7 @@ def wlth(word):
     '''Return the sort list of all differents word's characters, in one occurence.'''
     
     if type(word) != str:
-        raise ValueError('"word" argument should be a string, but "{}", of type "{}" was found !'.format(word, type(word)))
+        raise ValueError(tr('"word" argument should be a string, but "{}", of type "{}" was found !').format(word, type(word)))
 
     ret = list(set(word))
     ret.sort()
@@ -203,29 +204,29 @@ def walf(word):
     alf_lth = 0
     
     if hex_:
-        ret_alfs.append('Hexadecimal')
+        ret_alfs.append(tr('Hexadecimal'))
         alf_lth += 16
         
     elif dec:
-        ret_alfs.append('Decimal')
+        ret_alfs.append(tr('Decimal'))
         alf_lth += 10
         
     elif bi:
-        ret_alfs.append('Binary')
+        ret_alfs.append(tr('Binary'))
         alf_lth += 2
         
         
     if alph_up:
-        ret_alfs.append('Alphabetic uppercases')
+        ret_alfs.append(tr('Alphabetic uppercases'))
         alf_lth += 26
         
     if alph:
-        ret_alfs.append('Alphabetic lowercases')
+        ret_alfs.append(tr('Alphabetic lowercases'))
         alf_lth += 26
 
 
     if spe:
-        ret_alfs.append('Specials')
+        ret_alfs.append(tr('Specials'))
         alf_lth += len(alf_spe)
     
     
@@ -243,11 +244,11 @@ def get_sth(word, ret_entro=False):
     '''
     
     if word == '':
-        print('\nYou should enter something !!!')
+        print('\n' + tr('You should enter something !!!'))
         return -3 #Abort
     
     if ret_entro not in (0, 1):
-        raise ValueError('ret_entro should be a boolean !!!')
+        raise ValueError(tr('ret_entro should be a boolean !!!'))
     
     entro = None
     
@@ -265,13 +266,13 @@ def get_sth(word, ret_entro=False):
     #---------print info on the word (alphabets, lenths)
     color(c_output)
     ret = '\n' + '-'*60
-    ret += '\nReturn for : ' + '*'*lth
+    ret += '\n' + tr('Return for : ') + '*'*lth
     
-    ret += '\n\nAlphabets : ' + ret_alfs
+    ret += '\n\n' + tr('Alphabets : ') + ret_alfs
     
-    ret += '\n\nYour word\'s lenth : ' + str(lth)
-    ret += '\nNumber of differents characters : ' + str(lth_occ)
-    ret += '\nLenth of the alphabet containing your word : ' + str(lth_alfs) + '\n'
+    ret += '\n\n' + tr("Your word's lenth : ") + str(lth)
+    ret += '\n' + tr('Number of differents characters : ') + str(lth_occ)
+    ret += '\n' + tr('Lenth of the alphabet containing your word : ') + str(lth_alfs) + '\n'
     
     
     #---------tests
@@ -307,8 +308,8 @@ def get_sth(word, ret_entro=False):
 
 
     #---------set the scale (from https://www.ssi.gouv.fr/administration/precautions-elementaires/calculer-la-force-dun-mot-de-passe/ and me)
-    dct_wk_lvl = {0 : 'uncrackable !!!', 1 : 'very strong', 2 : 'strong', 3 : 'strong',
-    4 : 'medium', 5 : 'weak', 6 : 'weak', 7 : 'very weak', 8 : 'too much weak !', 9 : 'so bad !'}
+    dct_wk_lvl = {0 : tr('uncrackable'), 1 : tr('very strong'), 2 : tr('strong'), 3 : tr('strong'),
+    4 : tr('medium'), 5 : tr('weak'), 6 : tr('weak'), 7 : tr('very weak'), 8 : tr('too much weak'), 9 : tr('so bad')}
     
     lst_entro_lvl = (512, 200, 128, 104, 82, 78, 65, 49, 39, 0)
     
@@ -344,38 +345,37 @@ def get_sth(word, ret_entro=False):
     
     if weak_freq:
         print(type(ret))
-        ret += '\n\nYour password is in the top 25 weakest passwords !!!\nIt has an entropy of ~' + str(round(entro, 3)) + 'bits.'
-        ret += '\nYou shall choose an other password.'
+        ret += '\n\n' + tr('Your password is in the top 25 weakest passwords !!!') + '\n' + tr('It has an entropy of ~') + str(round(entro, 3)) + ' ' + tr('bits.')
+        ret += '\n' + tr('You should choose an other password.')
         
         
     elif weak_occ:
-        ret += '\n\nYour password contain only ' + str(lth_occ) + ' differents characters !!!\nIt has an entropy of ~ ' +  str(round(entro, 3)) + ' bits.'
-        ret +='\nYou should add more differents characters.'
+        ret += '\n\n' + tr('Your password contain only') + ' ' + str(lth_occ) + ' ' + tr('differents characters !!!') + '\n' + tr('It has an entropy of ~') +  str(round(entro, 3)) + ' ' + tr('bits.')
+        ret +='\n' + tr('You should add more differents characters.')
         
         
     elif weak_year:
-        ret += '\n\nYour password is a PIN took from a date in [1900 : 2100] !!!\nIt has an entropy of ~' + str(round(entro, 3)) + ' bits.'
+        ret += '\n\n' + tr('Your password is a PIN took from a date in [1900 : 2100] !!!') + '\n' + tr('It has an entropy of ~') + str(round(entro, 3)) + ' ' + tr('bits.')
         
         
     else:
-        ret += '\n\nYour password is ' + str(wk_lvl) + ' (' + str(round(weakness / 9 * 100, 3)) + '% (' + str(weakness) + '/9) of weakness) ;'
-        ret += '\nIt has an entropy of ~' + str(round(entro, 3)) + ' bits.'
+        ret += '\n\n' + tr('Your password is') + ' ' + str(wk_lvl) + ' (' + str(round(weakness / 9 * 100, 3)) + '% (' + str(weakness) + '/9) ' + tr('of weakness') + ') ;'
+        ret += '\n' + tr('It has an entropy of ~') + str(round(entro, 3)) + ' ' + tr('bits.')
         
         if weakness != 0:
-            ret += ('\n\nTo get a ' + dct_wk_lvl[weakness - 1] +
-            ' password (' + str(weakness - 1) + '/9 of weakness, with an entropy of ' + str(next_entro) + '), you can add ' +
-            str(add_lth) + ' characters to your password.')
+            ret += ('\n\n' + tr('To get a') + ' ' + dct_wk_lvl[weakness - 1] +
+            ' ' + tr('password') + ' (' + str(weakness - 1) + '/9 ' + tr('of weakness, with an entropy of') + ' ' + str(next_entro) + '), ' + tr('you can add') + ' ' + str(add_lth) + ' ' + tr('characters to your password.'))
 
         if weakness in [9, 8, 7, 6]: #get medium
-            ret += ('\n\nTo get a ' + dct_wk_lvl[4] + ' password (4/9 of weakness, with an entropy of 82), you can add ' +
-            str(add_lth_med) + ' characters to your password.')
+            ret += ('\n\n' + tr('To get a') + ' ' + dct_wk_lvl[4] + ' ' + tr('password (4/9 of weakness, with an entropy of 82), you can add') + ' ' +
+            str(add_lth_med) + ' ' + tr('characters to your password.'))
             
     return ret
     
 ##-using function
 def use():
     color(c_prog)
-    print('\nEnter the password to test :')
+    print('\n' + tr('Enter the password to test :'))
     color(c_input)
     word = getpass('>')
     color(c_prog)
@@ -383,7 +383,7 @@ def use():
     print(get_sth(word))
     
     color(c_input)
-    input('---End---')
+    input(tr('---End---'))
     color(c_prog)
     
 ##-test module
