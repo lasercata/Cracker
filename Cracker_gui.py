@@ -4,7 +4,7 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '26.11.2020'
+Cracker_gui__last_update = '05.12.2020'
 Cracker_gui__version = '1.2.7'
 
 
@@ -46,7 +46,7 @@ class AboutCracker(QMainWindow):
         about = QWidget()
         about.setLayout(about_lay)
 
-        self.about_msg = '\n' + tr('Cracker is a software developed and updated by Lasercata and by Elerias. It is written in Python 3 and in C.') + '\n\n\n' + tr('This software is a toolbox application that enables you to do many things : you can encrypt securely a secret message using one of the many ciphers present in Cracker (KRIS, AES, RSA, ...), sign it with a hash function, decrypt it.') + '\n\n' + tr('If you have a message without the key, but you need to read the content, you can try to crack it using a wordlist that you made with Cracker, or let the algorithm try to crack it using its wordlist bank.') + '\n\n' + tr("You don't remember which was your favourite wordlist ? Don't worry ! You can analyze them with the wordlist tab to get numerous informations on them.") + '\n\n' + tr('You need to convert a number from binary to hexadecimal ? You need to do a special conversion using your own base alphabet ? Check the "Base convert" tab.') + '\n\n' + tr('As you can see, there is a lot of functions, often about cracking. But Cracker can also help to improve your security : if you need a strong password, hard to be cracked by brute-force, the "P@ssw0rd_Test0r" tab is for you ! It gives a lot of informations about the password you entered, like its entropy.') + '\n'
+        self.about_msg = '\n' + tr('Cracker is a software developed and updated by Lasercata and by Elerias. It is written in Python 3 and in C.') + '\n\n\n' + NewLine(100).text_set(tr('This software is a toolbox application that enables you to do many things : you can encrypt securely a secret message using one of the many ciphers present in Cracker (KRIS, AES, RSA, ...), sign it with a hash function, decrypt it.')) + '\n\n' + NewLine(100).text_set(tr('If you have a message without the key, but you need to read the content, you can try to crack it using a wordlist that you made with Cracker, or let the algorithm try to crack it using its wordlist bank.')) + '\n\n' + NewLine(100).text_set(tr("You don't remember which was your favourite wordlist ? Don't worry ! You can analyze them with the wordlist tab to get numerous informations on them.")) + '\n\n' + NewLine(100).text_set(tr('You need to convert a number from binary to hexadecimal ? You need to do a special conversion using your own base alphabet ? Check the "Base convert" tab.')) + '\n\n' + NewLine(100).text_set(tr('As you can see, there is a lot of functions, often about cracking. But Cracker can also help to improve your security : if you need a strong password, hard to be cracked by brute-force, the "P@ssw0rd_Test0r" tab is for you ! It gives a lot of informations about the password you entered, like its entropy.')) + '\n'
 
         about_lay.addWidget(QLabel(self.about_msg), 0, 0)
 
