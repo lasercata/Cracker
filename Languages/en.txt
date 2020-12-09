@@ -383,3 +383,42 @@ Search
 !!! Directory error !!!
 The directory was NOT found !!!
 Select directory
+The argument "binary" should be a boolean, but "{}" of type "{}" was found !!!
+The argument "interface" should be None, "gui", or "console", but {} of type {} was found !!!
+The file "{}" was NOT found !!!
+Bad encoding "{}" for the file "{}"
+!!! File error !!!
+Filename : {} ;
+Size : {} ({}) ;
+Last modification : {} ;
+Last access : {} ;
+Creation : {} ;
+Number of characters : {} ;
+Minimum line length : {} characters ;
+Maximum line length : {} characters ;
+Average line length : {} characters ;
+Median line length : {} characters ;
+Wordlist's length : {} lines ;
+Wordlength repartition :
+Length of the alphabet : {} characters ;
+Alphabets : {} ;
+Number of differents characters : {} ;
+Characters' repartition :
+Reading "{}" ... ― Cracker
+Processing ...
+Enter the wordlist's name :
+No file of this name !!!
+Back menu ...
+Done in {} s !
+Done !
+Generate a wordlist
+Words' length :
+Alphabet :
+Filename :
+Encoding :
+-- Previous locations --
+Save in folder :
+&Generate
+Analyze a wordlist
+&Analyze
+Number of head / bottom lines :
