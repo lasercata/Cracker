@@ -4,8 +4,8 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '05.12.2020'
-Cracker_gui__version = '1.2.7'
+Cracker_gui__last_update = '09.12.2020'
+Cracker_gui__version = '1.2.8'
 
 
 ##-import/ini
@@ -444,14 +444,14 @@ class CrackerGui(QMainWindow):
         crack_wrdlst_lb = QLabel('Wordlist :')
         crack_wrdlst_lay.addWidget(crack_wrdlst_lb, 0, 0, alignment=Qt.AlignCenter)
 
-        self.crack_bt_wrdlst = QPushButton('Select a wordlist ...')
+        self.crack_bt_wrdlst = QPushButton(tr('Select a wordlist ...'))
         self.crack_bt_wrdlst.clicked.connect(self.select_wrdlst)
         crack_wrdlst_lay.addWidget(self.crack_bt_wrdlst, 0, 1, alignment=Qt.AlignLeft)
 
         self.crack_opt_wrdlst = QComboBox()
         self.crack_opt_wrdlst.addItem('-- Previously selected wordlists --')
         self.crack_opt_wrdlst.insertSeparator(1)
-        self.lst_wrdlst_opt['Select a wordlist ...'] = self.crack_opt_wrdlst
+        self.lst_wrdlst_opt[tr('Select a wordlist ...')] = self.crack_opt_wrdlst
         crack_wrdlst_lay.addWidget(self.crack_opt_wrdlst, 1, 0, 1, 2)
 
         crack_wrdlst_lst_wid = (crack_wrdlst_lb, self.crack_bt_wrdlst, self.crack_opt_wrdlst) #To dislable or not with chk_meth
@@ -471,7 +471,7 @@ class CrackerGui(QMainWindow):
         crack_wlst_permut_lay.addWidget(self.crack_wlst_sp, 0, 0, 1, 2, Qt.AlignCenter)
 
         #-alphabet
-        wlst_alf_lb = QLabel('Alphabet :')
+        wlst_alf_lb = QLabel(tr('Alphabet :'))
         crack_wlst_permut_lay.addWidget(wlst_alf_lb, 1, 0)
 
         self.crack_wlst_alf = QComboBox()
@@ -814,7 +814,7 @@ class CrackerGui(QMainWindow):
         #------widgets
         #---generate
         #-ini
-        gen_grp = QGroupBox('Generate a wordlist')
+        gen_grp = QGroupBox(tr('Generate a wordlist'))
         gen_grp.setMinimumSize(730, 190)
         gen_lay = QGridLayout()
         gen_grp.setLayout(gen_lay)
@@ -830,7 +830,7 @@ class CrackerGui(QMainWindow):
         self.wrdlst_lth_sp.setMinimum(1)
         self.wrdlst_lth_sp.setValue(5)
         self.wrdlst_lth_sp.setMaximumSize(50, 30)
-        gen_col_1.addRow("Words' length :", self.wrdlst_lth_sp)
+        gen_col_1.addRow(tr("Words' length :"), self.wrdlst_lth_sp)
 
         #-alphabet
         self.wrdlst_alf_opt = QComboBox()
@@ -839,13 +839,13 @@ class CrackerGui(QMainWindow):
         self.wrdlst_alf_opt.addItem(tr('-- Select an alphabet --'))
         self.wrdlst_alf_opt.insertSeparator(1)
         self.wrdlst_alf_opt.addItems(w_gen.alfs.values())
-        gen_col_1.addRow('Alphabet :', self.wrdlst_alf_opt)
+        gen_col_1.addRow(tr('Alphabet :'), self.wrdlst_alf_opt)
 
         #-filename
         self.wrdlst_fn_ledit = QLineEdit()
         self.wrdlst_fn_ledit.setMinimumSize(150, 0)
         self.wrdlst_fn_ledit.setMaximumSize(300, 35)
-        gen_col_1.addRow('Filename :', self.wrdlst_fn_ledit)
+        gen_col_1.addRow(tr('Filename :'), self.wrdlst_fn_ledit)
 
         gen_lay.setColumnMinimumWidth(1, 50) #Spacing
         gen_lay.setColumnStretch(1, -1)
@@ -858,7 +858,7 @@ class CrackerGui(QMainWindow):
         self.wrdlst_encod_opt = QComboBox()
         self.wrdlst_encod_opt.setMaximumSize(150, 30)
         self.wrdlst_encod_opt.addItems(lst_encod)
-        gen_col_2.addRow('Encoding :', self.wrdlst_encod_opt)
+        gen_col_2.addRow(tr('Encoding :'), self.wrdlst_encod_opt)
 
         gen_col_2.setVerticalSpacing(40)
 
@@ -866,21 +866,21 @@ class CrackerGui(QMainWindow):
         save_lay = QHBoxLayout()
         save_lay.setStretch(1, 1)
 
-        self.wrdlst_dir_bt = QPushButton('Select a location ...')
+        self.wrdlst_dir_bt = QPushButton(tr('Select a location ...'))
         self.wrdlst_dir_bt.setMaximumSize(140, 32)
         self.wrdlst_dir_bt.clicked.connect(self.select_wrdlst)
         save_lay.addWidget(self.wrdlst_dir_bt)
 
         self.wrdlst_dir_opt = QComboBox()
-        self.lst_wrdlst_opt['Select a location ...'] = self.wrdlst_dir_opt
-        self.wrdlst_dir_opt.addItem('-- Previous locations --')
+        self.lst_wrdlst_opt[tr('Select a location ...')] = self.wrdlst_dir_opt
+        self.wrdlst_dir_opt.addItem(tr('-- Previous locations --'))
         self.wrdlst_dir_opt.insertSeparator(1)
         save_lay.addWidget(self.wrdlst_dir_opt)
 
-        gen_col_2.addRow('Save in folder :', save_lay)
+        gen_col_2.addRow(tr('Save in folder :'), save_lay)
 
         #-gen bt
-        self.wrdlst_gen_bt = QPushButton('&Generate')
+        self.wrdlst_gen_bt = QPushButton(tr('&Generate'))
         self.wrdlst_gen_bt.setStyleSheet(self.style)
         self.wrdlst_gen_bt.setObjectName('main_obj')
         self.wrdlst_gen_bt.setMaximumSize(140, 32)
@@ -903,7 +903,7 @@ class CrackerGui(QMainWindow):
 
         #---Analyze
         #-ini
-        ana_grp = QGroupBox('Analyze a wordlist')
+        ana_grp = QGroupBox(tr('Analyze a wordlist'))
         #ana_grp.setMinimumSize(730, 150)
         ana_lay = QGridLayout()
         ana_grp.setLayout(ana_lay)
@@ -913,27 +913,27 @@ class CrackerGui(QMainWindow):
         ana_lay.addLayout(select_lay, 0, 0, 1, 3)
 
         #-bt select
-        self.wrdlst_ana_select_bt = QPushButton('Select a file ...')
+        self.wrdlst_ana_select_bt = QPushButton(tr('Select a file ...'))
         self.wrdlst_ana_select_bt.setMaximumSize(110, 32)
         self.wrdlst_ana_select_bt.clicked.connect(self.select_wrdlst)
         select_lay.addWidget(self.wrdlst_ana_select_bt)
 
         #-opt previous loc
         self.wrdlst_ana_opt = QComboBox()
-        self.lst_wrdlst_opt['Select a file ...'] = self.wrdlst_ana_opt
-        self.wrdlst_ana_opt.addItem('-- Previous locations --')
+        self.lst_wrdlst_opt[tr('Select a file ...')] = self.wrdlst_ana_opt
+        self.wrdlst_ana_opt.addItem(tr('-- Previous locations --'))
         self.wrdlst_ana_opt.insertSeparator(1)
         select_lay.addWidget(self.wrdlst_ana_opt)
 
         #-bt ana
-        self.wrdlst_ana_bt = QPushButton('&Analyze')
+        self.wrdlst_ana_bt = QPushButton(tr('&Analyze'))
         self.wrdlst_ana_bt.setStyleSheet(self.style)
         self.wrdlst_ana_bt.setObjectName('main_obj')
         self.wrdlst_ana_bt.setMaximumSize(110, 32)
         ana_lay.addWidget(self.wrdlst_ana_bt, 1, 2, Qt.AlignRight)
 
         #-lth spin box
-        ana_lay.addWidget(QLabel('Number of head / bottom lines :'), 1, 1, Qt.AlignLeft)
+        ana_lay.addWidget(QLabel(tr('Number of head / bottom lines :')), 1, 1, Qt.AlignLeft)
 
         self.wrdlst_ana_sp = QSpinBox()
         self.wrdlst_ana_sp.setMaximum(20) #todo: set this from the wordlist len / 2 if len/2 <= 20, 20 else.
@@ -1682,11 +1682,11 @@ class CrackerGui(QMainWindow):
         tab = self.app_widget.currentIndex()
         sender = self.sender().text()
 
-        if sender in ('Select a wordlist ...', 'Select a file ...'): #Crack, Wordlists ana
-            fn = QFileDialog.getOpenFileName(self, 'Open file', getcwd())[0]
+        if sender in (tr('Select a wordlist ...'), tr('Select a file ...')): #Crack, Wordlists ana
+            fn = QFileDialog.getOpenFileName(self, tr('Open file'), getcwd())[0]
 
-        elif sender == 'Select a location ...': #Wordlists gen
-            fn = QFileDialog.getExistingDirectory(self, 'Select directory')
+        elif sender == tr('Select a location ...'): #Wordlists gen
+            fn = QFileDialog.getExistingDirectory(self, tr('Select directory'))
 
 
         if fn in ((), ''):
@@ -1695,11 +1695,11 @@ class CrackerGui(QMainWindow):
         if fn not in self.lst_selected_wrdlst[sender]:
             self.lst_selected_wrdlst[sender].append(fn)
 
-            if sender == 'Select a location ...':
+            if sender == tr('Select a location ...'):
                 self.lst_wrdlst_opt[sender].addItem(fn)
 
             else:
-                for k in ('Select a wordlist ...', 'Select a file ...'):
+                for k in (tr('Select a wordlist ...'), tr('Select a file ...')):
                     self.lst_wrdlst_opt[k].addItem(fn)
 
         self.lst_wrdlst_opt[sender].setCurrentText(fn)
@@ -3160,7 +3160,7 @@ class UseWordlistsGenTab:
             QMessageBox.critical(None, '!!! No file name !!!', '<h2>Please select a filename !!!</h2>')
             return -3 #Abort
 
-        elif self.loc_opt.currentText() == '-- Previous locations --':
+        elif self.loc_opt.currentText() == tr('-- Previous locations --'):
             QMessageBox.critical(None, '!!! No location !!!', '<h2>Please select a location !!!</h2>')
             return -3 #Abort
 
@@ -3236,7 +3236,7 @@ class UseWordlistsAnaTab:
 
 
     def show(self):
-        '''Show informtions about a wordlist, using the informations given in init.'''
+        '''Show informations about a wordlist, using the informations given in init.'''
 
         self.fn = self.opt.currentText()
 
@@ -3292,7 +3292,7 @@ class UseWordlistsAnaTab:
     def verify_fn(self):
         '''Check if there is a file is selected. Raise an error popup if not.'''
 
-        if self.fn == '-- Previous locations --':
+        if self.fn == tr('-- Previous locations --'):
             QMessageBox.warning(None, '!!! No file selected !!!', '<h2>Please select a file !</h2>')
             return -3
 
