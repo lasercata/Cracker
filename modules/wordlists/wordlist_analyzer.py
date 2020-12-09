@@ -3,8 +3,8 @@
 '''Module incuding wordlist_analyzer function'''
 
 wrdlst_ana__auth = 'Lasercata'
-wrdlst_ana__last_update = '09.09.2020'
-wrdlst_ana__version = '3.1'
+wrdlst_ana__last_update = '09.12.2020'
+wrdlst_ana__version = '3.2'
 
 ##-import
 #---------Cracker's modules
@@ -13,6 +13,7 @@ from modules.base.base_functions import set_prompt, inp_lst, FileInfo
 from modules.base.progress_bars import *
 from modules.password_testor.pwd_testor import walf, wlth
 from modules.b_cvrt.b_cvrt import space_b
+from Languages.lang import translate as tr
 
 #------packages
 from datetime import datetime as dt
@@ -36,12 +37,10 @@ class WordlistAnalyzer:
         '''
 
         if binary not in (True, False):
-            raise ValueError('The argument "binary" should be a boolean, but \
-                "{}" of type "{}" was found !!!'.format(binary, type(binary)))
+            raise ValueError(tr('The argument "binary" should be a boolean, but "{}" of type "{}" was found !!!').format(binary, type(binary)))
 
         if interface not in (None, 'gui', 'console'):
-            raise ValueError('The argument "interface" should be None, "gui", \
-                or "console", but {} of type {} was found !!!'.format(interface, type(interface)))
+            raise ValueError(tr('The argument "interface" should be None, "gui", or "console", but {} of type {} was found !!!').format(interface, type(interface)))
 
 
         self.fn = fn
@@ -77,10 +76,10 @@ class WordlistAnalyzer:
             ana = self.ana()
 
         if ana == -1:
-            msg_err = 'The file "" was NOT found !!!'.format(self.fn)
+            msg_err = tr('The file "{}" was NOT found !!!').format(self.fn)
 
         elif ana == -2:
-            msg_err = 'Bad encoding "{}" for the file "{}"'.format(self.encod, self.fn)
+            msg_err = tr('Bad encoding "{}" for the file "{}"').format(self.encod, self.fn)
 
         if ana in (-1, -2, -3):
             if self.interface == None:
@@ -91,7 +90,7 @@ class WordlistAnalyzer:
                 return ana
 
             elif self.interface == 'gui':
-                QMessageBox.critical(None, '!!! File error !!!', msg_err)
+                QMessageBox.critical(None, tr('!!! File error !!!'), msg_err)
                 return ana
 
 
@@ -101,33 +100,33 @@ class WordlistAnalyzer:
         lib_C = ana[3][0]
         infosLibC = ana[3][1]
 
-        ret = 'Filename : {} ;'.format(self.fn)
-        ret += '\n\nSize : {} ({}) ;'.format(*sizes)
+        ret = tr('Filename : {} ;').format(self.fn)
+        ret += '\n\n' + tr('Size : {} ({}) ;').format(*sizes)
 
-        ret += '\n\nLast modification : {} ;'.format(times[0])
-        ret += '\nLast access : {} ;'.format(times[1])
-        ret += '\nCreation : {} ;'.format(times[2])
+        ret += '\n\n' + tr('Last modification : {} ;').format(times[0])
+        ret += '\n' + tr('Last access : {} ;').format(times[1])
+        ret += '\n' + tr('Creation : {} ;').format(times[2])
         
         if lib_C:
-            ret += '\n\nNumber of characters : {} ;'.format(infosLibC['nb_car'])
+            ret += '\n\n' + tr('Number of characters : {} ;').format(infosLibC['nb_car'])
 
-        ret += '\n\nMinimum line length : {} characters ;'.format(infos['min'])
-        ret += '\nMaximum line length : {} characters ;'.format(infos['max'])
+        ret += '\n\n' + tr('Minimum line length : {} characters ;').format(infos['min'])
+        ret += '\n' + tr('Maximum line length : {} characters ;').format(infos['max'])
         if lib_C:
-            ret += '\nAverage line length : {} characters ;'.format(infosLibC['av_len'])
-            ret += '\nMedian line length : {} characters ;'.format(infosLibC['med_len'])
-        ret += "\nWordlist's length : {} lines ;".format(space_b(infos['nb_lines']))
+            ret += '\n' + tr('Average line length : {} characters ;').format(infosLibC['av_len'])
+            ret += '\n' + tr('Median line length : {} characters ;').format(infosLibC['med_len'])
+        ret += '\n' + tr("Wordlist's length : {} lines ;").format(space_b(infos['nb_lines']))
         if lib_C:
-            ret += '\nWordlength repartition :'
+            ret += '\n' + tr('Wordlength repartition :')
             
             for k in infosLibC['dct_len_w']:
                 ret += "\n\t'{}': {} ;".format(k, space_b(infosLibC['dct_len_w'][k]))
 
-        ret += '\n\nLength of the alphabet : {} characters ;'.format(infos['alf_lth'])
-        ret += '\nAlphabets : {} ;'.format(set_prompt(infos['lst_alf']))
+        ret += '\n\n' + tr('Length of the alphabet : {} characters ;').format(infos['alf_lth'])
+        ret += '\n' + tr('Alphabets : {} ;').format(set_prompt(infos['lst_alf']))
 
-        ret += '\n\nNumber of differents characters : {} ;'.format(infos['nb_occ'])
-        ret += "\nCharacters' repartition :"
+        ret += '\n\n' + tr('Number of differents characters : {} ;').format(infos['nb_occ'])
+        ret += '\n' + tr("Characters' repartition :")
 
         for k in infos['dct_occ']:
             ret += "\n\t'{}': {} ;".format(k, space_b(infos['dct_occ'][k]))
@@ -155,7 +154,7 @@ class WordlistAnalyzer:
 
 
         if self.interface == 'gui':
-            pb = GuiProgressBar(title='Reading "{}" ... ― Cracker'.format(self.fn), verbose=True, mn=1)
+            pb = GuiProgressBar(title=tr('Reading "{}" ... ― Cracker').format(self.fn), verbose=True, mn=1)
 
         elif self.interface == 'console':
             pb = ConsoleProgressBar()
@@ -211,7 +210,7 @@ class WordlistAnalyzer:
         i = 0
 
         if print_verbose:
-            print('Processing ...')
+            print(tr('Processing ...'))
 
         t0 = dt.now()
 
@@ -318,7 +317,7 @@ class WordlistAnalyzer:
             'max': mx                  #Longer line length.
         }
         
-        infoLibC = {}
+        infosLibC = {}
         
         if lib_C:
             infosLibC = {
@@ -386,7 +385,7 @@ class WordlistAnalyzer:
     def show_time(self, time):
         '''Show the time, according to the self.interface arg.'''
 
-        msg = 'Done in {} s !'.format(time)
+        msg = tr('Done in {} s !').format(time)
 
         if self.interface == None:
             print(msg)
@@ -395,7 +394,7 @@ class WordlistAnalyzer:
             cl_out(c_succes, msg)
 
         else:
-            QMessageBox.about(None, 'Done !', msg)
+            QMessageBox.about(None, tr('Done !'), msg)
 
 
     def is_valid_file(self):
@@ -425,10 +424,10 @@ class WordlistAnalyzer:
 
 
         if ret == -1:
-            msg_err = 'The file "{}" was NOT found !!!'.format(self.fn)
+            msg_err = tr('The file "{}" was NOT found !!!').format(self.fn)
 
         elif ret == -2:
-            msg_err = 'Bad encoding "{}" for the file "{}"'.format(self.encod, self.fn)
+            msg_err = tr('Bad encoding "{}" for the file "{}"').format(self.encod, self.fn)
 
         if ret in (-1, -2):
             if self.interface == None:
@@ -438,7 +437,7 @@ class WordlistAnalyzer:
                 cl_out(c_error, msg_err)
 
             elif self.interface == 'gui':
-                QMessageBox.critical(None, '!!! File error !!!', msg_err)
+                QMessageBox.critical(None, tr('!!! File error !!!'), msg_err)
 
         return ret
 
@@ -446,13 +445,12 @@ class WordlistAnalyzer:
 
 def use_open_w(): #todo: move (in the console file) and improve this
     try:
-        file_name = cl_inp('Enter the wordlist\'s name :')
+        file_name = cl_inp(tr("Enter the wordlist's name :"))
         wordlist_f = open(file_name, 'r')
 
     except FileNotFoundError:
-        cl_out(c_error, 'No file of this name !!! \nBack menu ...')
+        cl_out(c_error, tr('No file of this name !!!') + ' \n' + tr('Back menu ...'))
 
     else:
         wordlist_f.close()
         open_w(file_name)
-
