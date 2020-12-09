@@ -383,3 +383,42 @@ Chercher
 !!! Erreur de répertoire !!!
 Le répertoire est introuvable !!!
 Sélectionnez un répertoire
+L'argument "binary" devrait être un booléen mais "{}" est de type "{}" !!! 
+L'argument "interface" devrait être None, "gui", ou "console",  mais "{}" est de type "{}" !!! 
+Le fichier "{}" est introuvable !!!
+Mauvais encodage ({}) pour le fichier "{}"
+!!! Erreur de fichier !!!
+Nom du fichier : {} ;
+Taille : {} ({}) ;
+Dernière modification : {} ;
+Dernier accès : {} ;
+Création : {} ;
+Nombre de caractères : {} ;
+Longueur minimum d'une ligne : {} caractères ;
+Longueur maximum d'une ligne : {} caractères ;
+Longueur moyenne d'une ligne : {} caractères ;
+Longueur médiane d'une ligne : {} caractères ;
+Longueur de la wordlist : {} lignes ;
+Répartition des caractères de la wordlist :
+Longueur de l'alphabet utilisé : {} caractères ;
+Alphabets : {} ;
+Nombre de caractères différents : {} ;
+Répartition des caractères utilisés :
+Lecture de "{}" ... ― Cracker
+En cours ...
+Entrez le nom de la wordlist :
+Aucun fichier de ce nom !!!
+Retour au menu ...
+Fait en {} s
+Opération terminée !
+Générer une wordlist
+Longueur des mots :
+Alphabet :
+Nom du fichier :
+Encodage :
+-- Derniers emplacements --
+Sauvegarder dans le dossier :
+&Générer
+Analyser une wordlist
+&Analyser
+Nombre de lignes au début / à la fin :
