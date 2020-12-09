@@ -19,7 +19,7 @@ them with the wordlist tab to get numerous informations on them.
 You need to convert a number from binary to hexadecimal ? You need to do a special convertion
 using your own base alphabet ? Check the "Base convert" tab.
 
-Like you can see, there is a lot of functions, often about cracking. But Cracker
+As you can see, there is a lot of functions, often about cracking. But Cracker
 can also help to improve your security : if you need a strong password, hard to be
 cracked by brute-force, the "P@ssw0rd_Test0r" tab is for you ! It gives a lot of informations
 about the password you entered, like its entropy.
