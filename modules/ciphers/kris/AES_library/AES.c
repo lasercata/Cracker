@@ -1,13 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdlib.h>
-#include "AES.h"
-
 /*
 --------------------AES.c--------------------
 Author :        Elerias
-Date :          15.07.2020
-Version :       1.0
+Date :          13.12.2020
+Version :       1.0.1
 Description :   Implementation of AES in C
 ---------------------------------------------
 */
@@ -15,6 +10,13 @@ Description :   Implementation of AES in C
 
 
 // Initialisation
+
+
+    // Include
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "AES.h"
 
 
     // Global variables
@@ -66,13 +68,13 @@ unsigned char gfmul_14[256];
     // Macros
 
 #define DECLAREVARIABLES() unsigned char a0, a1, a2, a3;
-// Declare the variables used for the macros SHIFTROWS (a0), INVSHIFTROWS (a0), MIXCOLUMNS (a0, a1, a2, a3) et INVMIXCOLUMNS (a0, a1, a2, a3)
+// Declare the variables used for the macros SHIFTROWS (a0), INVSHIFTROWS (a0), MIXCOLUMNS (a0, a1, a2, a3) et INVMIXCOLUMNS (a0, a1, a2, a3).
 
 #define SUBBYTES(state) for (int i=0 ; i<16 ; i++) state[i] = SBox[state[i]];
-// Substitute every bytes in the state with the SBox
+// Substitute every bytes in the state with the SBox.
 
 #define INVSUBBYTES(state) for (int i=0 ; i<16 ; i++) state[i] = invSBox[state[i]];
-// Inverse of SUBBYTES : Substitute every bytes in the state with invSBox
+// Inverse of SUBBYTES : Substitute every bytes in the state with invSBox.
 
 #define SHIFTROWS(state) \
     a0 = state[1]; \
@@ -115,15 +117,20 @@ unsigned char gfmul_14[256];
     state[7] = state[11]; \
     state[11] = state[15]; \
     state[15] = a0;
-// Inverse of SHIFTROWS
+/* Inverse of SHIFTROWS :
+ 00 04 08 12         00 04 08 12
+ 01 05 09 13   ==>   13 01 05 09
+ 02 06 10 14   ==>   10 14 02 06
+ 03 07 11 15   ==>   07 11 15 03
+*/
 
 #define ADDROUNDKEY(state, n) \
     for (int i=0 ; i<16 ; i++) \
     { \
         state[i] = state[i] ^ expKey[i%4][n*4+i/4]; \
     }
-// XOR the key n to the state
-// N.B. : This function is itself its inverse because a xor b xor b = a
+// XOR the key n to the state.
+// N.B. : This function is itself its inverse because (a xor b) xor b = a.
 
 #define MIXCOLUMNS(state) \
     for (int i=0 ; i<16 ; i+=4) \
@@ -137,13 +144,13 @@ unsigned char gfmul_14[256];
         state[i+2] = a0 ^ a1 ^ gfmul_2[a2] ^ gfmul_3[a3]; \
         state[i+3] = gfmul_3[a0] ^ a1 ^ a2 ^ gfmul_2[a3]; \
     }
-/* Mix the four columns of the state
-Every column is a vector and is transformed by multiplication with the matrix
-2 3 1 1
-1 2 3 1
-1 1 2 3
-3 1 1 2
-The multiplications are products in Galois Field (2 ** 8)
+/* Mix the four columns of the state.
+Every column is a vector and is transformed by multiplication with the matrix :
+ 2 3 1 1
+ 1 2 3 1
+ 1 1 2 3
+ 3 1 1 2
+The multiplications are products in Galois Field (2 ** 8).
 */
 
 #define INVMIXCOLUMNS(state) \
@@ -159,11 +166,11 @@ The multiplications are products in Galois Field (2 ** 8)
         state[i+3] = gfmul_11[a0] ^ gfmul_13[a1] ^ gfmul_9[a2] ^ gfmul_14[a3];  \
     }
 /* Inverse of MIXCOLUMNS
-The inverse matrix is
-14 11 13 09
-09 14 11 13
-13 09 14 11
-11 13 09 14
+The inverse matrix is :
+ 14 11 13 09
+ 09 14 11 13
+ 13 09 14 11
+ 11 13 09 14
 */
 
 #define XOR(A, B, n) \
@@ -175,11 +182,13 @@ The inverse matrix is
 #define COPY(A, B, n) \
     for (int i=0 ; i<n ; i++) A[i] = B[i];
 
+
+
 // Functions
 
 
 void printGrid(unsigned char* state)
-// Print the current state
+// Print the current state.
 {
     printf("%x %x %x %x\n", state[0], state[4], state[8], state[12]);
     printf("%x %x %x %x\n", state[1], state[5], state[9], state[13]);
@@ -188,9 +197,9 @@ void printGrid(unsigned char* state)
 }
 
 unsigned char gfmul_function(unsigned char a, unsigned char b)
-// Return the product of a and b in Galois Field (2 ** 8)
+// Return the product of a and b in Galois Field (2 ** 8).
 {
-    // Inspired of wikipedia english AES MixColumns C# example
+    // Inspired of wikipedia english AES MixColumns C# example.
     unsigned char c=0;
 
     for (int i=0 ; i<8 ; i++)
@@ -212,7 +221,7 @@ unsigned char gfmul_function(unsigned char a, unsigned char b)
 }
 
 void expandKey(const unsigned char* k)
-// Expand the key k and put the result in expKey
+// Expand the key k and put the result in expKey.
 {
     int Nk = Nr-6;
     unsigned char rc[11] = {0, 1, 2, 4, 8, 16, 32, 64, 128, 27, 54};
@@ -250,7 +259,7 @@ void expandKey(const unsigned char* k)
 }
 
 void initGfmul()
-// Init the arrays to have fast the result of usefull products in Galois Field (2 ** 8)
+// Init the arrays to have fast the result of usefull products in Galois Field (2 ** 8).
 {
     for (int j=0 ; j<256 ; j++)
     {
@@ -264,7 +273,7 @@ void initGfmul()
 }
 
 void initAES(int m, unsigned char* k)
-// Init the AES environnement with the mode m (128, 192 or 256 bits of key) and the not expanded key k
+// Init the AES environnement with the mode m (128, 192 or 256 bits of key) and the not expanded key k.
 {
     if (m != 128 && m != 192 && m != 256)
     {
@@ -291,7 +300,7 @@ void initAES(int m, unsigned char* k)
 }
 
 void encryptBlock(unsigned char* state)
-// Encrypt a block of 128 bits (16 bytes)
+// Encrypt a block of 128 bits (16 bytes).
 {
 
     DECLAREVARIABLES()
@@ -315,7 +324,7 @@ void encryptBlock(unsigned char* state)
 }
 
 void decryptBlock(unsigned char* state)
-// Decrypt a block of 128 bits (16 bytes)
+// Decrypt a block of 128 bits (16 bytes).
 {
 
     DECLAREVARIABLES()
@@ -362,7 +371,7 @@ unsigned int invBitPadding(unsigned char* text, unsigned int length)
 }
 
 unsigned int encryptTextECB(unsigned char* text, const unsigned int length)
-// Encrypt a text of length length
+// Encrypt a text of length length.
 {
     int length_c = bitPadding(text, length, 16);
 
@@ -384,7 +393,7 @@ unsigned int encryptTextECB(unsigned char* text, const unsigned int length)
 }
 
 unsigned int decryptTextECB(unsigned char* text_c, const unsigned int length_c)
-// Decrypt a text of length length_c and return the length of the text
+// Decrypt a text of length length_c and return the length of the text.
 {
     unsigned char state[16];
     for (int i=0 ; i<length_c ; i+=16)
@@ -403,7 +412,7 @@ unsigned int decryptTextECB(unsigned char* text_c, const unsigned int length_c)
 }
 
 unsigned int encryptTextCBC(unsigned char* text, const unsigned int length)
-// Encrypt a text of length length
+// Encrypt a text of length length.
 {
     int length_c = bitPadding(text, length, 16);
 
@@ -412,7 +421,7 @@ unsigned int encryptTextCBC(unsigned char* text, const unsigned int length)
     {
         for (int k=0 ; k<16 ; k++)
         {
-            state[k] = state[k] ^ text[j+k]; // Difference with ECB, the last cipherblock is added to the new plainblock
+            state[k] = state[k] ^ text[j+k]; // Difference with ECB : the last cipherblock is added to the new plainblock.
         }
         encryptBlock(state);
         for (int k=0 ; k<16 ; k++)
@@ -425,7 +434,7 @@ unsigned int encryptTextCBC(unsigned char* text, const unsigned int length)
 }
 
 unsigned int decryptTextCBC(unsigned char* text_c, const unsigned int length_c)
-// Decrypt a text of length length_c and return the length of the text
+// Decrypt a text of length length_c and return the length of the text.
 {
     unsigned char lastVector[16] = {0}; // Initialization vector
     unsigned char vector[16] = {0};
@@ -450,7 +459,7 @@ unsigned int decryptTextCBC(unsigned char* text_c, const unsigned int length_c)
 }
 
 void encryptFileECB(const char* sourcefilename, const char* destfilename)
-// Encrypt a file
+// Encrypt a file.
 {
     FILE* source_f = fopen(sourcefilename, "rb");
     FILE* dest_f = fopen(destfilename, "wb");
@@ -479,7 +488,7 @@ void encryptFileECB(const char* sourcefilename, const char* destfilename)
 }
 
 void decryptFileECB(const char* sourcefilename, const char* destfilename)
-// Decrypt a file
+// Decrypt a file.
 {
     FILE* source_f = fopen(sourcefilename, "rb");
     FILE* dest_f = fopen(destfilename, "wb");
@@ -502,7 +511,7 @@ void decryptFileECB(const char* sourcefilename, const char* destfilename)
 }
 
 void encryptFileCBC(const char* sourcefilename, const char* destfilename)
-// Encrypt a file
+// Encrypt a file.
 {
     FILE* source_f = fopen(sourcefilename, "rb");
     FILE* dest_f = fopen(destfilename, "wb");
@@ -535,7 +544,7 @@ void encryptFileCBC(const char* sourcefilename, const char* destfilename)
 }
 
 void decryptFileCBC(const char* sourcefilename, const char* destfilename)
-// Decrypt a file
+// Decrypt a file.
 {
     FILE* source_f = fopen(sourcefilename, "rb");
     FILE* dest_f = fopen(destfilename, "wb");
