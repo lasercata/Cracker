@@ -50,9 +50,9 @@ class ConsoleProgressBar:
             self.l_rep.append(k)
 
             if k > 0:
-                print('\b'*(self.bar_lth + 2), end='')
+                print('\b'*(self.bar_lth + 2), end='', flush=True)
 
-            print('|' + '#'*k + ' '*(self.bar_lth-k) + '|', end='')
+            print('|' + '#'*k + ' '*(self.bar_lth-k) + '|', end='', flush=True)
 
 
     def load(self, i=None, k=1, ret=False):
@@ -62,7 +62,7 @@ class ConsoleProgressBar:
         if i == None:
             i = self.i
 
-        print(self.load_lst[i % len(self.load_lst)], end='')
+        print(self.load_lst[i % len(self.load_lst)], end='', flush=True)
 
         self.i = i + k
         if ret:
