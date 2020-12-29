@@ -4,8 +4,8 @@
 '''This program allow you to encrypt and decrypt with RSA cipher.'''
 
 RSA__auth = 'Lasercata, Elerias'
-RSA__last_update = '23.09.2020'
-RSA__version = '3.2'
+RSA__last_update = '29.12.2020'
+RSA__version = '3.3'
 
 
 ##-import
@@ -28,9 +28,8 @@ from random import randint, choice
 from datetime import datetime as dt
 from time import sleep
 
-from os import chdir, mkdir, getcwd, listdir, rename
-from os.path import expanduser
-from shutil import rmtree
+from os import chdir, mkdir, getcwd, listdir, rename, remove
+from os.path import expanduser, isfile
 
 from PyQt5.QtWidgets import QMessageBox
 
@@ -640,7 +639,7 @@ class RsaKeys:
         '''
         Initiate the RsaKeys object.
 
-        - keys_name : the set of keys' name.
+        - keys_name : the set of keys' name (without the extention).
         '''
 
         if interface not in (None, 'gui', 'console'):
@@ -748,7 +747,7 @@ class RsaKeys:
         if verbose:
             print('\nSearching e ...\n')
         e = 0
-        while math.gcd(e, phi) != 1: #todo: test if math.gcd is faster
+        while math.gcd(e, phi) != 1:
             e = randint(q, phi)
 
             if self.interface in ('gui', 'console'):
@@ -819,25 +818,14 @@ class RsaKeys:
             .md_stored : the way how the keys are stored, i.e. in decimal or hexadecimal.
                 Should be "hexa" or "dec". Default is "hexa".
 
-        If save is True, the program make a directory and three files in it :
-        RSA_keys__[self.k_name]
-            | RSA_public_key__[self.k_name]
-            | RSA_private_key__[self.k_name]
-            | RSA_keys_infos__[self.k_name].csv
-
-        Or (if md_stored is "hexa") :
-        RSA_hex_keys__[self.k_name]
-            | RSA_hex_pbkey__[self.k_name]
-            | RSA_hex_pvkey__[self.k_name]
-            | RSA_hex_kinfos__[self.k_name].csv
-
-        This directory will be created in RSA_keys directory.
-
+        If save is True, the program make a file, in chd_rsa('.'), named :
+            '[self.k_name].pvk-h' if md_stored is 'hexa' ;
+            '[self.k_name].pvk-d' else.
 
         Return :
-            -2 if the set of keys already exist ;
+            -2 if the set of keys already exist and overwrite is False ;
             pbk, pvk, n_strth otherwise.
-        ''' #todo: indicate where the RSA_keys dir is
+        '''
 
 
         if save not in (True, False) or overwrite not in (True, False) or md_stored not in ('hexa', 'dec'):
@@ -845,33 +833,21 @@ class RsaKeys:
 
         if save:
             if md_stored == 'dec':
-                dir_name = 'RSA_keys__' + str(self.k_name)
-                fn_pbk = 'RSA_public_key__' + self.k_name
-                fn_pvk = 'RSA_private_key__' + self.k_name
-                fn_info = 'RSA_keys_infos__' + self.k_name + '.csv'
-
+                fn = str(self.k_name) + '.pvk-d'
 
             else:
-                dir_name = 'RSA_hex_keys__' + str(self.k_name)
-                fn_pbk = 'RSA_hex_pbkey__' + self.k_name
-                fn_pvk = 'RSA_hex_pvkey__' + self.k_name
-                fn_info = 'RSA_hex_kinfos__' + self.k_name + '.csv'
+                fn = str(self.k_name) + '.pvk-h'
 
-            #---try to make directory first to not lose your time
             old_path = chd_rsa('.')
 
-            try:
-                mkdir(dir_name)
-
-            except FileExistsError:
+            #---Check if file exists first to not lose your time
+            if isfile(fn):
                 if not overwrite:
                     chdir(old_path)
                     return -2
 
                 else:
-                    rmtree(dir_name) # Remove the old folder ...
-                    mkdir(dir_name) # ... and make the new one.
-
+                    remove(fn)
 
         #------get values
         p, q, n = self._gen_p_q(size)
@@ -880,32 +856,26 @@ class RsaKeys:
         n_strth = key_size(n) # size of n
 
         if save:
-            phi = (p - 1) * (q - 1)
-
-            v = {'date' : date(), 'n_strenth' : n_strth, 'p' : p, 'q' : q, \
-                'n' : n, 'phi' : phi, 'e' : pbk[0], 'd' : pvk[0]}
+            v = {
+                'p' : p,
+                'q' : q,
+                'n' : n,
+                'phi' : (p - 1) * (q - 1),
+                'e' : pbk[0],
+                'd' : pvk[0],
+                'date': date(),
+                'n_strenth': n_strth
+            }
 
             if md_stored == 'hexa':
                 for k in v:
                     if k != 'date':
                         v[k] = format(v[k], 'x') #convert numbers to hexadecimal
 
-            #---make files
-            chdir(dir_name)
-
-
-            with open(fn_pbk, 'w') as f_pb: #public key
-                f_pb.write(str(v['e']) + ',' + str(v['n']))
-
-            with open(fn_pvk, 'w') as f_pv: #private key
-                f_pv.write(str(v['d']) + ',' + str(v['n']))
-
-
-            fdn_i = ('date', 'n_strenth', 'p', 'q', 'n', 'phi', 'e', 'd')
-            row_i = v
-
-            CSV(fn_info).write(fdn_i, row_i)
-
+            #---make file
+            fdn = tuple(v.keys())
+            row = v
+            CSV(fn).write(fdn, row)
 
             chdir(old_path)
 
@@ -917,72 +887,62 @@ class RsaKeys:
     def read(self, mode):
         '''
         Return the key to use with RSA.
-        Read the keys from a file created by this program.
+        Read the keys from the key file created by this program.
 
         self.k_name : the name given when creating keys ;
         mode : 0 - encrypt (pbk), 1 - decrypt (pvk), used to choose between public and private keys.
+
+        Resolution order (to find the good key extention :
+            pvk-h ;
+            pvk-d ;
+            pbk-h ;
+            pbk-d.
         '''
 
         if mode not in (0, 1):
             raise ValueError('"mode" should be 0 or 1 (int), but "' + str(mode) + '" was found !!!')
 
+        old_path = chd_rsa('.')
 
-        try:
-            old_path = chd_rsa('RSA_keys__' + self.k_name)
-            md = ('all', 'dec')
+        if isfile(self.k_name + '.pvk-h'):
+            fn = self.k_name + '.pvk-h'
 
-        except FileNotFoundError:
-            try:
-                old_path = chd_rsa('RSA_pbk__' + self.k_name)
-                md = ('pbk', 'dec')
+        elif isfile(self.k_name + '.pvk-d'):
+            fn = self.k_name + '.pvk-d'
 
-            except FileNotFoundError:
-                try:
-                    old_path = chd_rsa('RSA_hex_keys__' + self.k_name)
-                    md = ('all', 'hexa')
-
-                except FileNotFoundError:
-                    try:
-                        old_path = chd_rsa('RSA_hex_pbk__' + self.k_name)
-                        md = ('pbk', 'hexa')
-
-                    except FileNotFoundError:
-                        raise FileNotFoundError('The keys "' + str(self.k_name) + '" were NOT found !!!')
-
-        if mode == 1 and md[0] == 'pbk':
+        elif mode == 1: #no pvk
             raise TypeError("Can't read the private key of a pbk set of keys !!!")
 
+        elif isfile(self.k_name + '.pbk-h'):
+            fn = self.k_name + '.pbk-h'
 
-        if mode == 0 and md[1] == 'dec':
-            fn = 'RSA_public_key__' + self.k_name
+        elif isfile(self.k_name + '.pbk-d'):
+            fn = self.k_name + '.pbk-d'
 
-        elif mode == 1 and md[1] == 'dec':
-            fn = 'RSA_private_key__' + self.k_name
+        else:
+            raise FileNotFoundError('The keys "' + str(self.k_name) + '" were NOT found !!!')
 
-        elif mode == 0 and md[1] == 'hexa':
-            fn = 'RSA_hex_pbkey__' + self.k_name
+        md = ('hexa', 'dec')[('.pvk-d' in fn) or ('.pbk-d' in fn)]
 
-        elif mode == 1 and md[1] == 'hexa':
-            fn = 'RSA_hex_pvkey__' + self.k_name
 
-        try:
-            with open(fn) as f:
-                txt = f.read()
+        infos = CSV(fn).read()[0]
+        n = infos['n']
 
-        except FileNotFoundError:
-            chdir(old_path)
-            raise KeyError('The keys "' + str(self.k_name) + '" are badly writen !!!')
+        if mode == 0:
+            ed_ = infos['e']
+
+        else:
+            ed_ = infos['d']
+
 
         chdir(old_path)
 
         #------
-        key_s = txt.split(',')
-
-        if md[1] == 'dec':
-            ed, n = int(key_s[0]), int(key_s[1])
+        if md == 'dec':
+            ed, n = int(ed_), int(n_)
 
         else:
-            ed, n = int(key_s[0], 16), int(key_s[1], 16) #convert to decimal
+            ed, n = int(ed_, 16), int(n_, 16) #convert to decimal
 
 
         return ed, n
@@ -992,22 +952,14 @@ class RsaKeys:
     #------export_pubic_key
     def export(self, md_stored_out='hexa'):
         '''
-        Function which export the public key in a folder containing two files :
-
-            RSA_pbk__[self.k_name]
-                | RSA_public_key__[self.k_name]
-                | RSA_pbk_infos__[self.k_name].csv
-
-            Or (if md_stored_out is "hexa") :
-
-            RSA_hex_pbk__[self.k_name]
-                | RSA__hex_pbkey__[self.k_name]
-                | RSA_hex_pbk_infos__[self.k_name].csv
-
-        return -1 if the file was not found, None otherwise.
+        Function which export the public key to a file named :
+            '[self.k_name].pbk-h' if md_stored_out is 'hexa' ;
+            '[self.k_name].pbk-d' else.
 
         - md_stored_out : the way how the exported keys will be stored, i.e. in
         decimal or hexadecimal. Should be "hexa" or "dec".
+
+        return -1 if the file was not found, None otherwise.
         '''
 
         if md_stored_out not in ('hexa', 'dec'):
@@ -1019,36 +971,31 @@ class RsaKeys:
         except ValueError:
             return -1
 
-        v = {'date' : date_, 'date_export' : date(), 'n_strenth' : n_strth, 'e' : e, 'n' : n}
-
+        v = {
+            'e': e,
+            'n': n,
+            'date' : date_,
+            'date_export' : date(),
+            'n_strenth' : n_strth
+        }
 
         #---write
         if md_stored_out == 'dec':
-            fn_dir = 'RSA_pbk__' + self.k_name
-            fn_pbk = 'RSA_public_key__' + self.k_name
-            fn_i = 'RSA_pbk_infos__' + self.k_name + '.csv'
+            fn = self.k_name + '.pbk-d'
 
         else:
-            fn_dir = 'RSA_hex_pbk__' + self.k_name
-            fn_pbk = 'RSA__hex_pbkey__' + self.k_name
-            fn_i =  'RSA_hex_pbk_infos__' + self.k_name + '.csv'
+            fn = self.k_name + '.pbk-h'
 
             for k in v:
-                if k != 'date' and k != 'date_export':
+                if k not in ('date', 'date_export'):
                     v[k] = format(int(v[k]), 'x') #convert numbers to hexadecimal
 
 
         old_path = chd_rsa('.')
-        mkdir(fn_dir)
-        chdir(fn_dir)
 
-        with open(fn_pbk, 'w') as f:
-            f.write(pbk)
-
-        fdn_i = ('date', 'date_export', 'n_strenth', 'e', 'n')
-        row_i = (v)
-
-        CSV(fn_i).write(fdn_i, row_i)
+        fdn = tuple(v.keys()) #('e', 'n', 'date', 'date_export', 'n_strenth')
+        row = (v)
+        CSV(fn).write(fdn, row)
 
         chdir(old_path)
 
@@ -1058,74 +1005,61 @@ class RsaKeys:
         '''
         Return the keys and info about them.
 
-        Return :
-            (pbk, pvk), (p, q, n, phi, e, d), (n_strth, date_) --- if it's a normal dir ;
-            pbk, (n, e), (n_strth, date_, date_exp) --- if it's a pkb file ;
-            md_stored ('hexa' or 'dec') --- if get_stg_md is True ;
-            -1 --- if the file was not found.
-
-        self.k_name : the keys' name ;
-        get_stg_md : If True, return only the way how they are stored, i.e. "hexa" or "dec". Should be True or False.
+        - self.k_name : the keys' name ;
+        - get_stg_md : If True, return only the way how they are stored, i.e. "hexa" or "dec". Should be True or False.
 
         The way how the keys are stored is automaticly detected.
 
         Order of the key finding :
-            .1 : RSA full keys, in decimal ;
-            .2 : RSA public keys, in decimal ;
-            .3 : RSA full keys, in hexa ;
-            .4 : RSA public keys, in hexa.
+            .1 : *.pvk-h ;
+            .2 : *.pvk-d ;
+            .3 : *.pbk-h ;
+            .4 : *.pbk-d.
+
+        Return :
+            (pbk, pvk), (p, q, n, phi, e, d), (n_strth, date_) --- if it's a *.pvk-* file ;
+            pbk, (n, e), (n_strth, date_, date_exp) --- if it's a *.pkb-* file ;
+            md_stored ('hexa' or 'dec') --- if get_stg_md is True ;
+            -1 --- if the file was not found.
         '''
 
         if get_stg_md not in (True, False):
             raise ValueError('"get_stg_md" should be True or False, but "' + str(get_stg_md) + '" was found !!!')
 
-        try:
-            old_path = chd_rsa('RSA_keys__' + self.k_name)
-            md = ('all', 'dec')
+        old_path = chd_rsa('.')
 
-        except FileNotFoundError:
-            try:
-                old_path = chd_rsa('RSA_pbk__' + self.k_name)
-                md = ('pbk', 'dec')
+        if isfile(self.k_name + '.pvk-h'):
+            fn = self.k_name + '.pvk-h'
 
-            except FileNotFoundError:
-                try:
-                    old_path = chd_rsa('RSA_hex_keys__' + self.k_name)
-                    md = ('all', 'hexa')
+        elif isfile(self.k_name + '.pvk-d'):
+            fn = self.k_name + '.pvk-d'
 
-                except FileNotFoundError:
-                    try:
-                        old_path = chd_rsa('RSA_hex_pbk__' + self.k_name)
-                        md = ('pbk', 'hexa')
+        elif isfile(self.k_name + '.pbk-h'):
+            fn = self.k_name + '.pbk-h'
 
-                    except FileNotFoundError:
-                        return -1
+        elif isfile(self.k_name + '.pbk-d'):
+            fn = self.k_name + '.pbk-d'
+
+        else:
+            return -1
+
+        md = (('all', 'pbk')[('.pbk-h' in fn) or ('.pbk-d' in fn)], ('hexa', 'dec')[('.pvk-d' in fn) or ('.pbk-d' in fn)]) #(key_type, md_storage)
+
 
         if get_stg_md:
             chdir(old_path)
             return md[1]
 
         if md[0] == 'pbk': #---RSA pbk
-            if md[1] == 'dec':
-                pb_n = 'RSA_public_key__' + self.k_name
-                i_nm = 'RSA_pbk_infos__' + self.k_name + '.csv'
-
-            else:
-                pb_n = 'RSA__hex_pbkey__' + self.k_name
-                i_nm = 'RSA_hex_pbk_infos__' + self.k_name + '.csv'
-
-            with open(pb_n) as f:
-                pbk = f.read()
-
-            infos = CSV(i_nm).read()[0]
+            infos = CSV(fn).read()[0]
             date_, date_exp, n_strth = infos['date'], infos['date_export'], infos['n_strenth']
-            n, e = infos['n'], infos['e']
+            e, n = infos['e'], infos['n']
 
             if md[1] == 'hexa': #convert in decimal
-                pbk = pbk.split(',')
-                pbk = str(int(pbk[0], 16)) + ',' + str(int(pbk[1], 16))
                 n_strth = str(int(n_strth, 16))
-                n, e = str(int(n, 16)), str(int(e, 16))
+                e, n = str(int(e, 16)), str(int(n, 16))
+
+            pbk = str(e) + ',' + str(n)
 
             chdir(old_path)
 
@@ -1133,35 +1067,17 @@ class RsaKeys:
 
 
         else: #---RSA_all
-            if md[1] == 'dec':
-                pb_n = 'RSA_public_key__' + self.k_name
-                pv_n = 'RSA_private_key__' + self.k_name
-                i_nm = 'RSA_keys_infos__' + self.k_name + '.csv'
-
-            else:
-                pb_n = 'RSA_hex_pbkey__' + self.k_name
-                pv_n = 'RSA_hex_pvkey__' + self.k_name
-                i_nm = 'RSA_hex_kinfos__' + self.k_name + '.csv'
-
-            with open(pb_n) as f:
-                pbk = f.read()
-
-            with open(pv_n) as f:
-                pvk = f.read()
-
-            infos = CSV(i_nm).read()[0]
+            infos = CSV(fn).read()[0]
             date_, n_strth = infos['date'], infos['n_strenth']
             p, q, n, phi, e, d = infos['p'], infos['q'], infos['n'], infos['phi'], infos['e'], infos['d']
 
             if md[1] == 'hexa': #convert in decimal
-                pbk = pbk.split(',')
-                pbk = str(int(pbk[0], 16)) + ',' + str(int(pbk[1], 16))
-                pvk = pvk.split(',')
-                pvk = str(int(pvk[0], 16)) + ',' + str(int(pvk[1], 16))
-
                 n_strth = str(int(n_strth, 16))
                 p, q, n, phi, e, d = str(int(p, 16)), str(int(q, 16)), \
                     str(int(n, 16)), str(int(phi, 16)), str(int(e, 16)), str(int(d, 16))
+
+            pvk = str(d) + ',' + str(n)
+            pbk = str(e) + ',' + str(n)
 
             chdir(old_path)
 
@@ -1173,8 +1089,8 @@ class RsaKeys:
     def convert(self):
         '''
         Function which convert RSA keys.
-        If the keys are stored in decimal, write them in hexadecimal ;
-        write them in decimal else.
+        If the keys are stored in decimal, it write them in hexadecimal ;
+        it write them in decimal else.
 
         If the keys were not found, return -1 ;
         if the keys already exists, return -2 ;
@@ -1190,22 +1106,22 @@ class RsaKeys:
 
 
         if len(lst_infos) == 2: #pvk
-            v = {'date' : lst_infos[1], 'n_strenth' : lst_infos[0], \
-                'p' : lst_values[0], 'q' : lst_values[1], 'n' : lst_values[2], \
-                'phi' : lst_values[3], 'e' : lst_values[4], 'd' : lst_values[5]}
+            v = {
+                'p' : lst_values[0],
+                'q' : lst_values[1],
+                'n' : lst_values[2],
+                'phi' : lst_values[3],
+                'e' : lst_values[4],
+                'd' : lst_values[5],
+                'date' : lst_infos[1],
+                'n_strenth' : lst_infos[0]
+            }
 
             if stg_md == 'hexa': #keys are in hexa, set it in dec
-                dir_name = 'RSA_keys__' + str(self.k_name)
-                fn_pbk = 'RSA_public_key__' + self.k_name
-                fn_pvk = 'RSA_private_key__' + self.k_name
-                fn_info = 'RSA_keys_infos__' + self.k_name + '.csv'
-
+                fn = str(self.k_name) + '.pvk-d'
 
             else:
-                dir_name = 'RSA_hex_keys__' + str(self.k_name)
-                fn_pbk = 'RSA_hex_pbkey__' + self.k_name
-                fn_pvk = 'RSA_hex_pvkey__' + self.k_name
-                fn_info = 'RSA_hex_kinfos__' + self.k_name + '.csv'
+                fn = str(self.k_name) + '.pvk-h'
 
                 for k in v:
                     if k != 'date':
@@ -1214,73 +1130,51 @@ class RsaKeys:
             pbk = v['e'], v['n']
             pvk = v['d'], v['n']
 
-            #---make directory
+            #---check if it not already exists
             old_path = chd_rsa('.')
 
-            try:
-                mkdir(dir_name)
-
-            except FileExistsError:
+            if isfile(fn):
                 chdir(old_path)
                 return -2
 
-            #---make files
-            chdir(dir_name)
-
-
-            with open(fn_pbk, 'w') as f_pb: #public key
-                f_pb.write(str(pbk[0]) + ',' + str(pbk[1]))
-
-            with open(fn_pvk, 'w') as f_pv: #private key
-                f_pv.write(str(pvk[0]) + ',' + str(pvk[1]))
-
-
-            fdn_i = ('date', 'n_strenth', 'p', 'q', 'n', 'phi', 'e', 'd')
-            row_i = v
-
-            CSV(fn_info).write(fdn_i, row_i)
-
+            #---make file
+            fdn = tuple(v.keys()) #('p', 'q', 'n', 'phi', 'e', 'd', 'date', 'n_strenth')
+            row = v
+            CSV(fn).write(fdn, row)
 
             chdir(old_path)
 
         else: #pbk
-            v = {'date' : date_, 'date_export' : date(), 'n_strenth' : n_strth, 'e' : e, 'n' : n}
+            v = {
+                'e' : lst_values[1],
+                'n' : lst_values[0],
+                'date' : lst_infos[1],
+                'date_export' : lst_infos[2],
+                'n_strenth' : lst_infos[0]
+            }
             pbk = v['e'], v['n']
 
             #---write
             if stg_md == 'hexa': #keys are in hexa, set it in dec
-                fn_dir = 'RSA_pbk__' + self.k_name
-                fn_pbk = 'RSA_public_key__' + self.k_name
-                fn_i = 'RSA_pbk_infos__' + self.k_name + '.csv'
+                fn = str(self.k_name) + '.pbk-d'
 
             else:
-                fn_dir = 'RSA_hex_pbk__' + self.k_name
-                fn_pbk = 'RSA__hex_pbkey__' + self.k_name
-                fn_i =  'RSA_hex_pbk_infos__' + self.k_name + '.csv'
+                fn = str(self.k_name) + '.pbk-h'
 
                 for k in v:
-                    if k != 'date' and k != 'date_export':
+                    if k not in ('date', 'date_export'):
                         v[k] = format(int(v[k]), 'x') #convert numbers to hexadecimal
-
 
             old_path = chd_rsa('.')
 
-            try:
-                mkdir(dir_name)
-
-            except FileExistsError:
+            if isfile(fn):
                 chdir(old_path)
                 return -2
 
-            chdir(fn_dir)
+            fdn = tuple(v.keys()) #('e', 'n', 'date', 'date_export', 'n_strenth')
+            row = (v)
 
-            with open(fn_pbk, 'w') as f:
-                f.write(pbk)
-
-            fdn_i = ('date', 'date_export', 'n_strenth', 'e', 'n')
-            row_i = (v)
-
-            CSV(fn_i).write(fdn_i, row_i)
+            CSV(fn).write(fdn, row)
 
             chdir(old_path)
 
@@ -1308,46 +1202,12 @@ class RsaKeys:
         old_path = chd_rsa('.')
 
         if len(lst_infos) == 2: #pvk
+            ext = ('.pvk-h', '.pvk-d')[stg_md == 'dec']
 
-            if stg_md == 'dec':
-                rename('RSA_keys__' + str(self.k_name), 'RSA_keys__' + new_name)
+        else:
+            ext = ('.pbk-h', '.pbk-d')[stg_md == 'dec']
 
-                chdir('RSA_keys__' + new_name)
-
-                rename('RSA_public_key__' + self.k_name, 'RSA_public_key__' + new_name)
-                rename('RSA_private_key__' + self.k_name, 'RSA_private_key__' + new_name)
-                rename('RSA_keys_infos__' + self.k_name + '.csv', 'RSA_keys_infos__' + new_name + '.csv')
-
-
-            else:
-                rename('RSA_hex_keys__' + str(self.k_name), 'RSA_hex_keys__' + new_name)
-
-                chdir('RSA_hex_keys__' + new_name)
-
-                rename('RSA_hex_pbkey__' + self.k_name, 'RSA_hex_pbkey__' + new_name)
-                rename('RSA_hex_pvkey__' + self.k_name, 'RSA_hex_pvkey__' + new_name)
-                rename('RSA_hex_kinfos__' + self.k_name + '.csv', 'RSA_hex_kinfos__' + new_name + '.csv')
-
-
-        else: #pbk
-
-            #---write
-            if stg_md == 'dec':
-                rename('RSA_pbk__' + self.k_name, 'RSA_pbk__' + new_name)
-
-                chdir('RSA_pbk__' + new_name)
-
-                rename('RSA_public_key__' + self.k_name, 'RSA_public_key__' + new_name)
-                rename('RSA_pbk_infos__' + self.k_name + '.csv', 'RSA_pbk_infos__' + new_name + '.csv')
-
-            else:
-                rename('RSA_hex_pbk__' + self.k_name, 'RSA_hex_pbk__' + new_name)
-
-                chdir('RSA_hex_pbk__' + new_name)
-
-                rename('RSA__hex_pbkey__' + self.k_name, 'RSA__hex_pbkey__' + new_name)
-                rename('RSA_hex_pbk_infos__' + self.k_name + '.csv', 'RSA_hex_pbk_infos__' + new_name + '.csv')
-
+        rename(str(self.k_name) + ext, new_name + ext)
 
         chdir(old_path)
 
@@ -1388,21 +1248,21 @@ def list_keys(mode='any'):
     lst_all = []
 
     for k in lst_k:
-        if 'RSA_keys__' in k:
-            lst_pvk.append(k[10:])
-            lst_all.append(k[10:])
+        if '.pvk-d' in k:
+            lst_pvk.append(k[:-6])
+            lst_all.append(k[:-6])
 
-        elif 'RSA_pbk__' in k:
-            lst_pbk.append(k[9:])
-            lst_all.append(k[9:])
+        elif '.pbk-d' in k:
+            lst_pbk.append(k[:-6])
+            lst_all.append(k[:-6])
 
-        elif 'RSA_hex_keys__' in k:
-            lst_hex_pvk.append(k[14:])
-            lst_all.append(k[14:])
+        elif '.pvk-h' in k:
+            lst_hex_pvk.append(k[:-6])
+            lst_all.append(k[:-6])
 
-        elif 'RSA_hex_pbk__' in k:
-            lst_hex_pbk.append(k[13:])
-            lst_all.append(k[13:])
+        elif '.pbk-h' in k:
+            lst_hex_pbk.append(k[:-6])
+            lst_all.append(k[:-6])
 
     #---
     lst_pvk = rm_lst(lst_pvk, lst_pbk)
