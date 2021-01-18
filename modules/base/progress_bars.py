@@ -5,7 +5,7 @@
 
 
 progress_bars__auth = 'Lasercata'
-progress_bars__last_update = '07.08.2020'
+progress_bars__last_update = '18.01.2021'
 progress_bars__version = '1.0'
 
 
@@ -14,9 +14,11 @@ import sys
 # from os import walk, getcwd, chdir
 from datetime import datetime as dt
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QLabel, QGridLayout,
-    QMessageBox, QWidget, QPushButton, QProgressBar)
+from modules.base import glb
+if glb.interface == 'gui':
+    from PyQt5.QtCore import Qt
+    from PyQt5.QtWidgets import (QApplication, QMainWindow, QLabel, QGridLayout,
+        QMessageBox, QWidget, QPushButton, QProgressBar)
 
 #------Cracker's modules
 # from modules.base.base_functions import list_files

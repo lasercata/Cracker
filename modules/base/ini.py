@@ -4,19 +4,22 @@
 '''Initiate Cracker's needed data.'''
 
 ini__auth = 'Lasercata'
-ini__last_update = '24.11.2020'
-ini__version = '1.2.1'
+ini__last_update = '18.01.2021'
+ini__version = '1.2.2'
 
 ##-import
 #---------packages
 #------gui
-from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QIcon, QPixmap, QCloseEvent, QPalette, QColor
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QComboBox, QStyleFactory,
-    QLabel, QGridLayout, QLineEdit, QMessageBox, QWidget, QPushButton, QCheckBox,
-    QHBoxLayout, QVBoxLayout, QGroupBox, QTabWidget, QTableWidget, QFileDialog,
-    QRadioButton, QTextEdit, QButtonGroup, QSizePolicy, QSpinBox, QFormLayout,
-    QSlider)
+from modules.base import glb
+
+if glb.interface == 'gui':
+    from PyQt5.QtCore import QSize, Qt
+    from PyQt5.QtGui import QIcon, QPixmap, QCloseEvent, QPalette, QColor
+    from PyQt5.QtWidgets import (QApplication, QMainWindow, QComboBox, QStyleFactory,
+        QLabel, QGridLayout, QLineEdit, QMessageBox, QWidget, QPushButton, QCheckBox,
+        QHBoxLayout, QVBoxLayout, QGroupBox, QTabWidget, QTableWidget, QFileDialog,
+        QRadioButton, QTextEdit, QButtonGroup, QSizePolicy, QSpinBox, QFormLayout,
+        QSlider)
 
 #------other
 from os import chdir, getcwd
@@ -36,10 +39,12 @@ try:
     from modules.base.progress_bars import *
 
     from modules.base.console.color import *
-    from modules.base.gui.lock_gui import Lock
-    from modules.base.gui.GuiStyle import GuiStyle
-    from modules.base.gui.TextEditor import TextEditor
-    from modules.base.gui.Popup import Popup
+
+    if glb.interface == 'gui':
+        from modules.base.gui.lock_gui import Lock
+        from modules.base.gui.GuiStyle import GuiStyle
+        from modules.base.gui.TextEditor import TextEditor
+        from modules.base.gui.Popup import Popup
 
     from modules.crack import crack
 
