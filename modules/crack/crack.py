@@ -3,7 +3,7 @@
 
 crack__auth = 'lasercata'
 crack__ver = '1.0.1'
-crack__last_update = '21.09.2020'
+crack__last_update = '18.01.2021'
 
 ##-import
 #---------Cracker's modules
@@ -15,7 +15,10 @@ from modules.base.console.color import color, cl_inp, cl_out, c_error, c_wrdlt, 
 from random import shuffle
 from datetime import datetime as dt
 from os import chdir, mkdir, getcwd
-from PyQt5.QtWidgets import QMessageBox
+
+from modules.base import glb
+if glb.interface == 'gui':
+    from PyQt5.QtWidgets import QMessageBox
 
 
 ##-ini
