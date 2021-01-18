@@ -12,7 +12,7 @@ created by Ron Rivest, Adi Shamir, and Leonard Adleman, and implemented in pytho
 '''
 
 KRIS__auth = 'Lasercata'
-KRIS__last_update = '31.08.2020'
+KRIS__last_update = '18.01.2021'
 KRIS__version = '1.1'
 
 
@@ -32,7 +32,9 @@ from ast import literal_eval #safer than eval
 
 import platform
 
-from PyQt5.QtWidgets import QMessageBox
+from modules.base import glb
+if glb.interface == 'gui':
+    from PyQt5.QtWidgets import QMessageBox
 
 #---------Cracker's modules
 from modules.ciphers.kris.RSA import *

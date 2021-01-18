@@ -4,7 +4,7 @@
 '''This program allow you to encrypt and decrypt with RSA cipher.'''
 
 RSA__auth = 'Lasercata, Elerias'
-RSA__last_update = '29.12.2020'
+RSA__last_update = '18.01.2021'
 RSA__version = '3.3'
 
 
@@ -31,7 +31,8 @@ from time import sleep
 from os import chdir, mkdir, getcwd, listdir, rename, remove
 from os.path import expanduser, isfile
 
-from PyQt5.QtWidgets import QMessageBox
+if glb.interface == 'gui':
+    from PyQt5.QtWidgets import QMessageBox
 
 #---------csv
 import csv
