@@ -4,7 +4,7 @@
 '''This script define a mother class for the ciphers.'''
 
 BaseCipher__auth = 'Lasercata'
-BaseCipher__last_update = '28.06.2020'
+BaseCipher__last_update = '18.01.2021'
 BaseCipher__version = '1.0'
 
 
@@ -14,7 +14,9 @@ from modules.base.progress_bars import *
 
 #---------Packages
 #------PyQt5
-from PyQt5.QtWidgets import QMessageBox
+from modules.base import glb
+if glb.interface == 'gui':
+    from PyQt5.QtWidgets import QMessageBox
 
 
 ##-main
