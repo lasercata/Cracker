@@ -5,7 +5,7 @@
 
 
 progress_bars__auth = 'Lasercata'
-progress_bars__last_update = '18.01.2021'
+progress_bars__last_update = '19.01.2021'
 progress_bars__version = '1.0'
 
 
@@ -71,225 +71,229 @@ class ConsoleProgressBar:
             return i + k
 
 
+if glb.interface == 'gui':
+    #Define the two following class only if interface is GUI, because they
+    #inherits from QWidget, which depends of PyQt5.
+    #Like that, we can use the console mode without having PyQt5.
 
-##-GUI
-class GuiProgressBar(QWidget):
-    '''Class creating a progess bar popup.'''
+    ##-GUI
+    class GuiProgressBar(QWidget):
+        '''Class creating a progess bar popup.'''
 
-    def __init__(self, title='Processing ... ― Cracker', undetermined=False, verbose=True, mn=0, parent=None):
-        '''Create the GuiProgressBar window.
+        def __init__(self, title='Processing ... ― Cracker', undetermined=False, verbose=True, mn=0, parent=None):
+            '''Create the GuiProgressBar window.
 
-        - undetermined : Should be True or False. Set it to True if the time duration is undetermined ;
-        - verbose : Should be True or False. If True, increase verbosity ;
-        - mn : the minimum of i, in set. Default is 0.
-        '''
+            - undetermined : Should be True or False. Set it to True if the time duration is undetermined ;
+            - verbose : Should be True or False. If True, increase verbosity ;
+            - mn : the minimum of i, in set. Default is 0.
+            '''
 
-        #------ini
-        super().__init__(parent)
-        self.setWindowTitle(title)
-        self.setMinimumSize(500, 150)
+            #------ini
+            super().__init__(parent)
+            self.setWindowTitle(title)
+            self.setMinimumSize(500, 150)
 
-        main_lay = QGridLayout()
-        self.setLayout(main_lay)
+            main_lay = QGridLayout()
+            self.setLayout(main_lay)
 
-        if undetermined:
-            mx = 0
+            if undetermined:
+                mx = 0
 
-        else:
-            mx = 100
+            else:
+                mx = 100
 
-        #------widgets
-        self.progress_bar = QProgressBar()
-        self.progress_bar.setRange(0, mx)
-        self.progress_bar.setValue(0)
-        main_lay.addWidget(self.progress_bar, 0, 0)
+            #------widgets
+            self.progress_bar = QProgressBar()
+            self.progress_bar.setRange(0, mx)
+            self.progress_bar.setValue(0)
+            main_lay.addWidget(self.progress_bar, 0, 0)
 
-        #self.setCentralWidget(self.progress_bar)
+            #self.setCentralWidget(self.progress_bar)
 
-        self.bt_stop = QPushButton('Stop')
-        self.bt_stop.clicked.connect(self._stop)
-        main_lay.addWidget(self.bt_stop, 1, 0, Qt.AlignRight)
+            self.bt_stop = QPushButton('Stop')
+            self.bt_stop.clicked.connect(self._stop)
+            main_lay.addWidget(self.bt_stop, 1, 0, Qt.AlignRight)
 
-        #------others
-        self.lst = []
-        self.verbose = verbose
-        self.mn = mn
-
-
-        #------show
-        self.show()
-
-
-    def setTitle(self, title):
-        '''Change the window's title.'''
-
-        self.setWindowTitle(title)
+            #------others
+            self.lst = []
+            self.verbose = verbose
+            self.mn = mn
 
 
-    def set(self, i, n):
-        '''Set the progress bar to (i / n * 100) %. Close automaticly when i == n.'''
+            #------show
+            self.show()
 
-        QApplication.processEvents()
 
-        if i == self.mn and self.verbose:
-            self.t0 = dt.now()
+        def setTitle(self, title):
+            '''Change the window's title.'''
 
-        k = round(i / n * 100)
+            self.setWindowTitle(title)
 
-        if k not in self.lst:
-            self.lst.append(k)
-            self.progress_bar.setValue(k)
 
-        self.lst = []
+        def set(self, i, n):
+            '''Set the progress bar to (i / n * 100) %. Close automaticly when i == n.'''
 
-        if i == n:
-            if self.verbose:
-                t_end = dt.now() - self.t0
-                QMessageBox.about(None, 'Done !', '<h2>Done in ' + str(t_end) + 's !</h2>')
+            QApplication.processEvents()
+
+            if i == self.mn and self.verbose:
+                self.t0 = dt.now()
+
+            k = round(i / n * 100)
+
+            if k not in self.lst:
+                self.lst.append(k)
+                self.progress_bar.setValue(k)
 
             self.lst = []
+
+            if i == n:
+                if self.verbose:
+                    t_end = dt.now() - self.t0
+                    QMessageBox.about(None, 'Done !', '<h2>Done in ' + str(t_end) + 's !</h2>')
+
+                self.lst = []
+                self.close()
+
+
+        def load(self, i=None, k=1, ret=False):
+            '''Increment of k the bar. Usefull with undetermined mode.
+
+            i : the old number. If None, it take the actual bar value ;
+            k : the number which increment the bar (bar.set(i + k)) ;
+            ret : If True, return i + k
+            '''
+
+            QApplication.processEvents()
+
+            if i == None:
+                i = self.progress_bar.value()
+
+            self.progress_bar.setValue(i + k)
+
+            if ret:
+                return i + k
+
+
+        def _stop(self):
             self.close()
-
-
-    def load(self, i=None, k=1, ret=False):
-        '''Increment of k the bar. Usefull with undetermined mode.
-
-        i : the old number. If None, it take the actual bar value ;
-        k : the number which increment the bar (bar.set(i + k)) ;
-        ret : If True, return i + k
-        '''
-
-        QApplication.processEvents()
-
-        if i == None:
-            i = self.progress_bar.value()
-
-        self.progress_bar.setValue(i + k)
-
-        if ret:
-            return i + k
-
-
-    def _stop(self):
-        self.close()
-        if self.verbose:
-            QMessageBox.about(None, 'Stoped', '<h1>The action has been be stoped.</h1>')
-
-        raise KeyboardInterrupt('Stoped')
-
-
-##-Gui Double progress bar
-class GuiDoubleProgressBar(QWidget):
-    '''Class creating a double progess bar popup.'''
-
-    def __init__(self, title='Processing ... ― Cracker', verbose=True, mn=0, parent=None):
-        '''Create the GuiProgressBar window.
-
-        - verbose : Should be True or False. If True, increase verbosity ;
-        - mn : the minimum of i, in set. Default is 0.
-        '''
-
-        #------ini
-        super().__init__(parent)
-        self.setWindowTitle(title)
-        self.setMinimumSize(500, 150)
-
-        main_lay = QGridLayout()
-        self.setLayout(main_lay)
-
-        mx = 100
-
-        #------widgets
-        self.pb_top = QProgressBar()
-        self.pb_top.setRange(0, mx)
-        self.pb_top.setValue(0)
-        main_lay.addWidget(self.pb_top, 0, 0)
-
-        self.pb_bottom = QProgressBar()
-        self.pb_bottom.setRange(0, mx)
-        self.pb_bottom.setValue(0)
-        main_lay.addWidget(self.pb_bottom, 1, 0)
-
-        self.bt_stop = QPushButton('Stop')
-        self.bt_stop.clicked.connect(self._stop)
-        main_lay.addWidget(self.bt_stop, 2, 0, Qt.AlignRight)
-
-        #------others
-        self.lst_0 = []
-        self.lst_1 = []
-        self.verbose = verbose
-        self.mn = mn
-
-
-        #------show
-        self.show()
-
-
-    def setTitle(self, title):
-        '''Change the window's title.'''
-
-        self.setWindowTitle(title)
-
-
-    def set(self, i, n, bar=0):
-        '''
-        Set the progress bar to (i / n * 100) %. Close automaticly when i == n.
-
-        - bar : the bar to set to i/n. Should be 0 for the top, 1 for the bottom.
-        '''
-
-        QApplication.processEvents()
-
-        if bar not in (0, 1):
-            raise ValueError('The arg "bar" should be in (0, 1), but "{}" was found !!!'.format(bar))
-
-        pb = (self.pb_top, self.pb_bottom)[bar]
-
-        if i == self.mn and self.verbose and bar == 0:
-            self.t0 = dt.now()
-
-        k = round(i / n * 100)
-
-        pb.setValue(k)
-
-        if i == n and bar == 0:
             if self.verbose:
-                t_end = dt.now() - self.t0
-                QMessageBox.about(None, 'Done !', '<h2>Done in ' + str(t_end) + 's !</h2>')
+                QMessageBox.about(None, 'Stoped', '<h1>The action has been be stoped.</h1>')
 
+            raise KeyboardInterrupt('Stoped')
+
+
+    ##-Gui Double progress bar
+    class GuiDoubleProgressBar(QWidget):
+        '''Class creating a double progess bar popup.'''
+
+        def __init__(self, title='Processing ... ― Cracker', verbose=True, mn=0, parent=None):
+            '''Create the GuiProgressBar window.
+
+            - verbose : Should be True or False. If True, increase verbosity ;
+            - mn : the minimum of i, in set. Default is 0.
+            '''
+
+            #------ini
+            super().__init__(parent)
+            self.setWindowTitle(title)
+            self.setMinimumSize(500, 150)
+
+            main_lay = QGridLayout()
+            self.setLayout(main_lay)
+
+            mx = 100
+
+            #------widgets
+            self.pb_top = QProgressBar()
+            self.pb_top.setRange(0, mx)
+            self.pb_top.setValue(0)
+            main_lay.addWidget(self.pb_top, 0, 0)
+
+            self.pb_bottom = QProgressBar()
+            self.pb_bottom.setRange(0, mx)
+            self.pb_bottom.setValue(0)
+            main_lay.addWidget(self.pb_bottom, 1, 0)
+
+            self.bt_stop = QPushButton('Stop')
+            self.bt_stop.clicked.connect(self._stop)
+            main_lay.addWidget(self.bt_stop, 2, 0, Qt.AlignRight)
+
+            #------others
+            self.lst_0 = []
+            self.lst_1 = []
+            self.verbose = verbose
+            self.mn = mn
+
+
+            #------show
+            self.show()
+
+
+        def setTitle(self, title):
+            '''Change the window's title.'''
+
+            self.setWindowTitle(title)
+
+
+        def set(self, i, n, bar=0):
+            '''
+            Set the progress bar to (i / n * 100) %. Close automaticly when i == n.
+
+            - bar : the bar to set to i/n. Should be 0 for the top, 1 for the bottom.
+            '''
+
+            QApplication.processEvents()
+
+            if bar not in (0, 1):
+                raise ValueError('The arg "bar" should be in (0, 1), but "{}" was found !!!'.format(bar))
+
+            pb = (self.pb_top, self.pb_bottom)[bar]
+
+            if i == self.mn and self.verbose and bar == 0:
+                self.t0 = dt.now()
+
+            k = round(i / n * 100)
+
+            pb.setValue(k)
+
+            if i == n and bar == 0:
+                if self.verbose:
+                    t_end = dt.now() - self.t0
+                    QMessageBox.about(None, 'Done !', '<h2>Done in ' + str(t_end) + 's !</h2>')
+
+                self.close()
+
+        def load(self, i=None, k=1, ret=False, bar=0):
+            '''Increment of k the bar. Usefull with undetermined mode.
+
+            - i : the old number. If None, it take the actual bar value ;
+            - k : the number which increment the bar (bar.set(i + k)) ;
+            - ret : If True, return i + k ;
+            - bar : the bar to increment. Should be 0 for the top, 1 for the bottom.
+            '''
+
+            QApplication.processEvents()
+
+            if bar not in (0, 1):
+                raise ValueError('The arg "bar" should be in (0, 1), but "{}" was found !!!'.format(bar))
+
+            pb = (self.pb_top, self.pb_bottom)[bar]
+
+            if i == None:
+                i = pb.value()
+
+            pb.setValue(i + k)
+
+            if ret:
+                return i + k
+
+
+        def _stop(self):
             self.close()
+            if self.verbose:
+                QMessageBox.about(None, 'Stoped', '<h1>The action has been be stoped.</h1>')
 
-    def load(self, i=None, k=1, ret=False, bar=0):
-        '''Increment of k the bar. Usefull with undetermined mode.
-
-        - i : the old number. If None, it take the actual bar value ;
-        - k : the number which increment the bar (bar.set(i + k)) ;
-        - ret : If True, return i + k ;
-        - bar : the bar to increment. Should be 0 for the top, 1 for the bottom.
-        '''
-
-        QApplication.processEvents()
-
-        if bar not in (0, 1):
-            raise ValueError('The arg "bar" should be in (0, 1), but "{}" was found !!!'.format(bar))
-
-        pb = (self.pb_top, self.pb_bottom)[bar]
-
-        if i == None:
-            i = pb.value()
-
-        pb.setValue(i + k)
-
-        if ret:
-            return i + k
-
-
-    def _stop(self):
-        self.close()
-        if self.verbose:
-            QMessageBox.about(None, 'Stoped', '<h1>The action has been be stoped.</h1>')
-
-        raise KeyboardInterrupt('Stoped')
+            raise KeyboardInterrupt('Stoped')
 
 
 ##-test
