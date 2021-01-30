@@ -1,7 +1,7 @@
 # Cracker
 A useful software about cryptography, numbers and passwords.
 
-![Cracker](Style/Cracker_ascii_logo.png)
+![Cracker](Style/Cracker_ascii_logo_surrounded.png)
 
 Cracker is a software developed and updated by Lasercata and by Elerias. It is written in Python 3 and in C.
 
