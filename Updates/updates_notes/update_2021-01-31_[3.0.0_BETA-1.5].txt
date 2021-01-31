@@ -1,0 +1,26 @@
+2021.01.31
+Cracker v3.0.0_BETA-1.5 <-- v3.0.0_BETA-1.4.1
+---------------------------------
+General improvements :
+    - The RSA keys are now encrypted with AES-256-CBC when Cracker is closed. The used password is the 32 firsts charaters of the sha256 hash of Cracker's password.
+    Process :
+        * When login, encrypted keys (with .enc) are decrypted and put in corresponding file (without .enc) (note that .enc is added after the key extention, i.g. 'key.pvk-h' -> 'key.pvk-h.enc') ;
+        * If the user generate a RSA key, the program also make an encrypted file of the key (with .enc) ;
+        * If the user change password, encrypted keys are deleted, and the clear keys are copyed in encrypted version using the new password (32 first char of the sha256 hash) ;
+        * When the user close Cracker (by clicking the quit button, with the cross, or with <alt> + f4), the clear keys' files are deleted.
+    
+    - Now detecting when the user close Cracker without clicking the quit button (<alt> + f4 or cross button), and warn him if there is text in a QTextEditor (like with the quit button) ;
+    
+    - If the user close the password window, Cracker stops (sys.exit is called)
+
+
+
+RSA v3.5 <-- v3.4 :
+    - Creating the class 'SecureRsaKeys' which manages the RSA keys' encryption and decryption ;
+    - Adding the methods 'encrypt' and 'decrypt' to RsaKeys, which respectively encrypt and decrypt a RSA key ;
+---
+
+
+---------------------------------
+
+By Lasercata
