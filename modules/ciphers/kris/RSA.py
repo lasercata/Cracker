@@ -4,8 +4,8 @@
 '''This program allow you to encrypt and decrypt with RSA cipher.'''
 
 RSA__auth = 'Lasercata, Elerias'
-RSA__last_update = '18.01.2021'
-RSA__version = '3.3'
+RSA__last_update = '31.01.2021'
+RSA__version = '3.5'
 
 
 ##-import
@@ -20,6 +20,8 @@ from modules.ciphers.hashes.hasher import Hasher
 from modules.base import glb
 from modules.base.arithmetic import mult_inverse
 from modules.prima.prima import isSurelyPrime
+
+from modules.ciphers.kris.AES import AES
 
 #---------packages
 import math
@@ -893,7 +895,7 @@ class RsaKeys:
         self.k_name : the name given when creating keys ;
         mode : 0 - encrypt (pbk), 1 - decrypt (pvk), used to choose between public and private keys.
 
-        Resolution order (to find the good key extention :
+        Resolution order (to find the good key extention) :
             pvk-h ;
             pvk-d ;
             pbk-h ;
@@ -1213,6 +1215,152 @@ class RsaKeys:
         chdir(old_path)
 
 
+    def get_fn(self, mode='ed'):
+        '''
+        Return the filename of the key (with the extention)
+
+        - self.k_name : the RSA key's name ;
+        - mode : in ('d', 'e', 'ed'). If 'd': only watch decrypted keys, if 'e': only watch encrypted keys, if 'ed': watch both.
+
+        Resolution order (to find the good key extention) if mode == 'ed' :
+            pvk-h ;
+            pvk-d ;
+            pbk-h ;
+            pbk-d ;
+            pvk-h.enc ;
+            pvk-d.enc ;
+            pbk-h.enc ;
+            pbk-d.enc.
+
+        It is the same order if 'd' or 'e', but without the other part.
+        '''
+
+        old_path = chd_rsa('.')
+
+        if mode not in ('d', 'e', 'ed'):
+            raise ValueError('The mode should be in ("d", "e", "ed"), but "{}" was found !!!'.format(mode))
+
+        if isfile(self.k_name + '.pvk-h') and mode in ('ed', 'd'):
+            fn = self.k_name + '.pvk-h'
+
+        elif isfile(self.k_name + '.pvk-d') and mode in ('ed', 'd'):
+            fn = self.k_name + '.pvk-d'
+
+        elif isfile(self.k_name + '.pbk-h') and mode in ('ed', 'd'):
+            fn = self.k_name + '.pbk-h'
+
+        elif isfile(self.k_name + '.pbk-d') and mode in ('ed', 'd'):
+            fn = self.k_name + '.pbk-d'
+
+
+        elif isfile(self.k_name + '.pvk-h.enc') and mode in ('ed', 'e'):
+            fn = self.k_name + '.pvk-h.enc'
+
+        elif isfile(self.k_name + '.pvk-d.enc') and mode in ('ed', 'e'):
+            fn = self.k_name + '.pvk-d.enc'
+
+        elif isfile(self.k_name + '.pbk-h.enc') and mode in ('ed', 'e'):
+            fn = self.k_name + '.pbk-h.enc'
+
+        elif isfile(self.k_name + '.pbk-d.enc') and mode in ('ed', 'e'):
+            fn = self.k_name + '.pbk-d.enc'
+
+        else:
+            chdir(old_path)
+            raise FileNotFoundError('The key "{}" does not seem to exists in {} mode !!!'.format(self.k_name, mode))
+
+        chdir(old_path)
+
+        return fn
+
+
+    #------Encrypt key
+    def encrypt(self, key):
+        '''
+        Encrypt 'self.k_name' with AES-256-CBC using the password
+        `RSA_keys_pwd` (Hasher('sha256').hash(clear_Cracker_pwd)[:32])
+        and make a file 'self.k_name' + ext + '.enc'
+        '''
+
+        file = '{}/RSA_keys/{}'.format(glb.Cracker_data_path, self.get_fn('d'))
+        AES(256, key).encryptFile(file, file + '.enc')
+
+
+    #------Encrypt key
+    def decrypt(self, key):
+        '''
+        Decrypt self.keys_name with AES-256-CBC using the password
+        `RSA_keys_pwd` (Hasher('sha256').hash(clear_Cracker_pwd)[:32])
+        '''
+
+        file = '{}/RSA_keys/{}'.format(glb.Cracker_data_path, self.get_fn('e'))
+        AES(256, key).decryptFile(file, file[:-4])
+
+
+
+#------SecureRsaKeys
+class SecureRsaKeys:
+    '''Class which manages the RSA keys encryption and decription.'''
+
+    def __init__(self, key, old_key=None, interface=None):
+        '''
+        Initiate class.
+
+        - key : the key used to encrypt the RSA keys (Hasher('sha256').hash(clear_Cracker_pwd)[:32]) ;
+        - old_key : the old key (before changing password). Used to decrypt an eventual key which is
+        only encrypted in self.rm_enc.
+        '''
+
+        if interface not in (None, 'gui', 'console'):
+            raise ValueError('The argument "interface" should be None, "gui", or "console", but {} of type {} was found !!!'.format(interface, type(interface)))
+
+        self.key = key
+        self.old_key = old_key
+        self.interface = interface
+
+
+    def encrypt(self):
+        '''Encrypt all the RSA keys present in Data/RSA_keys using RsaKeys.encrypt'''
+
+        RSA_keys = list_keys('all')
+
+        for k in RSA_keys:
+            RsaKeys(k, self.interface).encrypt(self.key)
+
+
+    def decrypt(self):
+        '''Decrypt all the RSA keys present in Data/RSA_keys using RsaKeys.decrypt'''
+
+        RSA_keys = list_keys('enc')
+
+        for k in RSA_keys:
+            RsaKeys(k, self.interface).decrypt(self.key)
+
+
+    def rm_clear(self):
+        '''Delete the clear RSA keys.'''
+
+        enc_keys = list_keys('enc')
+
+        for k in list_keys('all'):
+            if k not in enc_keys:
+                RsaKeys(k, self.interface).encrypt(self.key)
+
+            remove('{}/RSA_keys/{}'.format(glb.Cracker_data_path, RsaKeys(k, self.interface).get_fn('d')))
+
+
+    def rm_enc(self):
+        '''Delete the encrypted RSA keys. Used when changing password.'''
+
+        RSA_keys = list_keys('all')
+
+        for k in list_keys('enc'):
+            if k not in RSA_keys:
+                RsaKeys(k, self.interface).decrypt(self.old_key)
+
+            remove('{}/RSA_keys/{}'.format(glb.Cracker_data_path, RsaKeys(k, self.interface).get_fn('e')))
+
+
 
 
 #------list_keys
@@ -1220,23 +1368,25 @@ def list_keys(mode='any'):
     '''
     Function which lists the existing keys.
 
-    Return six tuples, first is the list of the normal keys (pvk + pbk) without the keys exported,
-    the second is the list of the exported (pbk) keys,
-    the third is the list of the normal keys in hexadecimal without the hex keys exported,
-    the fourth is the list of the exported (pbk) in hexadecimal,
-    the fifth is the list of all the key not exported,
-    and the sixth is the list of all of them, removing the duplicates.
+    if mode is 'any', return seven tuples :
+        - pvk-d without pbk-d ;
+        - pbk-d ;
+        - pvk-h without pbk-h ;
+        - pbk-h ;
+        - pvk-* without pbk-* ;
+        - all (pvk-d, pvk-h, pbk-d, pbk-h, without duplicates), without .enc (but if the .enc is also decrypted, it will be in it) ;
+        - .enc
 
-    mode : what return. Should be "pvk", "pbk", "pvk_hex", "pbk_hex", "pvk_without_pbk", "all", or "any".
+    mode : what return. Should be "pvk", "pbk", "pvk_hex", "pbk_hex", "pvk_without_pbk", "enc", "all", or "any".
 
     if mode is "any", return :
-        pvk, pbk, hex_pvk, hex_pbk, lst_pvk_without_pbk, all
+        pvk, pbk, hex_pvk, hex_pbk, lst_pvk_without_pbk, enc, all
 
     else return the corresponding value.
     '''
 
-    if mode not in ('pvk', 'pbk', 'pvk_hex', 'pbk_hex', 'pvk_without_pbk', 'all', 'any'):
-        raise ValueError('"mode" should be "pvk", "pbk", "pvk_hex", "pbk_hex", "pvk_without_pbk", "all" or "any", but "' + str(mode) + '" was found !!!')
+    if mode not in ('pvk', 'pbk', 'pvk_hex', 'pbk_hex', 'pvk_without_pbk', 'enc', 'all', 'any'):
+        raise ValueError('"mode" should be "pvk", "pbk", "pvk_hex", "pbk_hex", "pvk_without_pbk", "enc", "all" or "any", but "' + str(mode) + '" was found !!!')
 
     old_path = chd_rsa('.')
     lst_k = listdir()
@@ -1246,24 +1396,28 @@ def list_keys(mode='any'):
     lst_pbk = []
     lst_hex_pvk = []
     lst_hex_pbk = []
+    lst_enc = []
     lst_all = []
 
     for k in lst_k:
-        if '.pvk-d' in k:
+        if k[-6:] == '.pvk-d':
             lst_pvk.append(k[:-6])
             lst_all.append(k[:-6])
 
-        elif '.pbk-d' in k:
+        elif k[-6:] == '.pbk-d':
             lst_pbk.append(k[:-6])
             lst_all.append(k[:-6])
 
-        elif '.pvk-h' in k:
+        elif k[-6:] == '.pvk-h':
             lst_hex_pvk.append(k[:-6])
             lst_all.append(k[:-6])
 
-        elif '.pbk-h' in k:
+        elif k[-6:] == '.pbk-h':
             lst_hex_pbk.append(k[:-6])
             lst_all.append(k[:-6])
+
+        elif k[-4:] == '.enc':
+            lst_enc.append(k[:-10])
 
     #---
     lst_pvk = rm_lst(lst_pvk, lst_pbk)
@@ -1291,6 +1445,9 @@ def list_keys(mode='any'):
 
     elif mode == 'pvk_without_pbk':
         return tuple(lst_pvk_without_pbk)
+
+    elif mode == 'enc':
+        return tuple(lst_enc)
 
     return (
         tuple(lst_pvk),
