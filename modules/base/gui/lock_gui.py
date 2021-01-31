@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 lock_gui__auth = 'Lasercata'
-lock_gui__ver = '4.1'
-lock_gui__last_update = '11.11.2020'
+lock_gui__ver = '4.1.1'
+lock_gui__last_update = '31.01.2021'
 
 ##-import
 import sys
@@ -78,7 +78,7 @@ class Lock(QWidget):
         self.setLayout(main_lay)
 
         #---label
-        main_lay.addWidget(QLabel(tr('Enter your password') + ' :'), 0 ,0)
+        main_lay.addWidget(QLabel(tr('Enter your password') + ' :'), 0, 0)
 
         #---pwd_entry
         self.pwd = QLineEdit()
@@ -94,7 +94,7 @@ class Lock(QWidget):
 
         #---check box
         self.inp_show = QCheckBox(tr('Show password'))
-        self.inp_show.toggled.connect(self.show_pwd)
+        self.inp_show.toggled.connect(self._show_pwd)
 
         main_lay.addWidget(self.inp_show, 1, 0, 1, 2, alignment=Qt.AlignCenter | Qt.AlignTop)
 
@@ -119,6 +119,9 @@ class Lock(QWidget):
 
         if hshed_entry == self.pwd_hshed:
             locked = False
+
+            self.RSA_keys_pwd = Hasher('sha256').hash(self.pwd.text())[:32]
+
             self.unlock_func()
             self.close()
 
@@ -162,13 +165,23 @@ class Lock(QWidget):
         return locked
 
 
+    def get_RSA_keys_pwd(self):
+        '''Try returning RSA_keys_pwd'''
+
+        try:
+            return self.RSA_keys_pwd
+
+        except AttributeError:
+            return -1
+
+
     def connect(self, function):
         '''Execute the function given in parameter if locked is False. (in check)'''
 
         self.unlock_func = function
 
 
-    def show_pwd(self):
+    def _show_pwd(self):
         '''Show the password or not. Connected with the checkbutton "inp_show"'''
 
         if self.inp_show.isChecked():
@@ -176,6 +189,13 @@ class Lock(QWidget):
 
         else:
             self.pwd.setEchoMode(QLineEdit.Password)
+
+
+    def closeEvent(self, event):
+        '''exit if window is closed'''
+
+        if self.is_locked():
+            sys.exit()
 
 
     def chk():
