@@ -4,8 +4,8 @@
 '''Launch Cracker with the menu console interface.'''
 
 Cracker_console__auth = 'Lasercata'
-Cracker_console__last_update = '06.11.2020'
-Cracker_console__version = '1.2'
+Cracker_console__last_update = '31.01.2021'
+Cracker_console__version = '1.2.1'
 
 
 ##-import/ini
@@ -812,6 +812,10 @@ about the password you entered, like its entropy.
 
             if h_inp == pwd:
                 cl_out(c_succes, 'Good password !')
+
+                global RSA_keys_pwd
+                RSA_keys_pwd = hasher.Hasher('sha256').hash(inp)[:32]
+
                 sleep(0.25)
                 cls()
                 break
@@ -864,8 +868,12 @@ about the password you entered, like its entropy.
     def use():
         '''Use this function to launch the console app'''
 
+        global RSA_keys_pwd
+
         app = CrackerConsole()
         app.lock()
+
+        RSA.SecureRsaKeys(RSA_keys_pwd, interface='console').decrypt() #Unlock RSA keys
 
         while app.menu_on:
             try:
@@ -873,6 +881,8 @@ about the password you entered, like its entropy.
 
             except KeyboardInterrupt:
                 app.quit('exit')
+
+        RSA.SecureRsaKeys(RSA_keys_pwd, 'console').rm_clear() #Lock RSA keys
 
 
 
@@ -1292,6 +1302,9 @@ def use_gen_k():
 
         else:
             return -3 #Abort
+
+    global RSA_keys_pwd
+    RSA.RsaKeys(name, 'console').encrypt(RSA_keys_pwd)
 
     cl_out(c_succes, 'Done !')
     print('Your brand new RSA keys "{}" are ready !\n`n` size : {} bits.'.format(name, ret[2]))
@@ -1831,6 +1844,7 @@ def change_pwd():
 
     #---good
     pwd = hasher.SecHash(pwd1)
+    new_RSA_keys_pwd = hasher.Hasher('sha256').hash(pwd1)[:32]
 
     try:
         with open('Data/pwd', 'w') as f:
@@ -1841,6 +1855,10 @@ def change_pwd():
         return -1
 
     else:
+        global RSA_keys_pwd
+        RSA.SecureRsaKeys(new_RSA_keys_pwd, RSA_keys_pwd, 'console').rm_enc()
+        RSA.SecureRsaKeys(new_RSA_keys_pwd, interface='console').encrypt()
+
         cl_out(c_succes, 'Done !\nYour password has been be changed.\nIt has an entropy of {} bits.'.format(round(entro)))
         sleep(0.5)
 

@@ -4,8 +4,8 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '09.12.2020'
-Cracker_gui__version = '1.2.8'
+Cracker_gui__last_update = '31.01.2021'
+Cracker_gui__version = '1.2.9'
 
 
 ##-import/ini
@@ -1768,7 +1768,12 @@ class CrackerGui(QMainWindow):
 
         def chk_lock():
             if not self.locker.is_locked():
-                self.setDisabled(False) #todo: if lock wind is closed, quit app (capture when wind is closed)
+                self.setDisabled(False)
+
+                global RSA_keys_pwd
+                RSA_keys_pwd = self.locker.get_RSA_keys_pwd()
+
+                RSA.SecureRsaKeys(RSA_keys_pwd, interface='gui').decrypt()
 
         self.locker = Lock(pwd, pwd_h, pwd_loop, tries)
 
@@ -1780,10 +1785,10 @@ class CrackerGui(QMainWindow):
 
 
     #---------quit
-    def quit(self):
+    def quit(self, event=None):
         '''Quit the application. Check if there is text somewhere, and ask confirmation if there is.'''
 
-        global app #todo: catch when user press on the cross button
+        global app
 
         txt_ = False
         txt_tab = []
@@ -1820,10 +1825,22 @@ class CrackerGui(QMainWindow):
                 QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
             if sure == QMessageBox.No:
+                if event not in (None, True, False):
+                    event.ignore()
                 return -3
 
-        app.quit() #todo: add an option in Settings which can desactivate popups
-        #todo: use app.close() ? what differences ?
+        if event not in (None, True, False):
+            RSA.SecureRsaKeys(RSA_keys_pwd, 'gui').rm_clear()
+            event.accept()
+
+        else:
+            RSA.SecureRsaKeys(RSA_keys_pwd, 'gui').rm_clear()
+            app.quit()
+            #todo: use app.close() ? what differences ?
+
+
+    def closeEvent(self, event=None):
+        self.quit(event)
 
 
 
@@ -2124,6 +2141,10 @@ class GenKeyWin(QMainWindow):
                 return -2
 
         win.reload_keys()
+
+        global RSA_keys_pwd
+        RSA.RsaKeys(name, 'gui').encrypt(RSA_keys_pwd)
+
 
         QMessageBox.about(None, 'Done !', '<h2>Your brand new RSA keys "{}" are ready !</h2>\n<h3>`n` size : {} bits</h3>'.format(name, val[2]))
 
@@ -2986,6 +3007,7 @@ class UseCipherTab:
 
             except ValueError as err:
                 QMessageBox.critical(None, '!!! Value error !!!', '<h2>{}</h2>'.format(err))
+                return -3
 
             msg_c = C.encryptText(txt, encoding=encod, mode_c='hexa', mode=md)
 
@@ -3498,6 +3520,7 @@ class UseSettingsTab:
 
         #-good
         pwd = hasher.SecHash(pwd1)
+        new_RSA_keys_pwd = hasher.Hasher('sha256').hash(pwd1)[:32]
 
         try:
             with open('Data/pwd', 'w') as f:
@@ -3513,6 +3536,10 @@ class UseSettingsTab:
             self.old_pwd.clear()
             self.pwd1.clear()
             self.pwd2.clear()
+
+            global RSA_keys_pwd
+            RSA.SecureRsaKeys(new_RSA_keys_pwd, RSA_keys_pwd, 'gui').rm_enc()
+            RSA.SecureRsaKeys(new_RSA_keys_pwd, interface='gui').encrypt()
 
 
 
