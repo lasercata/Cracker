@@ -1,16 +1,4 @@
-To do :
-    - Encrypt the private part of the RSA key when the app is closed :
-        * Encrypt the files and copy them with an other name ;
-        * Use AES for this, the key is the Cracker's password in clear ;
-        
-        * Process :
-            - When launching the app : decrypt the files (copy the crypted file to the clear file) ;
-            - If the user generate a RSA key, ask the password (and make the encrypted file) ;
-            - If the user change the password, re-encrypt all the RSA private key files ;
-            - When closing the app (need to detect it), delete the clear files.
-        
-        * Like that, we could bring Cracker securely, it will be even more portable.
-    
+To do :    
     - Apply the CDC on every module ;
     
     - If first time launched, OS is Linux, 7z is installed, and quad.wrdlst is not unzip, unzip it automaticly.
@@ -57,3 +45,18 @@ To do :
             .crackerp cipher -c KRIS -msg test -key "Elerias" ;
             .crackerp crack -md 0 -wrdlst w4az -fn hashes.txt -c sha512 ;
             .crackerp pwd_testor -p azertyuiop OR cracherp pwd_testor ;
+
+------------------------------
+Done :
+    
+    - Encrypt the private part of the RSA key when the app is closed :
+        * Encrypt the files and copy them with an other name ;
+        * Use AES for this, the key is the Cracker's password in clear ;
+        
+        * Process :
+            - When launching the app : decrypt the files (copy the crypted file to the clear file) ;
+            - If the user generate a RSA key, ask the password (and make the encrypted file) ;
+            - If the user change the password, re-encrypt all the RSA private key files ;
+            - When closing the app (need to detect it), delete the clear files.
+        
+        * Like that, we could bring Cracker securely, it will be even more portable.
