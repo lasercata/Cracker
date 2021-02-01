@@ -71,11 +71,13 @@ chmod +x *.py
 
 ## Running
 
+### Run
 For the graphical UI, run `./Cracker_gui.py` in the root of the project, or `cracker` anywhere if you added the aliases ;
 
 For the console UI, run `./Cracker_console.py` in the root of the project, or `crackerc` anywhere if you added the aliases.
 
-The default password is `swiss_knife`. You can change it in the Settings part.
+### Password
+The default password is `swiss_knife`. It is used to encrypt the RSA key, so you can leave Cracker on your USB key or on an other computer without the risk of having your keys stolen. You can change it in the Settings part.
 
 
 ## Authors
