@@ -4,7 +4,7 @@
 '''This program allow you to encrypt and decrypt with RSA cipher.'''
 
 RSA__auth = 'Lasercata, Elerias'
-RSA__last_update = '31.01.2021'
+RSA__last_update = '02.02.2021'
 RSA__version = '3.5'
 
 
@@ -929,7 +929,7 @@ class RsaKeys:
 
 
         infos = CSV(fn).read()[0]
-        n = infos['n']
+        n_ = infos['n']
 
         if mode == 0:
             ed_ = infos['e']
