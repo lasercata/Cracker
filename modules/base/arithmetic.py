@@ -76,13 +76,13 @@ def solve_bezout_equation(a: int, b: int, c: int):
 
     (a, b, c) = (a // d, b // d, c // d)
 
-    # au + bv = c
-    # ax + by = au + bv
-    # a(x-u) = -b(y-v)
-    # gcd(a,-b) = 1, we use the lemma of Gauss : y-v = ak, y = ak + v
-    # ax + b(ak+v) = au + bv
-    # ax + bak + bv = au + bv
-    # ax = au - kab
-    # x = -bk + u
+    # au + bv = 1
+    # ax + by = a(cu) + b(cv)
+    # a(x-cu) = -b(y-cv)
+    # gcd(a,-b) = 1, we use the lemma of Gauss : y-cv = ak, y = ak + cv
+    # ax + b(ak+cv) = a(cu) + b(cv)
+    # ax + bak + b(cv) = a(cu) + b(cv)
+    # ax = a(cu) - kab
+    # x = -bk + cu
 
-    return (True, ((-b, u), (a, v)))
+    return (True, ((-b, c*u), (a, c*v)))
