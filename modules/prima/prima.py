@@ -3,8 +3,8 @@
 """Module dealing with prime numbers."""
 
 prima__auth = 'Elerias'
-prima__last_update = '25.11.2020'
-prima__version = '3.3'
+prima__last_update = '04.02.2021'
+prima__version = '3.3.1'
 
 
 ##-import
@@ -510,7 +510,7 @@ def use(cracker=cracker):
         if cracker: color(c_ascii)
         print('        1 : ' + tr('Trial division'))
         print('        2 : ' + tr('Wheel factorization'))
-        print('        3 : ' + tr("Fermat's' factorization"))
+        print('        3 : ' + tr("Fermat's factorization"))
         print('        4 : ' + tr("Pollard's rho"))
         print('        5 : ' + tr('p - 1'))
 
