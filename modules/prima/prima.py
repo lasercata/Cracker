@@ -512,7 +512,7 @@ def use(cracker=cracker):
         print('        2 : ' + tr('Wheel factorization'))
         print('        3 : ' + tr("Fermat's factorization"))
         print('        4 : ' + tr("Pollard's rho"))
-        print('        5 : ' + tr('p - 1'))
+        print('        5 : ' + 'p - 1')
 
         if cracker: color(c_succes)
         print('    ' + '-'*16)
