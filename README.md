@@ -44,10 +44,6 @@ git clone https://github.com/lasercata/Cracker.git
 Then unzip the wordlists :
 
 ```bash
-cd Data/Crack
-7z x quad_f.7z
-rm quad_f.7z
-
 cd ../Wordlists
 7z x wordlists.7z
 rm wordlists.7z
