@@ -3,8 +3,8 @@
 """Crypta is a cryptology program including cryptography and cryptanalysis functions."""
 
 crypta__auth = 'Elerias'
-crypta__last_update = '14.02.2021'
-crypta__ver = '3.6'
+crypta__last_update = '16.02.2021'
+crypta__ver = '3.7'
 
 sites = ("https://www.lama.univ-savoie.fr/pagesmembres/hyvernat/Enseignement/1920/info910/tp1.html", 'http://www.xavierdupre.fr/app/ensae_teaching_cs/helpsphinx/notebooks/expose_vigenere.html')
 
@@ -103,37 +103,15 @@ def ver_plain_text(text, wprocess=True):
     if lt < 5:
         return False
         
-    if text[0] == text[1] and text[1] == text[2] and text[2] == text[3] and text[3] == text[4]:
-        return False
-        
-    # Level 1 : Speed test
-    err = 0
-    if not(inD(text[0:4])):
-        err += 1
-    if not(inD(text[-4:lt])):
-        err += 1
-    if not(inD(text[1:5])):
-        err += 1
-    if not(inD(text[-5:lt-1])):
-        err += 1
-
-    if err > 1:
-        return False
-
-    # Level 2 : Check tetragrams
-    err = 0
-    for k in range(lt - 3):
-        if not inD(text[k:k+4]):
-            err += 1
-            
-    if err > 0.10 * (lt-3):
-        return False
-        
-    return True #todo: improve this algorithm !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    return prob_plain_text(text) > -11
 
 def prob_plain_text(text, wprocess=False):
     """Return the probability that the text is french or english."""
     global D_quad
+    
+    if wprocess:
+        text = msgform(text, "min", False, False)
+    
     lt = len(text)
     if lt < 5:
         return 0
@@ -1986,8 +1964,11 @@ class Caesar(BaseCipher):
 
 
 class Affine(BaseCipher):
-    """Defining the Affine cipher."""
-    
+    """
+    Affine cipher is a mono-alphabetic substitution cipher in which each letter converted to its place in the alphabet is encrypted using the affine function then converted back to a letter. The coefficients a and b in the function affine f(x) = ax + b form the key. To be able to decrypt, a and the length of the alphabet have to be coprime.
+    Affine cipher is very weak because it may be broken by brute force. Indeed, there are only 12 * 26 = 312 possible keys.
+    """
+
     def __init__(self, keyA=None, keyB=None, alf=alf_az, ignore=False, verbose=True, interface=None):
         """
         Initiate the Affine cipher.
