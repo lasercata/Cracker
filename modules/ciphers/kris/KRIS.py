@@ -12,8 +12,8 @@ created by Ron Rivest, Adi Shamir, and Leonard Adleman, and implemented in pytho
 '''
 
 KRIS__auth = 'Lasercata'
-KRIS__last_update = '18.01.2021'
-KRIS__version = '1.1'
+KRIS__last_update = '01.03.2021'
+KRIS__version = '1.2'
 
 
 ##-import
@@ -70,9 +70,9 @@ def AES_rnd_key_gen(n, mode=256): #todo: improve this
     '''
     Return a randomly generated key for AES.
 
-    n : the length of the key ;
-    mode : the AES mode, 128, 192 or 256.
-    ''' #todo: move this in the AES.py module
+    - n : the length of the key ;
+    - mode : the AES mode, 128, 192 or 256.
+    '''
 
     if mode not in (128, 192, 256):
         raise ValueError('AES cipher can only have a key of 128, 192 or 256 bits, not ' + str(mode))
@@ -80,15 +80,7 @@ def AES_rnd_key_gen(n, mode=256): #todo: improve this
     if n > mode // 8:
         raise ValueError('Key is too big for an AES ' + str(mode) + ' cipher')
 
-    key = ''
-    lst = []
-    while len(key) < n:
-        c = schoice(alf)
-
-        if c not in lst:
-            lst.append(c)
-
-            key += c
+    key = ''.join([schoice(alf) for k in range(n)])
 
     return key
 
