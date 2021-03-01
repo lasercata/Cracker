@@ -4,8 +4,8 @@
 '''This program allow you to encrypt and decrypt with RSA cipher.'''
 
 RSA__auth = 'Lasercata, Elerias'
-RSA__last_update = '02.02.2021'
-RSA__version = '3.5'
+RSA__last_update = '01.03.2021'
+RSA__version = '3.6'
 
 
 ##-import
@@ -25,7 +25,8 @@ from modules.ciphers.kris.AES import AES
 
 #---------packages
 import math
-from random import randint, choice
+from random import randint
+from secrets import randbits
 
 from datetime import datetime as dt
 from time import sleep
@@ -662,8 +663,8 @@ class RsaKeys:
 
 
     #---------get prime number p and q
-    def _get_p_q(self, mn, mx, verbose=True):
-        '''Function finding p and q in interval [mn ; mx].'''
+    def _get_p_q(self, size, verbose=False):
+        '''Function finding p and q of size `size // 2`.'''
 
         if verbose:
             print('\nCalculating keys ...\n')
@@ -679,7 +680,7 @@ class RsaKeys:
 
         p = 1
         while not isSurelyPrime(p):
-            p = randint(mn, mx)
+            p = randbits(size // 2)
 
             if self.interface in ('gui', 'console'):
                 pb.load()
@@ -694,8 +695,8 @@ class RsaKeys:
             t2 = dt.now()
 
         q = 1
-        while not isSurelyPrime(q):
-            q = randint(mn, mx)
+        while not (isSurelyPrime(q) and p != q):
+            q = randbits(size // 2)
 
             if self.interface in ('gui', 'console'):
                 pb.load()
@@ -711,7 +712,7 @@ class RsaKeys:
             if self.interface in (None, 'console'):
                 cl_out(c_succes, msg)
 
-            else:
+            elif verbose:
                 QMessageBox.about(None, 'Done !', '<h2>{}</h2>\n<h2>{}</h2>'.format(msg1, msg))
 
 
@@ -776,7 +777,7 @@ class RsaKeys:
 
             cl_out(c_succes, msg)
 
-            if self.interface == 'gui':
+            if self.interface == 'gui' and verbose:
                 QMessageBox.about(None, 'Done !', '<h2>{}</h2>\n<h2>{}</h2>'.format(msg1, msg))
 
         return n, phi, e, d
@@ -798,7 +799,7 @@ class RsaKeys:
         size : the wanted size (in bytes) +/- 4.
         '''
 
-        p, q = self._get_p_q(2**(size // 2), 2**(size//2 + 1))
+        p, q = self._get_p_q(size + 2)
         n = p * q
 
         #assert key_size(n) in [k for k in range(size - 4, size + 5)] #check the size of n
