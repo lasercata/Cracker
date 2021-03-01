@@ -1944,6 +1944,7 @@ class GenKeyWin(QMainWindow):
         #---line edit
         self.ledt = QLineEdit()
         self.ledt.setMinimumSize(250, 0)
+        self.ledt.returnPressed.connect(self.gen)
         RSA_lay.addWidget(self.ledt, 1, 1)
 
         #---check box hexa
