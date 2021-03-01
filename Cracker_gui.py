@@ -4,8 +4,8 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '31.01.2021'
-Cracker_gui__version = '1.2.9'
+Cracker_gui__last_update = '01.03.2021'
+Cracker_gui__version = '1.2.10'
 
 
 ##-import/ini
@@ -2089,7 +2089,12 @@ class GenKeyWin(QMainWindow):
             ret = self.gen_RSA()
 
         elif 'AES' in ciph:
-            ret = self._show_key(ciph, KRIS.AES_rnd_key_gen(self.str1_lth.value(), int(ciph[-3:])))
+            try:
+                ret = self._show_key(ciph, KRIS.AES_rnd_key_gen(self.str1_lth.value(), int(ciph[-3:])))
+
+            except ValueError as err:
+                QMessageBox.warning(None, 'Key size error', '<h2>{}</h2>'.format(err))
+                return -3
 
         elif ciph == 'Caesar':
             ret = self._show_key('Caesar', str(crypta.Caesar().gen_key()))

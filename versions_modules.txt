@@ -1,4 +1,4 @@
-Version of Cracker_gui : 1.2.9
+Version of Cracker_gui : 1.2.10
 Version of Cracker_console : 1.2.1
 
 Version of base_functions : 2.3.1
@@ -18,7 +18,7 @@ Version of Crack : 1.0.1
 
 Version of Crypta : 3.4.5
 Version of Hasher : 4.0
-Version of KRIS : 1.1
+Version of KRIS : 1.2
 Version of AES : 2.0.2
 Version of RSA : 3.5
 Version of BaseCipher : 1.0
