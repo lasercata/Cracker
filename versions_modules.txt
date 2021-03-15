@@ -20,7 +20,7 @@ Version of Crypta : 3.4.5
 Version of Hasher : 4.0
 Version of KRIS : 1.2
 Version of AES : 2.0.2
-Version of RSA : 3.6
+Version of RSA : 3.7
 Version of BaseCipher : 1.0
 
 Version of wordlist_generator : 7.0
