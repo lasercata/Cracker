@@ -4,8 +4,8 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '15.03.2021'
-Cracker_gui__version = '1.2.11'
+Cracker_gui__last_update = '01.04.2021'
+Cracker_gui__version = '1.3.0'
 
 
 ##-import/ini
@@ -289,6 +289,13 @@ class CrackerGui(QMainWindow):
 
         bt_lay = QHBoxLayout()
         tab_home_lay.addLayout(bt_lay, 0, 0, alignment=Qt.AlignRight | Qt.AlignBottom)
+
+        bt_calc = QPushButton('&Calc')
+        bt_calc.setObjectName('bt_calc')
+        bt_calc.setStyleSheet(self.style)
+        bt_calc.setMaximumSize(QSize(52, 35))
+        bt_calc.clicked.connect(self.start_calc)
+        bt_lay.addWidget(bt_calc)
 
         bt_lock = QPushButton(tr('&Lock'))
         bt_lock.setObjectName('bt_lock')
@@ -1594,8 +1601,6 @@ class CrackerGui(QMainWindow):
 
         return path_bar
 
-
-
     #---------chdir
     def change_dir(self):
         '''Change the current directory according to the path bar'''
@@ -1748,6 +1753,14 @@ class CrackerGui(QMainWindow):
         elif tab == 8: #Settings
             self.setMinimumSize(900, 250)
             self.resize(900, 250)
+
+
+    #---------start_calc
+    def start_calc(self):
+        '''Start a calculator program.'''
+
+        self.calc = Calc()
+        self.calc.show()
 
 
 
@@ -2543,7 +2556,7 @@ class CvrtKeyWin(QMainWindow):
         '''Collect the infos and convert RSA keys.'''
 
         k_name = self.keys_opt.currentText()
-        exp = ('decimal', 'hexadecimal')[self.rb_dec.isChecked()]
+        exp = ('hexadecimal', 'decimal')[self.rb_dec.isChecked()]
 
         if k_name == tr('-- Select a key --'):
             QMessageBox.critical(None, '!!! No selected key !!!', '<h2>Please select a key !!!</h2>')
