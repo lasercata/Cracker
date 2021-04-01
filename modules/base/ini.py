@@ -4,8 +4,8 @@
 '''Initiate Cracker's needed data.'''
 
 ini__auth = 'Lasercata'
-ini__last_update = '18.01.2021'
-ini__version = '1.2.2'
+ini__last_update = '01.04.2021'
+ini__version = '1.3'
 
 ##-import
 #---------packages
@@ -41,6 +41,7 @@ try:
     from modules.base.console.color import *
 
     if glb.interface == 'gui':
+        from modules.base.gui.calc import Calc
         from modules.base.gui.lock_gui import Lock
         from modules.base.gui.GuiStyle import GuiStyle
         from modules.base.gui.TextEditor import TextEditor
@@ -137,10 +138,10 @@ try:
 except FileNotFoundError:
     pwd = '0c0bf58bf97b83c9dd7c260ff3eefea72455d6c7768810cefb41697f266d97f8db06b9bfcce0dd1fa9f3c656b01876bd837f201c9e605ed4d357a22f7aa94cff'
 
-# pwd_h = 'sha512'
+# pwd_h = 'sha512'
 # pwd = '6a0cc613e360caf70250b1ddbe169554ddfe9f6edc8b0ec33d61d80d9d0b11090434fcf27d24b40f710bc81e01c05efd78a0086b4673bd042b213e8c7afb4b0c'
 
-# pwd = 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec'
+# pwd = 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec'
 
 admin_h = 'SecHash'
 admin_loop = 512
