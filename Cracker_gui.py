@@ -2556,7 +2556,7 @@ class CvrtKeyWin(QMainWindow):
         '''Collect the infos and convert RSA keys.'''
 
         k_name = self.keys_opt.currentText()
-        exp = ('hexadecimal', 'decimal')[self.rb_dec.isChecked()]
+        exp = ('decimal', 'hexadecimal')[self.rb_dec.isChecked()]
 
         if k_name == tr('-- Select a key --'):
             QMessageBox.critical(None, '!!! No selected key !!!', '<h2>Please select a key !!!</h2>')
