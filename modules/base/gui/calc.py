@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 
 calc__auth = 'Elerias'
-calc__ver = '1.0'
-calc__last_update = '01.04.2021'
+calc__ver = '1.1'
+calc__last_update = '02.04.2021'
 
 
 ##-import
 
 import sys
+import math
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QGridLayout, QLCDNumber, QPushButton
 
 
@@ -29,33 +30,45 @@ class Calc(QWidget):
 
     def create_gui(self):
 
+        self.setWindowTitle('Cracker calc')
+
         calc_grid = QGridLayout(self)
 
         self.screen = QLCDNumber(self)
-        self.screen.setMinimumSize(200, 45)
+        self.screen.setMinimumSize(350, 45)
         self.screen.setDigitCount(20)
 
-        calc_grid.addWidget(self.screen, 0, 0, 1, 4)
+        calc_grid.addWidget(self.screen, 1, 0, 1, 4)
+
+        self.little_screen = QLCDNumber(self)
+        self.little_screen.setMaximumSize(175, 20)
+        self.little_screen.setDigitCount(20)
+
+        calc_grid.addWidget(self.little_screen, 0, 2, 1, 2)
 
         labels = [
-        '7', '8', '9', '+',
-        '4', '5', '6', '-',
-        '1', '2', '3', '×',
-        '0', '.', 'Ent', '÷'
+        'C', 'CE', '√',   'x²',
+        '7', '8',  '9',   '÷',
+        '4', '5',  '6',   '×',
+        '1', '2',  '3',   '-',
+        '0', '.',  'Ent', '+'
         ]
 
         buttons = []
         buttons_functions = [
-        lambda: self.add('7'), lambda: self.add('8'), lambda: self.add('9'), lambda: self.add('+'),
-        lambda: self.add('4'), lambda: self.add('5'), lambda: self.add('6'), lambda: self.add('-'),
-        lambda: self.add('1'), lambda: self.add('2'), lambda: self.add('3'), lambda: self.add('×'),
-        lambda: self.add('0'), lambda: self.add('.'), lambda: self.add('Ent'), lambda: self.add('÷')
+        lambda: self.reset(), lambda: self.add('CE'), lambda: self.add('√'), lambda: self.add('x²'),
+        lambda: self.add('7'), lambda: self.add('8'), lambda: self.add('9'), lambda: self.add('÷'),
+        lambda: self.add('4'), lambda: self.add('5'), lambda: self.add('6'), lambda: self.add('×'),
+        lambda: self.add('1'), lambda: self.add('2'), lambda: self.add('3'), lambda: self.add('-'),
+        lambda: self.add('0'), lambda: self.add('.'), lambda: self.add('Ent'), lambda: self.add('+')
         ]
 
-        for k in range(16):
+        for k in range(20):
             buttons.append(QPushButton(labels[k]))
             buttons[k].clicked.connect(buttons_functions[k])
-            calc_grid.addWidget(buttons[k], 1 + k // 4, k % 4)
+            calc_grid.addWidget(buttons[k], 2 + k // 4, k % 4)
+
+        self.display()
 
     def add(self, c):
         if c in '0123456789':
@@ -68,6 +81,11 @@ class Calc(QWidget):
                 self.stack.append(0)
                 self.modif = True
             self.point = True
+        elif c == 'CE' and self.modif:
+            self.stack[-1] = 0
+            self.point = False
+            self.zeros = 0
+            self.n_dec = 0
         else:
             self.point = False
             self.zeros = 0
@@ -75,6 +93,11 @@ class Calc(QWidget):
             if c == 'Ent':
                 self.modif = True
                 self.stack.append(0)
+            elif c in ('√', 'x²'):
+                if c == '√' and self.stack[-1] >= 0:
+                    self.stack[-1] = math.sqrt(self.stack[-1])
+                else:
+                    self.stack[-1] = self.stack[-1] ** 2
             elif c in '+-×÷':
                 if len(self.stack) >= 2:
                     if c == '+':
@@ -112,6 +135,19 @@ class Calc(QWidget):
             self.screen.display(str(self.stack[-1]) + '.' + self.zeros*'0')
         else:
             self.screen.display(str(self.stack[-1]) + self.zeros*'0')
+        if len(self.stack) > 1:
+            self.little_screen.display(self.stack[-2])
+        else:
+            self.little_screen.display("")
+
+    def reset(self):
+        self.stack = [0]
+        self.point = False
+        self.n_dec = 0
+        self.zeros = 0
+        self.modif = True
+        self.display()
+
 
 
 ##-main
