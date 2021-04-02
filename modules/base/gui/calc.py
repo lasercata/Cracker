@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 calc__auth = 'Elerias'
-calc__ver = '1.1'
+calc__ver = '1.2'
 calc__last_update = '02.04.2021'
 
 
@@ -10,7 +10,8 @@ calc__last_update = '02.04.2021'
 
 import sys
 import math
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QGridLayout, QLCDNumber, QPushButton
+from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QGridLayout, QLCDNumber, QPushButton, QShortcut
+from PyQt5.QtGui import QKeySequence
 
 
 ##-class
@@ -62,6 +63,27 @@ class Calc(QWidget):
         lambda: self.add('1'), lambda: self.add('2'), lambda: self.add('3'), lambda: self.add('-'),
         lambda: self.add('0'), lambda: self.add('.'), lambda: self.add('Ent'), lambda: self.add('+')
         ]
+        QShortcut(QKeySequence('Delete'), self).activated.connect(buttons_functions[0])
+        QShortcut(QKeySequence('Backspace'), self).activated.connect(buttons_functions[1])
+        QShortcut(QKeySequence('s'), self).activated.connect(buttons_functions[2])
+        QShortcut(QKeySequence('²'), self).activated.connect(buttons_functions[3])
+        QShortcut(QKeySequence('7'), self).activated.connect(buttons_functions[4])
+        QShortcut(QKeySequence('8'), self).activated.connect(buttons_functions[5])
+        QShortcut(QKeySequence('9'), self).activated.connect(buttons_functions[6])
+        QShortcut(QKeySequence('/'), self).activated.connect(buttons_functions[7])
+        QShortcut(QKeySequence('4'), self).activated.connect(buttons_functions[8])
+        QShortcut(QKeySequence('5'), self).activated.connect(buttons_functions[9])
+        QShortcut(QKeySequence('6'), self).activated.connect(buttons_functions[10])
+        QShortcut(QKeySequence('*'), self).activated.connect(buttons_functions[11])
+        QShortcut(QKeySequence('1'), self).activated.connect(buttons_functions[12])
+        QShortcut(QKeySequence('2'), self).activated.connect(buttons_functions[13])
+        QShortcut(QKeySequence('3'), self).activated.connect(buttons_functions[14])
+        QShortcut(QKeySequence('-'), self).activated.connect(buttons_functions[15])
+        QShortcut(QKeySequence('0'), self).activated.connect(buttons_functions[16])
+        QShortcut(QKeySequence('.'), self).activated.connect(buttons_functions[17])
+        QShortcut(QKeySequence('Return'), self).activated.connect(buttons_functions[18])
+        QShortcut(QKeySequence('+'), self).activated.connect(buttons_functions[19])
+
 
         for k in range(20):
             buttons.append(QPushButton(labels[k]))
@@ -96,8 +118,10 @@ class Calc(QWidget):
             elif c in ('√', 'x²'):
                 if c == '√' and self.stack[-1] >= 0:
                     self.stack[-1] = math.sqrt(self.stack[-1])
+                    self.modif = False
                 else:
                     self.stack[-1] = self.stack[-1] ** 2
+                    self.modif = False
             elif c in '+-×÷':
                 if len(self.stack) >= 2:
                     if c == '+':
