@@ -2,14 +2,15 @@
 # -*- coding: utf-8 -*-
 
 TextEditor__auth = 'lasercata'
-TextEditor__last_update = '26.11.2020'
-TextEditor__version = '1.3.2'
+TextEditor__last_update = '10.04.2021'
+TextEditor__version = '1.3.3'
 
 ##-import
 import sys
 from os import walk, getcwd, chdir
 
 from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QComboBox, QStyleFactory,
     QLabel, QGridLayout, QLineEdit, QMessageBox, QWidget, QPushButton, QCheckBox,
     QHBoxLayout, QGroupBox, QButtonGroup, QRadioButton, QTextEdit, QFileDialog)
@@ -46,15 +47,22 @@ class TextEditor(QWidget):
         self.setLayout(main_lay)
 
         #---text
+        #-Radio button
         self.rb_txt = QRadioButton(txt_text)
         self.rb_txt.setChecked(True)
         main_lay.addWidget(self.rb_txt, 0, 0)
 
+        #-font
+        self.fixed_font = QFont('monospace')
+        self.fixed_font.setStyleHint(QFont.TypeWriter)
+
+        #-text
         self.txt = QTextEdit()
         self.txt.setMinimumSize(txt_width, txt_height)
         self.txt.setAcceptRichText(False)
         self.txt.setStyleSheet(self.style)
         self.txt.setObjectName('orange_border_hover')
+        self.txt.setFont(self.fixed_font)
         main_lay.addWidget(self.txt, 0, 1, 1, 7)
 
         #---clear
