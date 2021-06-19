@@ -7,7 +7,7 @@ Cracker is a software developed and updated by Lasercata and by Elerias. It is w
 
 This software is a toolbox application that allow you to do many things : you can encrypt
 securely a secret message using one of the many ciphers presents in Cracker (KRIS, AES, RSA, ...),
-sign it with a hash function, decrypt it.
+sign it with a hash function, decrypt it. It is compatible with [KRIS](https://github.com/lasercata/KRIS) software.
 
 If you have a message without the key, but you need to read the content, you can try to
 crack it using a wordlist that you made with Cracker, or let the algorithm try to crack
@@ -73,7 +73,7 @@ For the graphical UI, run `./Cracker_gui.py` in the root of the project, or `cra
 For the console UI, run `./Cracker_console.py` in the root of the project, or `crackerc` anywhere if you added the aliases.
 
 ### Password
-The default password is **`swiss_knife`**. It is used to encrypt the private RSA keys, so you can leave Cracker on your USB key or on an other computer without the risk of having your keys stolen.
+The default for application lock password is **`swiss_knife`**. 
 
 You can change the password in the Settings part.
 
