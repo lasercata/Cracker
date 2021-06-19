@@ -4,7 +4,7 @@
 '''Initiate Cracker's needed data.'''
 
 ini__auth = 'Lasercata'
-ini__last_update = '01.04.2021'
+ini__last_update = '19.06.2021'
 ini__version = '1.3'
 
 ##-import
@@ -19,7 +19,7 @@ if glb.interface == 'gui':
         QLabel, QGridLayout, QLineEdit, QMessageBox, QWidget, QPushButton, QCheckBox,
         QHBoxLayout, QVBoxLayout, QGroupBox, QTabWidget, QTableWidget, QFileDialog,
         QRadioButton, QTextEdit, QButtonGroup, QSizePolicy, QSpinBox, QFormLayout,
-        QSlider)
+        QSlider, QDialog)
 
 #------other
 from os import chdir, getcwd
@@ -39,6 +39,7 @@ try:
     from modules.base.progress_bars import *
 
     from modules.base.console.color import *
+    from modules.base.FormatMsg import FormatMsg
 
     if glb.interface == 'gui':
         from modules.base.gui.calc import Calc
