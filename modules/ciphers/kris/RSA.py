@@ -4,22 +4,23 @@
 '''This program allow you to encrypt and decrypt with RSA cipher.'''
 
 RSA__auth = 'Lasercata, Elerias'
-RSA__last_update = '15.03.2021'
-RSA__version = '3.7'
+RSA__last_update = '19.06.2021'
+RSA__version = '4.0'
 
 
 ##-import
 #---------Crackers's modules
 from modules.base.console.color import color, cl_inp, cl_out, c_error, c_wrdlt, c_output, c_prog, c_succes
 from modules.base.base_functions import chd, NewLine
-from modules.b_cvrt.b_cvrt import BaseConvert
-from modules.base.progress_bars import *
+from modules.base.FormatMsg import FormatMsg
 from modules.b_cvrt.b_cvrt import sp_grp
-from modules.ciphers.BaseCipher import BaseCipher
+from modules.base.progress_bars import *
 from modules.ciphers.hashes.hasher import Hasher
 from modules.base import glb
 from modules.base.arithmetic import mult_inverse
 from modules.prima.prima import isSurelyPrime
+from modules.base.gui.AskPwd import AskPwd
+from Languages.lang import translate as tr
 
 from modules.ciphers.kris.AES import AES
 
@@ -27,6 +28,9 @@ from modules.ciphers.kris.AES import AES
 import math
 from random import randint
 from secrets import randbits
+
+from ast import literal_eval #Safer than eval
+from getpass import getpass
 
 from datetime import datetime as dt
 from time import sleep
@@ -132,7 +136,7 @@ def chd_rsa(path, first=False, interface=None):
 def key_size(n):
     '''Return the byte lenth of n (the number of binary digits).'''
 
-    return len(BaseConvert(n, 10).cvrt(2))
+    return len(format(n, 'b'))
 
 
 #---------restore_encoding
@@ -182,13 +186,15 @@ def rest_encod(txt):
 
 #---------rm_lst
 def rm_lst(lst, lst_to_rm):
-    '''Remove the list "lst_to_rm" from "lst".'''
+    '''Return the list `lst` without elements from `lst_to_rm`.'''
+
+    ret = []
 
     for k in lst:
-        if k in lst_to_rm:
-            lst.remove(k)
+        if k not in lst_to_rm:
+            ret.append(k)
 
-    return lst
+    return ret
 
 
 #---------MsgForm
@@ -267,48 +273,6 @@ class MsgForm:
 
         return ret
 
-
-#---------CSV
-class CSV:
-    '''Class dealing with csv file.'''
-
-    def __init__(self, fn, delim=','):
-        '''Initiate some variables'''
-
-        self.fn = fn
-        self.delim = delim
-
-    #------read
-    def read(self):
-        '''Return a list of dict of the file self.fn.'''
-
-        with open(self.fn) as f_csv:
-            table = csv.DictReader(f_csv, delimiter=self.delim)
-
-            lst = []
-            for k in table:
-                lst.append(k)
-
-        return lst
-
-    #------write
-    def write(self, fdnames, row):
-        '''Write row in csv file self.fn with fieldnames fdnames.'''
-
-        with open(self.fn, 'w') as f_csv:
-            writer = csv.DictWriter(f_csv, fieldnames=fdnames)
-            writer.writeheader()
-            writer.writerow(row)
-
-
-    #------get_fieldnames
-    def get_fdn(self):
-        '''Return the fieldnames in a tuple.'''
-
-        with open(self.fn) as f:
-            fdn = f.readline()
-
-        return tuple(fdn.strip('\n').split(self.delim))
 
 
 ##-RSA
@@ -573,6 +537,7 @@ class RsaSign:
         self.interface = interface
 
         self.RSA = RSA(keys, interface)
+        self.h = h
         self.Hasher = Hasher(h)
 
 
@@ -602,31 +567,53 @@ class RsaSign:
         return msg_h == unsign
 
 
-    def str_sign(self, txt):
+    def str_sign(self, msg):
         '''
-        Sign 'txt' and return it, with the message, in a string of this form :
+        Sign 'txt' and return it, with the message, in a string of this form (the commented lines are set with FormatedMsg, in Cracker_gui.py) :
 
-            msg
-            '-'*40 + 'RSA_sign'
-            newline([signature], 40)
-            '-'*40 + 'end RSA_sign'
+            #------BEGIN KRIS SIGNED MESSAGE------
+            #Version: Cracker_v3.0.0
+            #Cipher: RSA signature
+            #Hash: sha256
+            #Key_name: test
+            #---
+            #
+            This is the signed message.
+
+            ------BEGIN KRIS SIGNATURE------
+            943807048734946125391551838892825323881224874134114102624258821
+            777497503175465732577498770633243452810041947630081594914335102
+            030685948454325645230350182968575318427660604935974297921249620
+            145627119142786967888460883779427870903491284297486553549313557
+            036484594229863184367664486859688319969288882500317784306881247
+            986697247977081407162090788619940533970560140434587970906714139
+            290858878587907236987805719455479320536481924920579051146037063
+            173431947005158307628367242387336720592701482187812886188311982
+            087888289689323511419214457508164027138556866752536079927267033
+            1287543493615931451357930596408267945537776650957
+            ------END KRIS SIGNATURE------
+            #------END KRIS SIGNED MESSAGE------
         '''
 
-        return '{0}\n{1}RSA_sign\n{2}\n{1}end RSA_sign'.format(txt, '-'*40, NewLine(40).set(self.sign(txt)))
+        sign = self.sign(msg)
+
+        txt = '{}\n\n------BEGIN KRIS SIGNATURE------\n{}\n------END KRIS SIGNATURE------'.format(msg, NewLine(64).set(sign))
+
+
+        return txt #FormatMsg(txt, nl=False).set(self.d)
 
 
     def str_check(self, txt):
         '''Same as self.check, but for a message formatted by self.str_sign.'''
 
-        begin = txt.find('\n' + '-'*40 + 'RSA_sign')
-        end = txt.find('\n' + '-' *40 + 'end RSA_sign')
+        begin = txt.find('\n\n------BEGIN KRIS SIGNATURE------\n')
+        end = txt.find('\n------END KRIS SIGNATURE------')
 
         if -1 in (begin, end):
             raise ValueError('The text is not well formatted !!!')
 
         msg = txt[:begin]
-        sign = txt[begin + 49:end]
-        sign = NewLine(40).unset(sign)
+        sign = txt[begin + 35:end].replace('\n', '')
 
         return self.check(msg, sign)
 
@@ -808,23 +795,30 @@ class RsaKeys:
 
 
     #---------generate keys
-    def generate(self, size, save=True, overwrite=False, md_stored='hexa'):
+    def generate(self, size, pwd=None, save=True, overwrite=False, md_stored='hexa'):
         '''
         Function which generate RSA keys.
 
         Arguments :
-            .self.k_name : the name to give for the keys ;
+            - self.k_name : the name to give for the keys ;
 
-            .size : wanted size for the keys (+/- 4), is an intenger (2048 recomended) ;
-            .save : save in files or just return keys, should be in (True, False) ;
-            .overwrite : in (True, False). If the dir keys_names already exist, if True, overwrite it,
-                return an error msg else ;
-            .md_stored : the way how the keys are stored, i.e. in decimal or hexadecimal.
+            - size : wanted size for the keys (+/- 4), is an intenger (2048 recomended) ;
+            - save : save in files or just return keys, should be in (True, False) ;
+            - pwd : The AES key used to encrypt the RSA key. If None, key will be saved in clear ;
+            - overwrite : in (True, False). If the dir keys_names already exist, if True, overwrite it,
+            return an error msg else ;
+            - md_stored : the way how the keys are stored, i.e. in decimal or hexadecimal.
                 Should be "hexa" or "dec". Default is "hexa".
 
-        If save is True, the program make a file, in chd_rsa('.'), named :
-            '[self.k_name].pvk-h' if md_stored is 'hexa' ;
-            '[self.k_name].pvk-d' else.
+        If save is True, the program make two files, in chd_rsa('.'), named :
+            For the private key :
+                '[self.k_name].pvk-h' if md_stored is 'hexa' ;
+                '[self.k_name].pvk-d' if md_stored is 'dec' ;
+                '[self.k_name].pvk-d.enc' or '[self.k_name].pvk-h.enc' if pwd != None.
+
+            For the public key :
+                '[self.k_name].pbk-h' if md_stored is 'hexa' ;
+                '[self.k_name].pbk-d' else.
 
         Return :
             -2 if the set of keys already exist and overwrite is False ;
@@ -833,14 +827,19 @@ class RsaKeys:
 
 
         if save not in (True, False) or overwrite not in (True, False) or md_stored not in ('hexa', 'dec'):
-            raise ValueError('The arguments were not the good !!!')
+            raise ValueError('The arguments are not correct !')
 
         if save:
             if md_stored == 'dec':
                 fn = str(self.k_name) + '.pvk-d'
+                fn_pbk = str(self.k_name) + '.pbk-d'
 
             else:
                 fn = str(self.k_name) + '.pvk-h'
+                fn_pbk = str(self.k_name) + '.pbk-h'
+
+            if pwd != None:
+                fn += '.enc'
 
             old_path = chd_rsa('.')
 
@@ -860,6 +859,7 @@ class RsaKeys:
         n_strth = key_size(n) # size of n
 
         if save:
+            #------Private key
             v = {
                 'p' : p,
                 'q' : q,
@@ -876,10 +876,28 @@ class RsaKeys:
                     if k != 'date':
                         v[k] = format(v[k], 'x') #convert numbers to hexadecimal
 
+            data = str(v)
+
+            if pwd != None:
+                data = AES(256, pwd, hexa=True).encryptText(data, mode_c='hexa')
+
             #---make file
-            fdn = tuple(v.keys())
-            row = v
-            CSV(fn).write(fdn, row)
+            with open(fn, 'w') as f:
+                f.write(data)
+
+
+            #------Public key
+            v_pbk = {
+                'e': v['e'],
+                'n': v['n'],
+                'date' : v['date'],
+                'n_strenth' : v['n_strenth']
+            }
+
+            #---make file
+            with open(fn_pbk, 'w') as f:
+                f.write(str(v_pbk))
+
 
             chdir(old_path)
 
@@ -888,176 +906,108 @@ class RsaKeys:
 
 
 
-    def read(self, mode):
+    def read(self, mode='all', also_ret_pwd=False):
         '''
-        Return the key to use with RSA.
-        Read the keys from the key file created by this program.
+        Try to read the content of the file `[self.k_name] + ext`.
 
-        self.k_name : the name given when creating keys ;
-        mode : 0 - encrypt (pbk), 1 - decrypt (pvk), used to choose between public and private keys.
-
-        Resolution order (to find the good key extention) :
-            pvk-h ;
-            pvk-d ;
-            pbk-h ;
-            pbk-d.
-        '''
-
-        if mode not in (0, 1):
-            raise ValueError('"mode" should be 0 or 1 (int), but "' + str(mode) + '" was found !!!')
-
-        old_path = chd_rsa('.')
-
-        if isfile(self.k_name + '.pvk-h'):
-            fn = self.k_name + '.pvk-h'
-
-        elif isfile(self.k_name + '.pvk-d'):
-            fn = self.k_name + '.pvk-d'
-
-        elif mode == 1: #no pvk
-            raise TypeError("Can't read the private key of a pbk set of keys !!!")
-
-        elif isfile(self.k_name + '.pbk-h'):
-            fn = self.k_name + '.pbk-h'
-
-        elif isfile(self.k_name + '.pbk-d'):
-            fn = self.k_name + '.pbk-d'
-
-        else:
-            raise FileNotFoundError('The keys "' + str(self.k_name) + '" were NOT found !!!')
-
-        md = ('hexa', 'dec')[('.pvk-d' in fn) or ('.pbk-d' in fn)]
-
-
-        infos = CSV(fn).read()[0]
-        n_ = infos['n']
-
-        if mode == 0:
-            ed_ = infos['e']
-
-        else:
-            ed_ = infos['d']
-
-
-        chdir(old_path)
-
-        #------
-        if md == 'dec':
-            ed, n = int(ed_), int(n_)
-
-        else:
-            ed, n = int(ed_, 16), int(n_, 16) #convert to decimal
-
-
-        return ed, n
-
-
-
-    #------export_pubic_key
-    def export(self, md_stored_out='hexa'):
-        '''
-        Function which export the public key to a file named :
-            '[self.k_name].pbk-h' if md_stored_out is 'hexa' ;
-            '[self.k_name].pbk-d' else.
-
-        - md_stored_out : the way how the exported keys will be stored, i.e. in
-        decimal or hexadecimal. Should be "hexa" or "dec".
-
-        return -1 if the file was not found, None otherwise.
-        '''
-
-        if md_stored_out not in ('hexa', 'dec'):
-            raise ValueError('"md_stored_out" should be "dec" or "hexa", but "' + str(md_stored_out) + '" was found !!!')
-
-        try:
-            (pbk, pvk), (p, q, n, phi, e, d), (n_strth, date_) = self.show_keys()
-
-        except ValueError:
-            return -1
-
-        v = {
-            'e': e,
-            'n': n,
-            'date' : date_,
-            'date_export' : date(),
-            'n_strenth' : n_strth
-        }
-
-        #---write
-        if md_stored_out == 'dec':
-            fn = self.k_name + '.pbk-d'
-
-        else:
-            fn = self.k_name + '.pbk-h'
-
-            for k in v:
-                if k not in ('date', 'date_export'):
-                    v[k] = format(int(v[k]), 'x') #convert numbers to hexadecimal
-
-
-        old_path = chd_rsa('.')
-
-        fdn = tuple(v.keys()) #('e', 'n', 'date', 'date_export', 'n_strenth')
-        row = (v)
-        CSV(fn).write(fdn, row)
-
-        chdir(old_path)
-
-
-    #---------show_keys
-    def show_keys(self, get_stg_md=False):
-        '''
-        Return the keys and info about them.
-
-        - self.k_name : the keys' name ;
-        - get_stg_md : If True, return only the way how they are stored, i.e. "hexa" or "dec". Should be True or False.
-
-        The way how the keys are stored is automaticly detected.
-
-        Order of the key finding :
-            .1 : *.pvk-h ;
-            .2 : *.pvk-d ;
-            .3 : *.pbk-h ;
-            .4 : *.pbk-d.
+        - mode : the self.get_fn mode. in ('pvk', 'pbk', 'all'). Default is 'all' ;
+        - also_ret_pwd : a bool indicating if also return the password. If True, return the password at the end of the return tuple.
 
         Return :
-            (pbk, pvk), (p, q, n, phi, e, d), (n_strth, date_) --- if it's a *.pvk-* file ;
-            pbk, (n, e), (n_strth, date_, date_exp) --- if it's a *.pkb-* file ;
-            md_stored ('hexa' or 'dec') --- if get_stg_md is True ;
-            -1 --- if the file was not found.
+            (pbk, pvk), (p, q, n, phi, e, d), (n_strth, date_)      if it's a *.pvk-* file ;
+            pbk, (n, e), (n_strth, date_)                           if it's a *.pkb-* file ;
+            -1                                                      if not found ;
+            -2                                                      if file not well formatted ;
+            -3                                                      if password is wrong or if canceled.
         '''
 
-        if get_stg_md not in (True, False):
-            raise ValueError('"get_stg_md" should be True or False, but "' + str(get_stg_md) + '" was found !!!')
+        #------other
+        def err_not_well_formated():
+            msg = tr('The file is not well formatted !')
 
-        old_path = chd_rsa('.')
+            if self.interface == 'gui':
+                QMessageBox.critical(None, '!!! File error !!!', '<h2>{}</h2>'.format(msg))
+            else:
+                print('Cracker: RsaKeys: read: ' + msg)
 
-        if isfile(self.k_name + '.pvk-h'):
-            fn = self.k_name + '.pvk-h'
+            return -2
 
-        elif isfile(self.k_name + '.pvk-d'):
-            fn = self.k_name + '.pvk-d'
+        #------Get filename
+        try:
+            fn, md = self.get_fn(mode, also_ret_md=True)
 
-        elif isfile(self.k_name + '.pbk-h'):
-            fn = self.k_name + '.pbk-h'
+        except FileNotFoundError:
+            msg = tr('File not found !')
 
-        elif isfile(self.k_name + '.pbk-d'):
-            fn = self.k_name + '.pbk-d'
+            if self.interface == 'gui':
+                QMessageBox.critical(None, '!!! Not found !!!', '<h2>{}</h2>'.format(msg))
+            else:
+                print('Cracker: RsaKeys: read: ' + msg)
 
-        else:
             return -1
 
-        md = (('all', 'pbk')[('.pbk-h' in fn) or ('.pbk-d' in fn)], ('hexa', 'dec')[('.pvk-d' in fn) or ('.pbk-d' in fn)]) #(key_type, md_storage)
+        #------Read file
+        old_path = chd_rsa('.')
 
+        with open(fn, 'r') as f:
+            f_content = f.read()
 
-        if get_stg_md:
-            chdir(old_path)
-            return md[1]
+        chdir(old_path)
 
-        if md[0] == 'pbk': #---RSA pbk
-            infos = CSV(fn).read()[0]
-            date_, date_exp, n_strth = infos['date'], infos['date_export'], infos['n_strenth']
-            e, n = infos['e'], infos['n']
+        #------Decrypt content, if encrypted
+        if fn[-4:] == '.enc':
+            #---Get password
+            if self.interface == 'gui':
+                pwd = AskPwd.use()
+
+            elif self.interface == 'console':
+                pwd_clear = getpass(tr('RSA key password :'))
+                pwd = Hasher('sha256').hash(pwd_clear)
+
+            else:
+                pwd_clear = input('RSA key password :')
+                pwd = Hasher('sha256').hash(pwd_clear)
+
+            if pwd == None:
+                return -3 # Canceled by user
+
+            #---Decrypt
+            try:
+                f_content_dec = AES(256, pwd, hexa=True).decryptText(f_content, mode_c='hexa')
+
+            except UnicodeDecodeError:
+                msg = tr('This is not the good password !')
+
+                if self.interface == 'gui':
+                    QMessageBox.critical(None, '!!! Wrong password !!!', '<h2>{}</h2>'.format(msg))
+                else:
+                    print('Cracker: RsaKeys: read: ' + msg)
+
+                return -3
+
+            except ValueError:
+                return err_not_well_formated()
+
+            else:
+                f_content = f_content_dec
+
+        else:
+            pwd = None
+
+        try:
+            infos = literal_eval(f_content)
+
+        except SyntaxError:
+            return err_not_well_formated()
+
+        #------Read and return infos
+        if md[0] == 'pbk':
+            try:
+                date_, n_strth = infos['date'], infos['n_strenth']
+                e, n = infos['e'], infos['n']
+
+            except KeyError:
+                return err_not_well_formated()
 
             if md[1] == 'hexa': #convert in decimal
                 n_strth = str(int(n_strth, 16))
@@ -1065,15 +1015,19 @@ class RsaKeys:
 
             pbk = str(e) + ',' + str(n)
 
-            chdir(old_path)
+            if also_ret_pwd:
+                return (pbk,), (n, e), (n_strth, date_), pwd
 
-            return pbk, (n, e), (n_strth, date_, date_exp)
+            return (pbk,), (n, e), (n_strth, date_)
 
 
-        else: #---RSA_all
-            infos = CSV(fn).read()[0]
-            date_, n_strth = infos['date'], infos['n_strenth']
-            p, q, n, phi, e, d = infos['p'], infos['q'], infos['n'], infos['phi'], infos['e'], infos['d']
+        else:
+            try:
+                date_, n_strth = infos['date'], infos['n_strenth']
+                p, q, n, phi, e, d = infos['p'], infos['q'], infos['n'], infos['phi'], infos['e'], infos['d']
+
+            except KeyError:
+                return err_not_well_formated()
 
             if md[1] == 'hexa': #convert in decimal
                 n_strth = str(int(n_strth, 16))
@@ -1085,7 +1039,94 @@ class RsaKeys:
 
             chdir(old_path)
 
+            if also_ret_pwd:
+                return (pbk, pvk), (p, q, n, phi, e, d), (n_strth, date_), pwd
+
             return (pbk, pvk), (p, q, n, phi, e, d), (n_strth, date_)
+
+
+    def get_key(self, mode):
+        '''
+        Return the key to use with RSA.
+        Read the keys from the key file created by this program.
+
+        self.k_name : the name given when creating keys ;
+        mode : 0 - encrypt (pbk), 1 - decrypt (pvk), used to choose between public and private keys.
+        '''
+
+        if mode not in (0, 1):
+            raise ValueError('"mode" should be 0 or 1 (int), but "' + str(mode) + '" was found !!!')
+
+        md = ('all', 'pbk')[mode == 0]
+        ret = self.read(md)
+
+        if ret in (-1, -2, -3):
+            return ret
+
+        keys = ret[0]
+
+        if len(keys) == 1: #pbk
+            if mode == 1:
+                raise TypeError("Can't read the private key of a pbk set of keys !!!")
+
+            ed, n = keys[0].split(',')
+
+        else:
+            ed, n = keys[mode].split(',')
+
+        return int(ed), int(n)
+
+
+
+    # #------export_pubic_key
+    # def export(self, md_stored_out='hexa'): #Todo: Useless, remove it ? or change the func : copy the file where asked ?
+    #     '''
+    #     Function which export the public key to a file named :
+    #         '[self.k_name].pbk-h' if md_stored_out is 'hexa' ;
+    #         '[self.k_name].pbk-d' else.
+    #
+    #     - md_stored_out : the way how the exported keys will be stored, i.e. in
+    #     decimal or hexadecimal. Should be "hexa" or "dec".
+    #
+    #     return -1 if the file was not found, None otherwise.
+    #     '''
+    #
+    #     if md_stored_out not in ('hexa', 'dec'):
+    #         raise ValueError('"md_stored_out" should be "dec" or "hexa", but "' + str(md_stored_out) + '" was found !!!')
+    #
+    #     try:
+    #         (pbk, pvk), (p, q, n, phi, e, d), (n_strth, date_) = self.read()
+    #
+    #     except ValueError:
+    #         return -1
+    #
+    #     v = {
+    #         'e': e,
+    #         'n': n,
+    #         'date' : date_,
+    #         'date_export' : date(),
+    #         'n_strenth' : n_strth
+    #     }
+    #
+    #     #---write
+    #     if md_stored_out == 'dec':
+    #         fn = self.k_name + '.pbk-d'
+    #
+    #     else:
+    #         fn = self.k_name + '.pbk-h'
+    #
+    #         for k in v:
+    #             if k not in ('date', 'date_export'):
+    #                 v[k] = format(int(v[k]), 'x') #convert numbers to hexadecimal
+    #
+    #
+    #     old_path = chd_rsa('.')
+    #
+    #     fdn = tuple(v.keys()) #('e', 'n', 'date', 'date_export', 'n_strenth')
+    #     row = (v)
+    #     CSV(fn).write(fdn, row)
+    #
+    #     chdir(old_path)
 
 
 
@@ -1104,14 +1145,14 @@ class RsaKeys:
         '''
 
         try:
-            lst_keys, lst_values, lst_infos = self.show_keys()
-            stg_md = self.show_keys(True)
+            lst_keys, lst_values, lst_infos, pwd = self.read(also_ret_pwd=True)
+            old_fn, (type_, stg_md) = self.get_fn(also_ret_md=True)
 
         except ValueError:
             return -1
 
 
-        if len(lst_infos) == 2: #pvk
+        if type_ == 'pvk': #pvk
             v = {
                 'p' : lst_values[0],
                 'q' : lst_values[1],
@@ -1125,9 +1166,11 @@ class RsaKeys:
 
             if stg_md == 'hexa': #keys are in hexa, set it in dec
                 fn = str(self.k_name) + '.pvk-d'
+                fn_pbk = str(self.k_name) + '.pbk-d'
 
             else:
                 fn = str(self.k_name) + '.pvk-h'
+                fn_pbk = str(self.k_name) + '.pbk-h'
 
                 for k in v:
                     if k != 'date':
@@ -1135,6 +1178,9 @@ class RsaKeys:
 
             pbk = v['e'], v['n']
             pvk = v['d'], v['n']
+
+            if pwd != None:
+                fn += '.enc'
 
             #---check if it not already exists
             old_path = chd_rsa('.')
@@ -1144,16 +1190,39 @@ class RsaKeys:
                 return -2
 
             #---make file
-            fdn = tuple(v.keys()) #('p', 'q', 'n', 'phi', 'e', 'd', 'date', 'n_strenth')
-            row = v
-            CSV(fn).write(fdn, row)
+            data = str(v)
+
+            if pwd != None:
+                data = AES(256, pwd, hexa=True).encryptText(data, mode_c='hexa')
+
+            with open(fn, 'w') as f:
+                f.write(data)
+
+            #-Public key
+            v_pbk = {
+                'e': v['e'],
+                'n': v['n'],
+                'date' : v['date'],
+                'n_strenth' : v['n_strenth']
+            }
+
+            #---make file
+            with open(fn_pbk, 'w') as f:
+                f.write(str(v_pbk))
+
 
             old_md = ('d', 'h')[stg_md == 'hexa']
-            remove(fn[:-1] + old_md)
 
             try:
-                remove(fn[:-1] + old_md + '.enc')
+                if pwd == None:
+                    remove(self.k_name + '.pvk-' + old_md)
+                else:
+                    remove(self.k_name + '.pvk-' + old_md + '.enc')
+            except FileNotFoundError:
+                pass
 
+            try:
+                remove(self.k_name + '.pbk-' + old_md)
             except FileNotFoundError:
                 pass
 
@@ -1164,7 +1233,6 @@ class RsaKeys:
                 'e' : lst_values[1],
                 'n' : lst_values[0],
                 'date' : lst_infos[1],
-                'date_export' : lst_infos[2],
                 'n_strenth' : lst_infos[0]
             }
             pbk = v['e'], v['n']
@@ -1186,19 +1254,11 @@ class RsaKeys:
                 chdir(old_path)
                 return -2
 
-            fdn = tuple(v.keys()) #('e', 'n', 'date', 'date_export', 'n_strenth')
-            row = (v)
-
-            CSV(fn).write(fdn, row)
+            with open(fn, 'w') as f:
+                f.write(str(v))
 
             old_md = ('d', 'h')[stg_md == 'hexa']
             remove(fn[:-1] + old_md)
-
-            try:
-                remove(fn[:-1] + old_md + '.enc')
-
-            except FileNotFoundError:
-                pass
 
             chdir(old_path)
 
@@ -1215,82 +1275,75 @@ class RsaKeys:
         Return -1 if the file was not found, None otherwise.
         '''
 
-        try:
-            lst_keys, lst_values, lst_infos = self.show_keys()
-            stg_md = self.show_keys(True)
-
-        except ValueError:
-            return -1
+        fn, (type_, stg_md) = self.get_fn(also_ret_md=True)
 
         new_name = str(new_name)
         old_path = chd_rsa('.')
 
-        if len(lst_infos) == 2: #pvk
-            ext = ('.pvk-h', '.pvk-d')[stg_md == 'dec']
+        ext = '.' + type_ + ('-h', '-d')[stg_md == 'dec']
 
-        else:
-            ext = ('.pbk-h', '.pbk-d')[stg_md == 'dec']
+        if type_ == 'pvk':
+            ext_pbk = '.pbk-' + ('h', 'd')[stg_md == 'dec']
+
+        if fn[-4:] == '.enc':
+            ext += '.enc'
 
         rename(str(self.k_name) + ext, new_name + ext)
 
-        try:
-            remove(str(self.k_name) + ext + '.enc')
-
-        except FileNotFoundError:
-            pass
+        if type_ == 'pvk':
+            rename(str(self.k_name) + ext_pbk, new_name + ext_pbk)
 
         chdir(old_path)
 
 
-    def get_fn(self, mode='ed'):
+    def get_fn(self, mode='all', also_ret_md=False):
         '''
         Return the filename of the key (with the extention)
 
         - self.k_name : the RSA key's name ;
-        - mode : in ('d', 'e', 'ed'). If 'd': only watch decrypted keys, if 'e': only watch encrypted keys, if 'ed': watch both.
+        - mode : in ('pvk', 'pbk', 'all'). If 'pvk': only watch for private keys, if 'pbk': only watch for public keys ('*.pbk-*'), if 'all': watch for both ;
+        - also_ret_md a bool indicating if also returning the mode, of the form (['pvk' | 'pbk'], ['dec' | 'hexa'])
 
-        Resolution order (to find the good key extention) if mode == 'ed' :
+        Resolution order (to find the good key extention) if mode == 'all' :
             pvk-h ;
             pvk-d ;
-            pbk-h ;
-            pbk-d ;
             pvk-h.enc ;
             pvk-d.enc ;
-            pbk-h.enc ;
-            pbk-d.enc.
+            pbk-h ;
+            pbk-d.
 
-        It is the same order if 'd' or 'e', but without the other part.
+        It is the same order if 'pvk' or 'pbk', but without the other part.
         '''
 
         old_path = chd_rsa('.')
 
-        if mode not in ('d', 'e', 'ed'):
-            raise ValueError('The mode should be in ("d", "e", "ed"), but "{}" was found !!!'.format(mode))
+        if mode not in ('pvk', 'pbk', 'all'):
+            raise ValueError('The mode should be in ("pvk", "pbk", "all"), but "{}" was found !!!'.format(mode))
 
-        if isfile(self.k_name + '.pvk-h') and mode in ('ed', 'd'):
+        if isfile(self.k_name + '.pvk-h') and mode in ('all', 'pvk'):
             fn = self.k_name + '.pvk-h'
+            md = ('pvk', 'hexa')
 
-        elif isfile(self.k_name + '.pvk-d') and mode in ('ed', 'd'):
+        elif isfile(self.k_name + '.pvk-d') and mode in ('all', 'pvk'):
             fn = self.k_name + '.pvk-d'
+            md = ('pvk', 'dec')
 
-        elif isfile(self.k_name + '.pbk-h') and mode in ('ed', 'd'):
-            fn = self.k_name + '.pbk-h'
-
-        elif isfile(self.k_name + '.pbk-d') and mode in ('ed', 'd'):
-            fn = self.k_name + '.pbk-d'
-
-
-        elif isfile(self.k_name + '.pvk-h.enc') and mode in ('ed', 'e'):
+        elif isfile(self.k_name + '.pvk-h.enc') and mode in ('all', 'pvk'):
             fn = self.k_name + '.pvk-h.enc'
+            md = ('pvk', 'hexa')
 
-        elif isfile(self.k_name + '.pvk-d.enc') and mode in ('ed', 'e'):
+        elif isfile(self.k_name + '.pvk-d.enc') and mode in ('all', 'pvk'):
             fn = self.k_name + '.pvk-d.enc'
+            md = ('pvk', 'dec')
 
-        elif isfile(self.k_name + '.pbk-h.enc') and mode in ('ed', 'e'):
-            fn = self.k_name + '.pbk-h.enc'
 
-        elif isfile(self.k_name + '.pbk-d.enc') and mode in ('ed', 'e'):
-            fn = self.k_name + '.pbk-d.enc'
+        elif isfile(self.k_name + '.pbk-h') and mode in ('all', 'pbk'):
+            fn = self.k_name + '.pbk-h'
+            md = ('pbk', 'hexa')
+
+        elif isfile(self.k_name + '.pbk-d') and mode in ('all', 'pbk'):
+            fn = self.k_name + '.pbk-d'
+            md = ('pbk', 'dec')
 
         else:
             chdir(old_path)
@@ -1298,158 +1351,154 @@ class RsaKeys:
 
         chdir(old_path)
 
+        if also_ret_md:
+            return fn, md
+
         return fn
 
 
     #------Encrypt key
-    def encrypt(self, key, full=False):
+    def encrypt(self, pwd):
         '''
         Encrypt 'self.k_name' with AES-256-CBC using the password
-        `RSA_keys_pwd` (Hasher('sha256').hash(clear_Cracker_pwd)[:32])
-        and make a file 'self.k_name' + ext + '.enc'
+        `pwd` (Hasher('sha256').hash(clear_pwd)), make a file
+        'self.k_name' + ext + '.enc' and remove clear one.
 
-        - key : the password ;
-        - full : a bool which indicates if self.k_name contain the extension.
+        - pwd : the password.
         '''
 
-        if full:
-            fn = self.k_name
+        fn = self.get_fn('pvk')
 
-        else:
-            fn = self.get_fn('d')
-
-        file = '{}/RSA_keys/{}'.format(glb.Cracker_data_path, fn)
-        AES(256, key).encryptFile(file, file + '.enc')
-
-
-    #------Encrypt key
-    def decrypt(self, key, full=False):
-        '''
-        Decrypt self.keys_name with AES-256-CBC using the password
-        `RSA_keys_pwd` (Hasher('sha256').hash(clear_Cracker_pwd)[:32])
-
-        - key : the password ;
-        - full : a bool which indicates if self.k_name contain the extension.
-        '''
-
-        if full:
-            fn = self.k_name
-
-        else:
-            fn = self.get_fn('e')
-
-        file = '{}/RSA_keys/{}'.format(glb.Cracker_data_path, fn)
-        AES(256, key).decryptFile(file, file[:-4])
-
-
-
-#------SecureRsaKeys
-class SecureRsaKeys:
-    '''Class which manages the RSA keys encryption and decription.'''
-
-    def __init__(self, key, old_key=None, interface=None):
-        '''
-        Initiate class.
-
-        - key : the key used to encrypt the RSA keys (Hasher('sha256').hash(clear_Cracker_pwd)[:32]) ;
-        - old_key : the old key (before changing password). Used to decrypt an eventual key which is
-        only encrypted in self.rm_enc.
-        '''
-
-        if interface not in (None, 'gui', 'console'):
-            raise ValueError('The argument "interface" should be None, "gui", or "console", but {} of type {} was found !!!'.format(interface, type(interface)))
-
-        self.key = key
-        self.old_key = old_key
-        self.interface = interface
-
-
-    def encrypt(self):
-        '''Encrypt all the private RSA keys present in Data/RSA_keys using RsaKeys.encrypt'''
-
-        RSA_keys = self._get_pvk()
-
-        for k in RSA_keys:
-            RsaKeys(k, self.interface).encrypt(self.key)
-
-
-    def decrypt(self):
-        '''Decrypt all the private RSA keys present in Data/RSA_keys using RsaKeys.decrypt'''
-
-        RSA_keys = self._get_pvk_enc()
-
-        for k in RSA_keys:
-            RsaKeys(k, self.interface).decrypt(self.key)
-
-
-    def rm_clear(self):
-        '''Delete the clear private RSA keys.'''
-
-        enc_keys = self._get_pvk_enc(True)
-
-        for k in self._get_pvk(True):
-            if k not in enc_keys:
-                RsaKeys(k, self.interface).encrypt(self.key, True)
-
-            remove('{}/RSA_keys/{}'.format(glb.Cracker_data_path, k))
-
-
-    def rm_enc(self):
-        '''Delete the encrypted private RSA keys. Used when changing password.'''
-
-        RSA_keys = self._get_pvk(True)
-
-        for k in self._get_pvk_enc(True):
-            if k not in RSA_keys:
-                RsaKeys(k, self.interface).decrypt(self.old_key)
-
-            remove('{}/RSA_keys/{}'.format(glb.Cracker_data_path, k))
-
-
-    def _get_pvk(self, ext=False):
-        '''
-        Return the list of all the *.pvk-* files.
-
-        - ext : a bool which indicate if keep the extension in the file names.
-        '''
+        if fn[-4:] == '.enc':
+            raise KeyError(tr('The RSA key is already encrypted !'))
 
         old_path = chd_rsa('.')
-        lst_k = listdir()
+
+        with open(fn, 'r') as f:
+            f_content = f.read()
+
+        f_enc = AES(256, pwd, hexa=True).encryptText(f_content, mode_c='hexa')
+
+        with open(fn + '.enc', 'w') as f:
+            f.write(f_enc)
+
+        remove(fn)
+
         chdir(old_path)
 
-        pvk_l = []
 
-        for k in lst_k:
-            if k[-6:] in ('.pvk-d', '.pvk-h'):
-                if ext:
-                    pvk_l.append(k)
-                else:
-                    pvk_l.append(k[:-6])
-
-        return pvk_l
-
-
-    def _get_pvk_enc(self, ext=False):
+    #------Decrypt key
+    def decrypt(self, pwd):
         '''
-        Return the list of all the *.pvk-*.enc files, without the extension.
+        Decrypt 'self.k_name' with AES-256-CBC using the password
+        `pwd` (Hasher('sha256').hash(clear_pwd)), make a file
+        'self.k_name' + ext and remove encrypted one.
 
-        - ext : a bool which indicate if keep the extension in the file names.
+        - pwd : the password.
         '''
+
+        fn = self.get_fn('pvk')
+
+        if fn[-4:] != '.enc':
+            raise KeyError(tr('The RSA key is not encrypted !'))
 
         old_path = chd_rsa('.')
-        lst_k = listdir()
+
+        with open(fn, 'r') as f:
+            f_content = f.read()
+
+        try:
+            f_dec = AES(256, pwd, hexa=True).decryptText(f_content, mode_c='hexa')
+
+        except UnicodeDecodeError:
+            msg = tr('This is not the good password !')
+
+            if self.interface == 'gui':
+                QMessageBox.critical(None, '!!! Wrong password !!!', '<h2>{}</h2>'.format(msg))
+            else:
+                print('Cracker: RsaKeys: decrypt: ' + msg)
+
+            chdir(old_path)
+            return -3
+
+        except ValueError:
+            msg = tr('The file is not well formatted !')
+
+            if self.interface == 'gui':
+                QMessageBox.critical(None, '!!! File error !!!', '<h2>{}</h2>'.format(msg))
+            else:
+                print('Cracker: RsaKeys: decrypt: ' + msg)
+
+            chdir(old_path)
+            return -2
+
+        with open(fn[:-4], 'w') as f:
+            f.write(f_dec)
+
+        remove(fn)
+
         chdir(old_path)
 
-        pvk_enc_l = []
 
-        for k in lst_k:
-            if k[-10:] in ('.pvk-d.enc', '.pvk-h.enc'):
-                if ext:
-                    pvk_enc_l.append(k)
-                else:
-                    pvk_enc_l.append(k[:-10])
+    def change_pwd(self, old_pwd, new_pwd):
+        '''
+        Change the RSA key password for `self.k_name`.
 
-        return pvk_enc_l
+        Return :
+            -1      if the RSA key is not encrypted ;
+            -2      if the RSA key file n=is not well formatted ;
+            -3      if the old_pwd is wrong ;
+            None    otherwise.
+        '''
+
+        fn = self.get_fn('pvk')
+
+        if fn[-4:] != '.enc':
+            msg = tr('The RSA key is not encrypted !')
+
+            if self.interface == 'gui':
+                QMessageBox.critical(None, '!!! Not encrypted !!!', '<h2>{}</h2>'.format(msg))
+            else:
+                print('Cracker: RsaKeys: change_pwd: ' + msg)
+
+            return -1
+
+        old_path = chd_rsa('.')
+
+        with open(fn, 'r') as f:
+            f_content = f.read()
+
+        try:
+            f_dec = AES(256, old_pwd, hexa=True).decryptText(f_content, mode_c='hexa')
+
+        except UnicodeDecodeError:
+            msg = tr('This is not the good password !')
+
+            if self.interface == 'gui':
+                QMessageBox.critical(None, '!!! Wrong password !!!', '<h2>{}</h2>'.format(msg))
+            else:
+                print('Cracker: RsaKeys: change_pwd: ' + msg)
+
+            chdir(old_path)
+            return -3
+
+        except ValueError:
+            msg = tr('The file is not well formatted !')
+
+            if self.interface == 'gui':
+                QMessageBox.critical(None, '!!! File error !!!', '<h2>{}</h2>'.format(msg))
+            else:
+                print('Cracker: RsaKeys: change_pwd: ' + msg)
+
+            chdir(old_path)
+            return -2
+
+        f_enc = AES(256, new_pwd, hexa=True).encryptText(f_dec, mode_c='hexa')
+
+        with open(fn, 'w') as f:
+            f.write(f_enc)
+
+        chdir(old_path)
 
 
 
@@ -1459,38 +1508,23 @@ def list_keys(mode='any'):
     '''
     Function which lists the existing keys.
 
-    if mode is 'any', return seven tuples :
-        - pvk-d without pbk-d ;
-        - pbk-d ;
-        - pvk-h without pbk-h ;
-        - pbk-h ;
-        - pvk-* without pbk-* ;
-        - all (pvk-d, pvk-h, pbk-d, pbk-h, without duplicates), without .enc (but if the .enc is also decrypted, it will be in it) ;
+    if mode is 'any', return eight tuples :
+        - pvk-d ;
+        - pbk-d without pvk-d ;
+        - pvk-h ;
+        - pbk-h without pvk-h ;
+        - pbk-* without pvk-* ;
+        - all (pvk-d, pvk-h, pbk-d, pbk-h), without duplicates and sorted ;
         - .enc
+        - all \ .enc
 
-    mode : what return. Should be "pvk", "pbk", "pvk_hex", "pbk_hex", "pvk_without_pbk", "enc", "all", or "any".
-
-    if mode is "any", return :
-        pvk, pbk, hex_pvk, hex_pbk, lst_pvk_without_pbk, enc, all
-
-    else return the corresponding value.
+    mode : what return. Should be "pvk", "pbk", "pvk_hex", "pbk_hex", "pbk_without_pvk", "enc", "dec", "all", or "any".
     '''
 
-    if mode not in ('pvk', 'pbk', 'pvk_hex', 'pbk_hex', 'pvk_without_pbk', 'enc', 'all', 'any'):
-        raise ValueError('"mode" should be "pvk", "pbk", "pvk_hex", "pbk_hex", "pvk_without_pbk", "enc", "all" or "any", but "' + str(mode) + '" was found !!!')
+    if mode not in ('pvk', 'pbk', 'pvk_hex', 'pbk_hex', 'pbk_without_pvk', 'enc', 'dec', 'all', 'any'):
+        raise ValueError('"mode" should be "pvk", "pbk", "pvk_hex", "pbk_hex", "pbk_without_pvk", "enc", "dec", "all" or "any", but "' + str(mode) + '" was found !!!')
 
-    old_path = chd_rsa('.')
-    lst_k = listdir()
-    chdir(old_path)
-
-    lst_pvk = []
-    lst_pbk = []
-    lst_hex_pvk = []
-    lst_hex_pbk = []
-    lst_enc = []
-    lst_all = []
-
-    for k in lst_k:
+    def append_lst(k):
         if k[-6:] == '.pvk-d':
             lst_pvk.append(k[:-6])
             lst_all.append(k[:-6])
@@ -1509,12 +1543,29 @@ def list_keys(mode='any'):
 
         elif k[-4:] == '.enc':
             lst_enc.append(k[:-10])
+            lst_all.append(k[:-10])
+            append_lst(k[:-4])
+
+    old_path = chd_rsa('.')
+    lst_k = listdir()
+    chdir(old_path)
+
+    lst_pvk = []
+    lst_pbk = []
+    lst_hex_pvk = []
+    lst_hex_pbk = []
+    lst_enc = []
+    lst_all = []
+
+    for k in lst_k:
+        append_lst(k)
 
     #---
-    lst_pvk = rm_lst(lst_pvk, lst_pbk)
-    lst_hex_pvk = rm_lst(lst_hex_pvk, lst_hex_pbk)
+    lst_pbk = rm_lst(lst_pbk, lst_pvk)
+    lst_hex_pbk = rm_lst(lst_hex_pbk, lst_hex_pvk)
 
-    lst_pvk_without_pbk = rm_lst(lst_pvk + lst_hex_pvk, lst_pbk + lst_hex_pbk)
+    lst_pbk_without_pvk = rm_lst(lst_pbk + lst_hex_pbk, lst_pvk + lst_hex_pvk)
+    lst_all_without_enc = sorted(list(set(rm_lst(lst_all, lst_enc))))
 
     lst_all = list(set(lst_all))
     lst_all.sort()
@@ -1534,18 +1585,23 @@ def list_keys(mode='any'):
     elif mode == 'pbk_hex':
         return tuple(lst_hex_pbk)
 
-    elif mode == 'pvk_without_pbk':
-        return tuple(lst_pvk_without_pbk)
+    elif mode == 'pbk_without_pvk':
+        return tuple(lst_pbk_without_pvk)
 
     elif mode == 'enc':
         return tuple(lst_enc)
+
+    elif mode == 'dec':
+        return tuple(lst_all_without_enc)
 
     return (
         tuple(lst_pvk),
         tuple(lst_pbk),
         tuple(lst_hex_pvk),
         tuple(lst_hex_pbk),
-        tuple(lst_pvk_without_pbk),
+        tuple(lst_pbk_without_pvk),
+        tuple(lst_enc),
+        tuple(lst_all_without_enc),
         tuple(lst_all)
     )
 
