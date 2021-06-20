@@ -4,7 +4,7 @@
 '''Initiate Cracker's needed data.'''
 
 ini__auth = 'Lasercata'
-ini__last_update = '19.06.2021'
+ini__last_update = '20.06.2021'
 ini__version = '1.3'
 
 ##-import
@@ -23,7 +23,8 @@ if glb.interface == 'gui':
 
 #------other
 from os import chdir, getcwd
-from os.path import isfile
+from os.path import isfile, isdir
+from shutil import copy
 import sys
 
 from datetime import datetime as dt
