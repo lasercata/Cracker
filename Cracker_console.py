@@ -4,8 +4,8 @@
 '''Launch Cracker with the menu console interface.'''
 
 Cracker_console__auth = 'Lasercata'
-Cracker_console__last_update = '31.01.2021'
-Cracker_console__version = '1.2.1'
+Cracker_console__last_update = '20.06.2021'
+Cracker_console__version = '1.3'
 
 
 ##-import/ini
@@ -298,6 +298,9 @@ class CrackerConsole:
             elif c == '4':
                 use_func(self.code_break_menu)
 
+            elif c == 'exit':
+                self.quit('exit')
+
 
     #---Brute-force menu
     def brute_force_menu(self):
@@ -342,6 +345,9 @@ class CrackerConsole:
                     ciph = c
 
                 use_func(UseCrack('Brute-force', ciph).crack)
+
+            elif c == 'exit':
+                self.quit('exit')
 
 
     #---Dictionary attack / Advanced brute-force menu
@@ -388,6 +394,9 @@ class CrackerConsole:
 
                 use_func(UseCrack(meth, ciph).crack)
 
+            elif c == 'exit':
+                self.quit('exit')
+
 
     #---Code break menu
     def code_break_menu(self):
@@ -429,6 +438,9 @@ class CrackerConsole:
                     ciph = c
 
                 use_func(UseCrack('Code break', ciph).crack)
+
+            elif c == 'exit':
+                self.quit('exit')
 
 
     #------Cipher
@@ -500,6 +512,9 @@ class CrackerConsole:
             elif c == '16': #Hashes
                 use_func(self.hash_menu)
 
+            elif c == 'exit':
+                self.quit('exit')
+
 
     #---RSA keys menu
     def RSA_keys_menu(self):
@@ -520,39 +535,58 @@ class CrackerConsole:
 
             self.sep(c_ascii)
 
-            print('    1.Generate new keys')
-            print('    2.Export to public key')
-            print('    3.Show infos about keys')
-            print('    4.Rename keys')
-            print('    5.Convert keys')
-            print('    6.Show keys')
+            print('    1.Show keys')
+            print('    2.Show infos about a key')
+            print('    3.Generate new keys')
+            print('    4.Import public key')
+            print('    5.Export public key')
+            print('    6.Rename keys')
+            print('    7.Convert keys')
+            print('    8.Encrypt a key')
+            print('    9.Decrypt a key')
+            print('    10.Change key password')
             color(c_prog)
 
             c = ''
             c = cl_inp('Your Choice :')
 
 
-            if c not in ('quit', 'exit', 'q', '0', '1', '2', '3', '4', '5', '6'):
+            if c not in ('quit', 'exit', 'q', *[str(k) for k in range(11)]):
                 cl_out(c_error, '"{}" is NOT an option of this menu !'.format(c))
                 sleep(0.5)
 
             elif c == '1':
-                use_func(use_gen_k)
+                use_func(use_show_k)
 
             elif c == '2':
-                use_func(use_exp_k)
-
-            elif c == '3':
                 use_func(use_info_k)
 
+            elif c == '3':
+                use_func(use_gen_k)
+
             elif c == '4':
-                use_func(use_rn_k)
+                use_func(use_import_k)
 
             elif c == '5':
-                use_func(use_cvrt_k)
+                use_func(use_exp_k)
 
             elif c == '6':
-                use_func(use_show_k)
+                use_func(use_rn_k)
+
+            elif c == '7':
+                use_func(use_cvrt_k)
+
+            elif c == '8':
+                use_func(use_encrypt_k)
+
+            elif c == '9':
+                use_func(use_decrypt_k)
+
+            elif c == '10':
+                use_func(use_chg_pwd_k)
+
+            elif c == 'exit':
+                self.quit('exit')
 
 
     #---Hash menu
@@ -596,6 +630,9 @@ class CrackerConsole:
 
                 use_func(use_hash, h)
 
+            elif c == 'exit':
+                self.quit('exit')
+
 
     #---Crypta menu
     def crypta_menu(self):
@@ -638,6 +675,9 @@ class CrackerConsole:
 
                 use_func(use_crypta, ciph)
 
+            elif c == 'exit':
+                self.quit('exit')
+
 
     #------Wordlists
     def wordlists_menu(self):
@@ -675,6 +715,9 @@ class CrackerConsole:
 
             elif c == '2':
                 use_func(use_wrdlst_ana)
+
+            elif c == 'exit':
+                self.quit('exit')
 
 
     #------Settings
@@ -720,6 +763,9 @@ class CrackerConsole:
 
             elif c == '4':
                 use_func(self.about)
+
+            elif c == 'exit':
+                self.quit('exit')
 
 
 
@@ -836,10 +882,10 @@ about the password you entered, like its entropy.
     def quit(self, menu_choice):
         '''Quit Cracker.'''
 
-        sure = ''
+        sure = None
         if menu_choice not in ('quit', 'q'): #tap 'q' or 'quit' to exit faster (don't need to confirm)
             try:
-                while sure not in ('y', 'n'):
+                while sure not in ('y', 'n', ''):
                     color(c_error)
                     sure = input('\nAre you sure ? (y/n) :\n>')
                     color(c_prog)
@@ -847,7 +893,7 @@ about the password you entered, like its entropy.
             except KeyboardInterrupt:
                 self.quit(menu_choice)
 
-        if sure == 'y' or menu_choice in ('quit', 'q'):
+        if sure in ('y', '') or menu_choice in ('quit', 'q'):
             cl_out(c_output, 'By Lasercata, Elerias')
             sleep(0.15)
             cl_out(c_ascii, auth_ascii_Elerias)
@@ -858,6 +904,7 @@ about the password you entered, like its entropy.
             sleep(0.25)
 
             self.menu_on = False
+            sys.exit()
 
         else:
             print('\nBack menu ...')
@@ -865,15 +912,14 @@ about the password you entered, like its entropy.
 
 
 
-    def use():
+    def use(lock=False):
         '''Use this function to launch the console app'''
 
         global RSA_keys_pwd
 
         app = CrackerConsole()
-        app.lock()
-
-        RSA.SecureRsaKeys(RSA_keys_pwd, interface='console').decrypt() #Unlock RSA keys
+        if lock:
+            app.lock()
 
         while app.menu_on:
             try:
@@ -881,8 +927,6 @@ about the password you entered, like its entropy.
 
             except KeyboardInterrupt:
                 app.quit('exit')
-
-        RSA.SecureRsaKeys(RSA_keys_pwd, 'console').rm_clear() #Lock RSA keys
 
 
 
@@ -1168,7 +1212,29 @@ class UseCrack:
 
 
 
-#---------Cipher
+#---------Ciphers
+def get_unformatted(raw_txt, ciph):
+    '''Try to unformat `raw_txt` (if formatted with FormatMsg), return the text and dict (None if not formatted)'''
+
+    try:
+        txt, d = FormatMsg(raw_txt).unset()
+        formatted_out = True
+
+    except ValueError:
+        txt = raw_txt
+        d = None
+        formatted_out = False
+
+    else:
+        if d['Cipher'] != ciph:
+            cl_out(c_error, f'You might have used the wrong cipher ({ciph}) instead of {d["Cipher"]}')
+
+        if ciph == 'RSA signature':
+            txt, d = FormatMsg(raw_txt, nl=False).unset()
+
+    return txt, d
+
+
 #------KRIS
 def use_kris(AES_mode):
     '''Collect infos to encrypt/decrypt with KRIS.'''
@@ -1176,7 +1242,7 @@ def use_kris(AES_mode):
     md = inp_lst('Encrypt or decrypt ? (e/d) :', ('e', 'd'))
     msg = get_text()
 
-    keys = (RSA.list_keys('all'), RSA.list_keys('pvk_without_pbk'))[md == 'd']
+    keys = (RSA.list_keys('all'), RSA.rm_lst(RSA.list_keys('all'), RSA.list_keys('pbk_without_pvk')))[md == 'd']
     key = inp_lst('Available keys :\n\t{}.\n\nChosen key :'.format(NewLine(c='\n\t').text_set(set_prompt(keys))), keys)
 
     try:
@@ -1189,7 +1255,13 @@ def use_kris(AES_mode):
         msg_ = C.encrypt(msg)
         msg_ = '{} {}'.format(msg_[0], msg_[1])
 
+        d = {'Version': 'Cracker_v' + cracker_version, 'Cipher': f'KRIS-AES-{AES_mode}', 'Key_name': key}
+
+        msg_ = FormatMsg(msg_).set(d)
+
     else:
+        msg, d = get_unformatted(msg, f'KRIS-AES-{AES_mode}')
+
         try:
             msg_ = C.decrypt(msg.split(' '), True)
 
@@ -1215,10 +1287,11 @@ def use_AES(AES_mode):
         cl_out(c_error, str(err))
 
     if md == 'e':
-        msg_ = C.encryptText(msg, mode_c='hexa')
+        d = {'Version': 'Cracker_v' + cracker_version, 'Cipher': f'AES-{AES_mode}'}
+        msg_ = FormatMsg(C.encryptText(msg, mode_c='hexa')).set(d)
 
     else:
-        msg_ = C.decryptText(msg, mode_c='hexa')
+        msg_ = C.decryptText(get_unformatted(msg, f'AES-{AES_mode}')[0], mode_c='hexa')
 
     give_text(msg_)
 
@@ -1230,17 +1303,18 @@ def use_RSA():
     md = inp_lst('Encrypt or decrypt ? (e/d) :', ('e', 'd'))
     msg = get_text()
 
-    keys = RSA.list_keys('all')
+    keys = (RSA.list_keys('all'), RSA.rm_lst(RSA.list_keys('all'), RSA.list_keys('pbk_without_pvk')))[md == 'd']
     key = inp_lst('Available keys :\n\t{}.\n\nChosen key :'.format(NewLine(c='\n\t').text_set(set_prompt(keys))), keys)
 
 
     C = RSA.RSA(key, interface='console')
 
     if md == 'e':
-        msg_ = C.encrypt(msg)
+        d = {'Version': 'Cracker_v' + cracker_version, 'Cipher': 'RSA', 'Key_name': key}
+        msg_ = FormatMsg(C.encrypt(msg)).set(d)
 
     else:
-        msg_ = C.decrypt(msg)
+        msg_ = C.decrypt(get_unformatted(msg, 'RSA')[0])
 
     give_text(msg_)
 
@@ -1252,16 +1326,18 @@ def use_RSA_Sign():
     md = inp_lst('Sign or check ? (s/c) :', ('s', 'c'))
     msg = get_text()
 
-    keys = RSA.list_keys('all')
+    keys = (RSA.list_keys('all'), RSA.rm_lst(RSA.list_keys('all'), RSA.list_keys('pbk_without_pvk')))[md == 's']
     key = inp_lst('Available keys :\n\t{}.\n\nChosen key :'.format(NewLine(c='\n\t').text_set(set_prompt(keys))), keys)
 
     C = RSA.RsaSign(key, interface='console')
 
     if md == 's':
-        cl_out(c_output, C.str_sign(msg))
+        d = {'Version': 'Cracker_v' + cracker_version, 'Cipher': 'RSA signature', 'Hash': C.h, 'Key_name': key}
+
+        cl_out(c_output, FormatMsg(C.str_sign(msg), nl=False, md='sign').set(d))
 
     else:
-        if C.str_check(msg):
+        if C.str_check(get_unformatted(msg, 'RSA signature')[0]):
             cl_out(c_succes, 'The signature match to the message.')
 
         else:
@@ -1271,6 +1347,92 @@ def use_RSA_Sign():
 
 
 #------RSA keys management
+#---Show keys
+def use_show_k():
+    '''Show the keys.'''
+
+    pvk_d = RSA.list_keys('pvk')
+    pvk_h = RSA.list_keys('pvk_hex')
+    pbk_d = RSA.list_keys('pbk')
+    pbk_h = RSA.list_keys('pbk_hex')
+    all_ = RSA.list_keys('all')
+
+    print('\nFull keys stored in decimal :', end='')
+    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(pvk_d))), sp=False)
+
+    print('\nFull keys stored in hexadecimal :', end='')
+    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(pvk_h))), sp=False)
+
+    print('\nPublic keys stored in decimal :', end='')
+    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(pbk_d))), sp=False)
+
+    print('\nPublic keys stored in hexadecimal :', end='')
+    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(pbk_h))), sp=False)
+
+
+    print('\nAll keys :', end='')
+    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(all_))), sp=False)
+
+    pause()
+
+
+#---infos
+def use_info_k():
+    '''Choose a key and show infos on it.'''
+
+    key_list = RSA.list_keys('all')
+
+    print('Full keys :', end='')
+    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(key_list))), sp=False)
+
+    k_name = inp_lst('Select a key :', key_list)
+
+
+    keys = RSA.RsaKeys(k_name, 'console')
+
+
+    md_stg = keys.get_fn(also_ret_md=True)[1][1]
+
+    if md_stg == -1:
+        cl_out(c_error, 'The keys were NOT found !!!')
+        return -1 #File not found
+
+    keys_read = keys.read()
+    while keys_read == -3:
+        cl_out(c_error, 'Not the good password !')
+        keys_read = keys.read()
+
+    if keys_read in (-1, -2, -3):
+        return keys_read
+
+    lst_keys, lst_values, lst_infos = keys_read
+
+    if len(lst_keys) == 2: #Full keys
+        (pbk, pvk), (p, q, n, phi, e, d), (n_strth, date_) = lst_keys, lst_values, lst_infos
+
+        prnt = 'The keys were created the ' + date_
+        prnt += '\nThe n\'s strenth : ' + n_strth + ' bytes ;\n'
+
+        prnt += '\n\nValues :\n\tp : ' + str(p) + ' ;\n\tq : ' + str(q) + ' ;\n\tn : ' + str(n)
+        prnt += ' ;\n\tphi : ' + str(phi) + ' ;\n\te : ' + str(e) + ' ;\n\td : ' + str(d) + ' ;\n'
+
+        prnt += '\n\tPublic key : ' + str(pbk) + ' ;'
+        prnt += '\n\tPrivate key : ' + str(pvk) + '.'
+
+    else: #Public keys
+        pbk, (n, e), (n_strth, date_) = lst_keys, lst_values, lst_infos
+
+        prnt = 'The keys were created the ' + date_
+        prnt += '\nThe n\'s strenth : ' + n_strth + ' bytes ;\n'
+
+        prnt += '\n\nValues :\n\tn : ' + str(n) + ' ;\n\te : ' + str(e) + ' ;\n'
+
+        prnt += '\n\tPublic key : ' + str(pbk) + '.'
+
+    cl_out(c_output, prnt)
+    pause()
+
+
 #---Generate RSA keys
 def use_gen_k():
     '''Generate RSA keys.'''
@@ -1290,100 +1452,100 @@ def use_gen_k():
 
     stg = ('dec', 'hexa')[stg_md in ('h', '')]
 
+    if inp_lst('Secure your RSA keys with a password ? Do this if the computer you use may be used by someone else. (y/n) :', ('y', 'n')) == 'y':
+        while True:
+            pwd0 = getpass('Password (won\'t be echoed) :')
+            pwd1 = getpass('Confirm password :')
 
-    ret = RSA.RsaKeys(name).generate(size, md_stored=stg)
+            if pwd0 != pwd1:
+                cl_out(c_error, 'The passwords do not correspond ! (Ctrl+C to stop)')
+
+            elif pwd0 == '':
+                cl_out(c_error, 'The password is empty !')
+
+            else:
+                pwd = hasher.Hasher('sha256').hash(pwd0)
+                break
+
+    else:
+        pwd = None
+
+
+    ret = RSA.RsaKeys(name, interface='console').generate(size, pwd, md_stored=stg)
 
     if ret == -2:
         cl_out(c_error, 'The set of keys already exists !!!')
 
         ow = inp_lst('Overwrite it ? (y/n) :', ('y', 'n'))
         if ow == 'y':
-            ret = RSA.RsaKeys(name, 'console').generate(size, md_stored=stg, overwrite=True)
+            ret = RSA.RsaKeys(name, 'console').generate(size, pwd, md_stored=stg, overwrite=True)
 
         else:
             return -3 #Abort
-
-    global RSA_keys_pwd
-    RSA.RsaKeys(name, 'console').encrypt(RSA_keys_pwd)
 
     cl_out(c_succes, 'Done !')
     print('Your brand new RSA keys "{}" are ready !\n`n` size : {} bits.'.format(name, ret[2]))
     pause()
 
 
-#---Export RSA keys
-def use_exp_k():
-    '''Export RSA keys.'''
 
-    pvk = RSA.list_keys('pvk_without_pbk')
+#---Import RSA keys
+def use_import_k():
+    '''Import RSA keys.'''
 
-    print('Full keys :', end='')
-    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(pvk))), sp=False)
+    fn_src = cl_inp('Name of the key (with the path) :')
 
-    key = inp_lst('Select a key :', pvk)
+    while True:
+        if not isfile(fn_src):
+            cl_out(c_error, 'File not found !')
 
-    stg_md = inp_lst('Store in decimal, or in hexadecimal (default is hexa, it takes less storage space) ? (d/h) :', ('d', 'h', ''))
+        elif fn_src[-6:] not in ('.pbk-d', '.pbk-h', '.pvk-d', '.pvk-h'):
+            cl_out(c_error, 'This is not an RSA key formatted for Cracker (or KRIS) !')
 
-    stg = ('dec', 'hexa')[stg_md in ('h', '')]
+        else:
+            break
 
+        fn_src = cl_inp('Name of the key (with the path) :')
 
-    ret = RSA.RsaKeys(key, 'console').export(stg)
+    k_name = fn_src.split('/')[-1]
 
-    if ret == -1:
-        cl_out(c_error, 'The full keys were NOT found !!!')
+    fn_dest = '{}/RSA_keys/{}'.format(glb.Cracker_data_path, k_name)
 
-    else:
-        cl_out(c_succes, 'The keys "{}" have been be exported !'.format(key))
+    copy(fn_src, fn_dest)
+
+    cl_out(c_succes, 'The keys "{}" have been imported.'.format(k_name))
 
     sleep(0.5)
 
 
-#---infos
-def use_info_k():
-    '''Choose a key and show infos on it.'''
 
-    key_list = RSA.list_keys('all')
+#---Export RSA keys
+def use_exp_k():
+    '''Export RSA keys.'''
+
+    keys = RSA.list_keys('all')
 
     print('Full keys :', end='')
-    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(key_list))), sp=False)
+    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(keys))), sp=False)
 
-    k_name = inp_lst('Select a key :', key_list)
+    key_name = inp_lst('Select a key :', keys)
 
+    key = RSA.RsaKeys(key_name, interface='console')
+    fn_src0, (md, md_stored) = key.get_fn('pbk', also_ret_md=True)
 
-    keys = RSA.RsaKeys(k_name, 'console')
+    fn_src = '{}/RSA_keys/{}'.format(glb.Cracker_data_path, fn_src0)
 
-    md_stg = keys.show_keys(get_stg_md=True)
+    fn_dest = cl_inp('Path of the destination :')
 
-    if md_stg == -1:
-        cl_out(c_error, 'The keys were NOT found !!!')
-        return -1 #File not found
+    while not isdir(fn_dest):
+        cl_out(c_error, 'Path not found !')
+        fn_dest = cl_inp('Path of the destination :')
 
-    lst_keys, lst_values, lst_infos = keys.show_keys()
+    copy(fn_src, fn_dest)
 
-    if len(lst_infos) == 2: #Full keys
-        (pbk, pvk), (p, q, n, phi, e, d), (n_strth, date_) = lst_keys, lst_values, lst_infos
+    cl_out(c_succes, 'The keys "{}" have been be exported !'.format(key_name))
 
-        prnt = 'The keys were created the ' + date_
-        prnt += '\nThe n\'s strenth : ' + n_strth + ' bytes ;\n'
-
-        prnt += '\n\nValues :\n\tp : ' + str(p) + ' ;\n\tq : ' + str(q) + ' ;\n\tn : ' + str(n)
-        prnt += ' ;\n\tphi : ' + str(phi) + ' ;\n\te : ' + str(e) + ' ;\n\td : ' + str(d) + ' ;\n'
-
-        prnt += '\n\tPublic key : ' + str(pbk) + ' ;'
-        prnt += '\n\tPrivate key : ' + str(pvk) + '.'
-
-    else: #Public keys
-        pbk, (n, e), (n_strth, date_, date_exp) = lst_keys, lst_values, lst_infos
-
-        prnt = 'The keys were created the ' + date_ + '\nAnd exported the ' + date_exp
-        prnt += '\nThe n\'s strenth : ' + n_strth + ' bytes ;\n'
-
-        prnt += '\n\nValues :\n\tn : ' + str(n) + ' ;\n\te : ' + str(e) + ' ;\n'
-
-        prnt += '\n\tPublic key : ' + str(pbk) + '.'
-
-    cl_out(c_output, prnt)
-    pause()
+    sleep(0.5)
 
 
 #---Rename keys
@@ -1399,7 +1561,7 @@ def use_rn_k():
 
     new_name = cl_inp('Enter the new name :')
 
-    ret = RSA.RsaKeys(k_name, 'console').rename(new_name)
+    ret = RSA.RsaKeys(k_name, interface='console').rename(new_name)
 
     if ret == -1:
         cl_out(c_error, 'The keys were NOT found !!!')
@@ -1445,33 +1607,129 @@ def use_cvrt_k():
     sleep(0.5)
 
 
-#---Show keys
-def use_show_k():
-    '''Show the keys.'''
+#---Encrypt key
+def use_encrypt_k():
+    '''Ask for the key and encrypt it using RsaKeys.'''
 
-    pvk_d = RSA.list_keys('pvk')
-    pvk_h = RSA.list_keys('pvk_hex')
-    pbk_d = RSA.list_keys('pbk')
-    pbk_h = RSA.list_keys('pbk_hex')
-    all_ = RSA.list_keys('all')
+    key_list = RSA.list_keys('dec')
 
-    print('\nFull keys stored in decimal :', end='')
-    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(pvk_d))), sp=False)
+    print('Keys :', end='')
+    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(key_list))), sp=False)
 
-    print('\nFull keys stored in hexadecimal :', end='')
-    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(pvk_h))), sp=False)
+    k_name = inp_lst('Select a key :', key_list)
 
-    print('\nPublic keys stored in decimal :', end='')
-    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(pbk_d))), sp=False)
+    pwd0 = pwd1 = ''
 
-    print('\nPublic keys stored in hexadecimal :', end='')
-    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(pbk_h))), sp=False)
+    while True:
+        pwd0 = getpass('New password (won\' be echoed) :')
+        pwd1 = getpass('Confirm password :')
+
+        if pwd0 != pwd1:
+            cl_out(c_error, 'The passwords do not correspond !')
+
+        elif pwd0 == '':
+            cl_out(c_error, 'The password is empty !')
+
+        else:
+            pwd = hasher.Hasher('sha256').hash(pwd0)
+            break
+
+    keys = RSA.RsaKeys(k_name, interface='console')
+
+    try:
+        keys.encrypt(pwd)
+
+    except KeyError as err:
+        cl_out(c_error, err)
+        return -3
+
+    except Exception as err:
+        cl_out(c_error, err)
+        return -3
+
+    cl_out(c_succes, 'Your keys "{}" have been encrypted !'.format(k_name))
+    sleep(0.5)
 
 
-    print('\nAll keys :', end='')
-    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(all_))), sp=False)
+#---Decrypt key
+def use_decrypt_k():
+    '''Ask for the key and decrypt it using RsaKeys.'''
 
-    pause()
+    key_list = RSA.list_keys('enc')
+
+    print('Keys :', end='')
+    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(key_list))), sp=False)
+
+    k_name = inp_lst('Select a key :', key_list)
+
+    if cl_inp('Do you really want to decrypt "{}" keys ? Anyone with access to this computer will be able to read them !\nType "YES" to confirm :'.format(k_name)) != 'YES':
+        return -3 #Abort
+
+    pwd = hasher.Hasher('sha256').hash(getpass('Password (won\'t be echoed) :'))
+
+    keys = RSA.RsaKeys(k_name, interface='console')
+
+    try:
+        out = keys.decrypt(pwd)
+
+    except KeyError as err:
+        cl_out(c_error, 'Not encrypted !\n{}'.format(err))
+        return -3
+
+    except Exception as err:
+        cl_out(c_error, err)
+        return -3
+
+    if out in (-1, -2, -3):
+        sleep(0.5)
+        return out
+
+    cl_out(c_succes, 'Your keys "{}" have been decrypted !'.format(k_name))
+    sleep(0.5)
+
+
+#---Change password
+def use_chg_pwd_k():
+    '''Ask for the key, the old password and the new password, and use RsaKeys to change the password.'''
+
+    key_list = RSA.list_keys('enc')
+    print('Keys :', end='')
+    cl_out(c_output, '\n\t{}'.format(NewLine(c='\n\t').text_set(set_prompt(key_list))), sp=False)
+    k_name = inp_lst('Select a key :', key_list)
+
+    keys = RSA.RsaKeys(k_name, interface='console')
+
+    old_pwd = hasher.Hasher('sha256').hash(getpass('Actual password (won\'t be echoed) :'))
+
+    pwd0 = pwd1 = ''
+    while True:
+        pwd0 = getpass('New password (won\' be echoed) :')
+        pwd1 = getpass('Confirm password :')
+
+        if pwd0 != pwd1:
+            cl_out(c_error, 'The passwords do not correspond !')
+
+        elif pwd0 == '':
+            cl_out(c_error, 'The password is empty !')
+
+        else:
+            new_pwd = hasher.Hasher('sha256').hash(pwd0)
+            break
+
+    try:
+        out = keys.change_pwd(old_pwd, new_pwd)
+
+    except Exception as err:
+        cl_out(c_error, err)
+        return -3
+
+    if out in (-1, -2, -3):
+        sleep(0.5)
+        return out
+
+    cl_out(c_succes, 'The password for your RSA keys "{}" has been changed !'.format(k_name))
+
+    sleep(0.5)
 
 
 #------Crypta
