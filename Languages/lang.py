@@ -63,9 +63,9 @@ def translate(text_en, lang=lang):
         ret = text_en
 
         if lang == 'fr':
-            print("KRIS: lang.py: Impossible de traduire '{}' : non trouvé.".format(text_en))
+            print("Cracker: lang.py: Impossible de traduire '{}' : non trouvé.".format(text_en))
 
         else:
-            print("KRIS: lang.py: Can't translate '{}' : not found.".format(text_en))
+            print("Cracker: lang.py: Can't translate '{}' : not found.".format(text_en))
 
     return ret
