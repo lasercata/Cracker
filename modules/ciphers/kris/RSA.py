@@ -4,8 +4,8 @@
 '''This program allow you to encrypt and decrypt with RSA cipher.'''
 
 RSA__auth = 'Lasercata, Elerias'
-RSA__last_update = '19.06.2021'
-RSA__version = '4.0'
+RSA__last_update = '20.06.2021'
+RSA__version = '4.1'
 
 
 ##-import
@@ -295,13 +295,15 @@ class RSA:
                 or "console", but {} of type {} was found !!!'.format(interface, type(interface)))
 
         self.interface = interface
+        self.keys_init = keys
 
         self.keys = {} #will contain the keys
 
         if type(keys) == str:
             try:
-                self.keys['e'] = RsaKeys(keys).read(0)
-                self.keys['d'] = RsaKeys(keys).read(1)
+                self.keys['e'] = RsaKeys(keys, interface=self.interface).get_key(0)
+                #self.keys['d'] = RsaKeys(keys, interface=self.interface).get_key(1)
+                self.keys['d'] = None
 
             except FileNotFoundError as err:
                 if interface == 'console':
@@ -419,15 +421,20 @@ class RSA:
         '''Return the decrypted text txt with the private key self.pv_key.'''
 
         if self.pv_key == None:
-            msg_err = 'Cannot decrypt with an empty key !!!'
+            try:
+                self.keys['d'] = RsaKeys(self.keys_init, interface=self.interface).get_key(1)
+                self.pv_key = self.keys['d']
 
-            if self.interface == 'console':
-                cl_out(c_error, msg_err)
+            except TypeError:
+                msg_err = 'Cannot decrypt with an empty key !!!'
 
-            elif self.interface == 'gui':
-                QMessageBox.critical(None, 'Cannot decrypt !!!', '<h2>{}</h2>'.format(msg_err))
+                if self.interface == 'console':
+                    cl_out(c_error, msg_err)
 
-            raise TypeError(msg_err)
+                elif self.interface == 'gui':
+                    QMessageBox.critical(None, 'Cannot decrypt !!!', '<h2>{}</h2>'.format(msg_err))
+
+                raise TypeError(msg_err)
 
 
         #------ini progress bar
@@ -487,15 +494,20 @@ class RSA:
         '''
 
         if self.pv_key == None:
-            msg_err = 'Cannot sign with an empty private key !!!'
+            try:
+                self.keys['d'] = RsaKeys(self.keys_init, interface=self.interface).get_key(1)
+                self.pv_key = self.keys['d']
 
-            if self.interface == 'console':
-                cl_out(c_error, msg_err)
+            except TypeError:
+                msg_err = 'Cannot sign with an empty private key !!!'
 
-            elif self.interface == 'gui':
-                QMessageBox.critical(None, 'Cannot sign !!!', '<h2>{}</h2>'.format(msg_err))
+                if self.interface == 'console':
+                    cl_out(c_error, msg_err)
 
-            raise TypeError(msg_err)
+                elif self.interface == 'gui':
+                    QMessageBox.critical(None, 'Cannot sign !!!', '<h2>{}</h2>'.format(msg_err))
+
+                raise TypeError(msg_err)
 
         return RSA([self.pv_key, self.pb_key], self.interface).encrypt(txt)
 
@@ -927,6 +939,10 @@ class RsaKeys:
 
             if self.interface == 'gui':
                 QMessageBox.critical(None, '!!! File error !!!', '<h2>{}</h2>'.format(msg))
+
+            elif self.interface == 'console':
+                cl_out(c_error, msg)
+
             else:
                 print('Cracker: RsaKeys: read: ' + msg)
 
@@ -941,6 +957,10 @@ class RsaKeys:
 
             if self.interface == 'gui':
                 QMessageBox.critical(None, '!!! Not found !!!', '<h2>{}</h2>'.format(msg))
+
+            elif self.interface == 'console':
+                cl_out(c_error, msg)
+
             else:
                 print('Cracker: RsaKeys: read: ' + msg)
 
@@ -980,6 +1000,10 @@ class RsaKeys:
 
                 if self.interface == 'gui':
                     QMessageBox.critical(None, '!!! Wrong password !!!', '<h2>{}</h2>'.format(msg))
+
+                elif self.interface == 'console':
+                    cl_out(c_error, msg)
+
                 else:
                     print('Cracker: RsaKeys: read: ' + msg)
 
@@ -1415,6 +1439,10 @@ class RsaKeys:
 
             if self.interface == 'gui':
                 QMessageBox.critical(None, '!!! Wrong password !!!', '<h2>{}</h2>'.format(msg))
+
+            elif self.interface == 'console':
+                cl_out(c_error, msg)
+
             else:
                 print('Cracker: RsaKeys: decrypt: ' + msg)
 
@@ -1426,6 +1454,10 @@ class RsaKeys:
 
             if self.interface == 'gui':
                 QMessageBox.critical(None, '!!! File error !!!', '<h2>{}</h2>'.format(msg))
+
+            elif self.interface == 'console':
+                cl_out(c_error, msg)
+
             else:
                 print('Cracker: RsaKeys: decrypt: ' + msg)
 
@@ -1446,7 +1478,7 @@ class RsaKeys:
 
         Return :
             -1      if the RSA key is not encrypted ;
-            -2      if the RSA key file n=is not well formatted ;
+            -2      if the RSA key file is not well formatted ;
             -3      if the old_pwd is wrong ;
             None    otherwise.
         '''
@@ -1458,6 +1490,10 @@ class RsaKeys:
 
             if self.interface == 'gui':
                 QMessageBox.critical(None, '!!! Not encrypted !!!', '<h2>{}</h2>'.format(msg))
+
+            elif self.interface == 'console':
+                cl_out(c_error, msg)
+
             else:
                 print('Cracker: RsaKeys: change_pwd: ' + msg)
 
@@ -1476,6 +1512,10 @@ class RsaKeys:
 
             if self.interface == 'gui':
                 QMessageBox.critical(None, '!!! Wrong password !!!', '<h2>{}</h2>'.format(msg))
+
+            elif self.interface == 'console':
+                cl_out(c_error, msg)
+
             else:
                 print('Cracker: RsaKeys: change_pwd: ' + msg)
 
@@ -1487,6 +1527,10 @@ class RsaKeys:
 
             if self.interface == 'gui':
                 QMessageBox.critical(None, '!!! File error !!!', '<h2>{}</h2>'.format(msg))
+
+            elif self.interface == 'console':
+                cl_out(c_error, msg)
+
             else:
                 print('Cracker: RsaKeys: change_pwd: ' + msg)
 
