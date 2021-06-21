@@ -1824,8 +1824,7 @@ class CrackerGui(QMainWindow):
 
         copy(fn_src, fn_dest)
 
-        self.ciph_bar.reload_keys()
-        self.statusbar.showMessage('The keys "{}" have been imported.'.format(k_name), 3000)
+        self.reload_keys()
 
         QMessageBox.about(None, 'Done !', '<h2>The keys "{}" have been imported.</h2>'.format(k_name))
 
