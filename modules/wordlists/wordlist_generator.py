@@ -3,7 +3,7 @@
 '''Module incuding wordlist_generator fonctions'''
 
 wrdlst_gen__auth = 'Lasercata, Elerias'
-wrdlst_gen__last_update = '11.06.2020'
+wrdlst_gen__last_update = '16.06.2021'
 wrdlst_gen__version = '7.0'
 
 
@@ -222,21 +222,21 @@ class WordlistGenerator:
 
         if self.interface == None:
             print(msg)
-            sure = 'y'
+            sure = True
 
         elif self.interface == 'console':
             cl_out(c_output, msg)
-            sure = inp_lst('Generate ? (y/n) :', ('y', 'n'))
+            sure = inp_lst('Generate ? (y/n) :', ('y', 'n')) == 'y'
 
         else:
             msg_ = msg + '\n\nGenerate ?'
 
             sure = QMessageBox.question(
                 None, 'Generate ?', msg_, \
-                QMessageBox.Yes | QMessageBox.Cancel, QMessageBox.Yes)
+                QMessageBox.Yes | QMessageBox.Cancel, QMessageBox.Yes) == QMessageBox.Yes
 
 
-        if sure in ('y', QMessageBox.Yes):
+        if sure :
             self._gen(self.w_lth, '')
 
 
