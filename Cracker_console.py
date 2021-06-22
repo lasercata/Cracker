@@ -4,8 +4,8 @@
 '''Launch Cracker with the menu console interface.'''
 
 Cracker_console__auth = 'Lasercata'
-Cracker_console__last_update = '20.06.2021'
-Cracker_console__version = '1.3'
+Cracker_console__last_update = '22.06.2021'
+Cracker_console__version = '1.3.1'
 
 
 ##-import/ini
@@ -742,13 +742,14 @@ class CrackerConsole:
             print('    1.Change directory')
             print('    2.Change colors')
             print('    3.Change password')
-            print('    4.Show infos about Cracker')
+            print('    4.{} home mode'.format('Disable' if glb.home else 'Enable'))
+            print('    5.Show infos about Cracker')
 
             color(c_prog)
 
             c = cl_inp('Your Choice :')
 
-            if c.lower() not in ('quit', 'exit', '0', 'q', '1', '2', '3', '4'):
+            if c.lower() not in ('quit', 'exit', '0', 'q', '1', '2', '3', '4', '5'):
                 cl_out(c_error, '"{}" is NOT an option of this menu !!!'.format(c))
                 sleep(0.5)
 
@@ -762,6 +763,9 @@ class CrackerConsole:
                 use_func(change_pwd)
 
             elif c == '4':
+                use_func(toggle_home_md)
+
+            elif c == '5':
                 use_func(self.about)
 
             elif c == 'exit':
@@ -2121,13 +2125,39 @@ def change_pwd():
         sleep(0.5)
 
 
+#---------Toggle home mode
+def toggle_home_md():
+    '''Toggle the home mode after asking the user.'''
+
+    if glb.home:
+        if inp_lst('Are you sure (y/n) ?\nThis will copy all RSA keys from "{0}" to "{1}", and permanently remove the folder "{0}".'.format(expanduser('~/.RSA_keys'), glb.Cracker_data_path + '/RSA_keys'), ('y', 'n', '')) != 'y':
+            return -3 #Aborted.
+
+        for fn in listdir(expanduser('~/.RSA_keys')):
+            copy(expanduser('~/.RSA_keys/') + fn, glb.Cracker_data_path + '/RSA_keys/' + fn)
+
+        rmtree(expanduser('~/.RSA_keys'))
+
+        glb.home = False
+        cl_out(c_output, 'New RSA keys location : "{}"'.format(glb.Cracker_data_path + '/RSA_keys'))
+        cl_out(c_succes, 'Home mode is off.\nRSA keys copyied to "{}", folder "{}" removed.'.format(glb.Cracker_data_path + '/RSA_keys', expanduser('~/.RSA_keys')))
+
+    else:
+        if inp_lst('Are you sure (y/n) ?\nThis will copy all your RSA keys from "{}" to "{}" !'.format(glb.Cracker_data_path + '/RSA_keys', expanduser('~/.RSA_keys')), ('y', 'n', '')) != 'y':
+            return -3 #aborted.
+
+        chdir(RSA.chd_rsa(home=True))
+        glb.home = True
+        cl_out(c_output, 'RSA keys location : "{}"'.format(expanduser('~/.RSA_keys')))
+        cl_out(c_succes, 'Home mode is on.\nRSA keys copyied to "{}".'.format(expanduser('~/.RSA_keys')))
+
+    sleep(0.5)
+
+
 
 ##-run
 if __name__ == '__main__':
     color(c_prog)
-
-    #------If first time launched, introduce RSA keys
-    chdir(RSA.chd_rsa('.', first=True, interface='console'))
 
     #------Launch the program
     CrackerConsole.use()

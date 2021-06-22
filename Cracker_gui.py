@@ -4,8 +4,8 @@
 '''Launch Cracker with PyQt5 graphical interface.'''
 
 Cracker_gui__auth = 'Lasercata'
-Cracker_gui__last_update = '19.06.2021'
-Cracker_gui__version = '1.4.0'
+Cracker_gui__last_update = '22.06.2021'
+Cracker_gui__version = '1.4.1'
 
 
 ##-import/ini
@@ -742,8 +742,6 @@ class CrackerGui(QMainWindow):
 
         # bt_lay.addWidget(QLabel('')) # Spacing
 
-        #TODO: Find a great way to put these buttons correcly (or use an other widget (menu, ...) ?)
-
         bt_info_k = QPushButton(tr('Show info about keys'))
         bt_info_k.setStyleSheet(self.style)
         bt_info_k.setObjectName('orange_border_hover')
@@ -1430,7 +1428,7 @@ class CrackerGui(QMainWindow):
         #self.style_grp.setMinimumSize(500, 200)
         main_style_lay = QHBoxLayout()
         self.style_grp.setLayout(main_style_lay)
-        tab_stng_lay.addWidget(self.style_grp, 0, 0, Qt.AlignLeft | Qt.AlignTop)
+        tab_stng_lay.addWidget(self.style_grp, 0, 0, 1, 2) #, Qt.AlignLeft | Qt.AlignTop)
 
         self.main_style_palette = QApplication.palette()
 
@@ -1476,7 +1474,7 @@ class CrackerGui(QMainWindow):
         stng_pwd_lay = QGridLayout()
         self.stng_pwd_grp.setLayout(stng_pwd_lay)
 
-        tab_stng_lay.addWidget(self.stng_pwd_grp, 0, 1, 2, 1)#, Qt.AlignRight)
+        tab_stng_lay.addWidget(self.stng_pwd_grp, 0, 2, 2, 1)#, Qt.AlignRight)
 
         #-form widgets (ask for pwd)
         stng_pwd_form_lay = QFormLayout()
@@ -1564,7 +1562,7 @@ class CrackerGui(QMainWindow):
         #-ini
         self.stng_lang_grp = QGroupBox('Change Language')
         self.stng_lang_grp.setMaximumSize(200, 130)
-        # self.stng_lang_grp.setMinimumSize(500, 200)
+        self.stng_lang_grp.setMinimumSize(200, 130)
         stng_lang_lay = QGridLayout()
         self.stng_lang_grp.setLayout(stng_lang_lay)
 
@@ -1581,6 +1579,62 @@ class CrackerGui(QMainWindow):
         self.stng_lang_bt = QPushButton('Apply')
         stng_lang_lay.addWidget(self.stng_lang_bt, 1, 0, Qt.AlignRight)
         self.stng_lang_bt.clicked.connect(chg_lang)
+
+
+        #---Home mode
+        #-function
+        def chg_home_md():
+            '''Change the home mode.'''
+
+            if self.stng_home_cb.isChecked() == glb.home:
+                return -3 # not changed.
+
+            if self.stng_home_cb.isChecked():
+                if QMessageBox.question(self, 'Sure ?', '<h2>Are you sure ?</h2>\nThis will copy all your RSA keys from "{}" to "{}" !'.format(glb.Cracker_data_path + '/RSA_keys', expanduser('~/.RSA_keys')), QMessageBox.Cancel | QMessageBox.Yes, QMessageBox.Yes) != QMessageBox.Yes:
+                    return -3 #Aborted.
+
+                chdir(RSA.chd_rsa(home=True))
+                glb.home = True
+                self.stng_RSA_k_location_lb.setText('RSA keys location : "{}"'.format(expanduser('~/.RSA_keys')))
+                QMessageBox.about(self, 'Done !', '<h2>Home mode is on.</h2>\nRSA keys copyied to "{}".'.format(expanduser('~/.RSA_keys')))
+
+            else:
+                if QMessageBox.question(self, 'Sure ?', '<h2>Are you sure ?</h2>\nThis will copy all RSA keys from "{0}" to "{1}", and permanently remove the folder "{0}".'.format(expanduser('~/.RSA_keys'), glb.Cracker_data_path + '/RSA_keys'), QMessageBox.Cancel | QMessageBox.Yes, QMessageBox.Yes) != QMessageBox.Yes:
+                    return -3 #Aborted.
+
+                for fn in listdir(expanduser('~/.RSA_keys')):
+                    copy(expanduser('~/.RSA_keys/') + fn, glb.Cracker_data_path + '/RSA_keys/' + fn)
+
+                rmtree(expanduser('~/.RSA_keys'))
+
+                glb.home = False
+                self.stng_RSA_k_location_lb.setText('RSA keys location : "{}"'.format(glb.Cracker_data_path + '/RSA_keys'))
+                QMessageBox.about(self, 'Done !', '<h2>Home mode is off.</h2>\nRSA keys copyied to "{}", folder "{}" removed.'.format(glb.Cracker_data_path + '/RSA_keys', expanduser('~/.RSA_keys')))
+
+        #-ini
+        self.stng_home_md_grp = QGroupBox('Home mode')
+        self.stng_home_md_grp.setMinimumSize(200, 130)
+        self.stng_home_md_grp.setMaximumSize(200, 130)
+        stng_home_lay = QGridLayout()
+        self.stng_home_md_grp.setLayout(stng_home_lay)
+
+        tab_stng_lay.addWidget(self.stng_home_md_grp, 1, 1)
+
+        #-CheckBox
+        self.stng_home_cb = QCheckBox('Home mode')
+        self.stng_home_cb.setChecked(glb.home)
+        stng_home_lay.addWidget(self.stng_home_cb, 0, 0)
+
+        #-Button Apply
+        self.stng_home_bt = QPushButton('Apply')
+        stng_home_lay.addWidget(self.stng_home_bt, 1, 0, Qt.AlignRight)
+        self.stng_home_bt.clicked.connect(chg_home_md)
+
+
+        #---RSA keys location label
+        self.stng_RSA_k_location_lb = QLabel('RSA keys location : "{}"'.format(expanduser('~/.RSA_keys') if glb.home else glb.Cracker_data_path + '/RSA_keys'))
+        tab_stng_lay.addWidget(self.stng_RSA_k_location_lb, 2, 0, 1, 3, Qt.AlignLeft | Qt.AlignBottom)
+
 
         #------show
         self.app_widget.addTab(tab_stng, 'Setti&ngs')
@@ -1648,7 +1702,7 @@ class CrackerGui(QMainWindow):
 
         except FileNotFoundError:
             self.path_ent[self.app_widget.currentIndex()].setText(getcwd())
-            QMessageBox.about(QWidget(), tr('!!! Directory error !!!'), tr('The directory was NOT found !!!'))
+            QMessageBox.warning(self, tr('!!! Directory error !!!'), tr('The directory was NOT found !!!'))
             return False
 
         for tab in range(5):
@@ -1685,7 +1739,7 @@ class CrackerGui(QMainWindow):
 
             except FileNotFoundError:
                 self.path_ent[self.app_widget.currentIndex()].setText(getcwd())
-                QMessageBox.about(QWidget(), tr('!!! Directory error !!!'), tr('The directory was NOT found !!!'))
+                QMessageBox.warning(self, tr('!!! Directory error !!!'), tr('The directory was NOT found !!!'))
                 return False
 
             for tab in range(5):
@@ -1787,8 +1841,8 @@ class CrackerGui(QMainWindow):
             self.resize(800, 500)
 
         elif tab == 8: #Settings
-            self.setMinimumSize(900, 250)
-            self.resize(900, 250)
+            self.setMinimumSize(930, 260)
+            self.resize(930, 280)
 
 
     #---------start_calc
@@ -1826,7 +1880,7 @@ class CrackerGui(QMainWindow):
 
         self.reload_keys()
 
-        QMessageBox.about(None, 'Done !', '<h2>The keys "{}" have been imported.</h2>'.format(k_name))
+        QMessageBox.about(self, 'Done !', '<h2>The keys "{}" have been imported.</h2>'.format(k_name))
 
 
 
@@ -2284,7 +2338,7 @@ class GenKeyWin(QDialog):
 
         win.reload_keys()
 
-        QMessageBox.about(None, 'Done !', '<h2>' + tr('Your brand new RSA keys "{}" are ready !').format(name) + '</h2>\n<h3>' + tr('`n` size : {} bits').format(val[2]) + '</h3>')
+        QMessageBox.about(self, 'Done !', '<h2>' + tr('Your brand new RSA keys "{}" are ready !').format(name) + '</h2>\n<h3>' + tr('`n` size : {} bits').format(val[2]) + '</h3>')
 
 
     def gen_1_arg(self):
@@ -2396,7 +2450,7 @@ class ExpKeyWin(QDialog):
 
         copy(fn_src, fn_dest)
 
-        QMessageBox.about(None, 'Done !', '<h2>The keys "{}" have been exported.</h2>'.format(k_name))
+        QMessageBox.about(self, 'Done !', '<h2>The keys "{}" have been exported.</h2>'.format(k_name))
 
         self.close()
 
@@ -2580,7 +2634,7 @@ class RenKeyWin(QDialog):
             QMessageBox.critical(None, '!!! Keys not found !!!', '<h2>The set of keys was NOT found !!!</h2>')
             return -1
 
-        QMessageBox.about(None, 'Done !', '<h2>Your keys "{}" have been renamed "{}" !</h2>'.format(k_name, new_name))
+        QMessageBox.about(self, 'Done !', '<h2>Your keys "{}" have been renamed "{}" !</h2>'.format(k_name, new_name))
 
         self.close()
         win.ciph_bar.reload_keys()
@@ -2686,7 +2740,7 @@ class CvrtKeyWin(QDialog):
             QMessageBox.critical(None, '!!! Keys already exist !!!', '<h2>The set of keys already exist !!!</h2>\n<h3>You may already have converted them.</h3>')
             return -2
 
-        QMessageBox.about(None, 'Done !', '<h2>Your set of keys has been converted in "{}" !</h2>'.format(exp))
+        QMessageBox.about(self, 'Done !', '<h2>Your set of keys has been converted in "{}" !</h2>'.format(exp))
         self.close()
 
 
@@ -2816,7 +2870,7 @@ class EncKeyWin(QDialog): #QMainWindow):
             QMessageBox.critical(None, '!!! Error !!!', '<h2>{}</h2>'.format(err))
             return -3
 
-        QMessageBox.about(None, 'Done !', '<h2>Your keys "{}" have been encrypted !</h2>'.format(k_name))
+        QMessageBox.about(self, 'Done !', '<h2>Your keys "{}" have been encrypted !</h2>'.format(k_name))
 
         self.close()
 
@@ -2933,7 +2987,7 @@ class DecKeyWin(QDialog): #QMainWindow):
         if out in (-1, -2, -3):
             return out
 
-        QMessageBox.about(None, 'Done !', '<h2>Your keys "{}" have been decrypted !</h2>'.format(k_name))
+        QMessageBox.about(self, 'Done !', '<h2>Your keys "{}" have been decrypted !</h2>'.format(k_name))
 
         self.close()
 
@@ -3075,7 +3129,7 @@ class ChPwdKeyWin(QDialog): #QMainWindow):
         if out in (-1, -2, -3):
             return out
 
-        QMessageBox.about(None, 'Done !', '<h2>The password for your RSA keys "{}" has been changed !</h2>'.format(k_name))
+        QMessageBox.about(self, 'Done !', '<h2>The password for your RSA keys "{}" has been changed !</h2>'.format(k_name))
 
         self.close()
 
@@ -3206,7 +3260,7 @@ class UseCrackTab:
         elif pwd == None:
             self._ret_append(msg_f, algo)
             if f_verbose:
-                QMessageBox.about(
+                QMessageBox.warning(
                     None, 'Not found !',
                     '<h2>The clear text has not be found !!!</h2>\n<h3>Try with an other {}, method, or dictionary.</h3>'.format(prnt)
                 )
@@ -4149,9 +4203,6 @@ class UseSettingsTab:
 ##-run
 if __name__ == '__main__':
     color(c_prog)
-
-    #------If first time launched, introduce RSA keys
-    chdir(RSA.chd_rsa('.', first=True, interface='gui'))
 
     #------Launch the GUI
     CrackerGui.use()
