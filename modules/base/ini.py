@@ -22,9 +22,9 @@ if glb.interface == 'gui':
         QSlider, QDialog)
 
 #------other
-from os import chdir, getcwd
+from os import chdir, getcwd, listdir
 from os.path import isfile, isdir
-from shutil import copy
+from shutil import copy, rmtree
 import sys
 
 from datetime import datetime as dt
