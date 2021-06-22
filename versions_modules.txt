@@ -1,9 +1,9 @@
-Version of Cracker_gui : 1.4.0
-Version of Cracker_console : 1.3
+Version of Cracker_gui : 1.4.1
+Version of Cracker_console : 1.3.1
 
 Version of base_functions : 2.3.1
 Version of ini : 1.2.2
-Version of glb : 1.0
+Version of glb : 1.1
 Version of matrix : 1.3
 Version of progress_bars : 1.0
 Version of FormatMsg : 1.0
@@ -22,7 +22,7 @@ Version of Crypta : 3.4.5
 Version of Hasher : 4.0
 Version of KRIS : 1.3
 Version of AES : 2.0.2
-Version of RSA : 4.1
+Version of RSA : 4.2
 Version of BaseCipher : 1.0
 
 Version of wordlist_generator : 7.0
