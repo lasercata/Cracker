@@ -78,6 +78,14 @@ The default for application lock password is **`swiss_knife`**.
 You can change the password in the Settings part.
 
 
+## RSA keys
+You can manage RSA keys in the Cipher tab (with the buttons at right). You can generate new ones, get info on them, export or import public keys, ...
+
+The default location for the keys is the folder `Cracker/Data/RSA_keys`. It is useful if you transport Cracker on a usb stick. But if you use it only on your computer, you can activate the `home` mode, meaning that the keys will be copied in the folder `~/.RSA_keys`. This is useful if you also use [KRIS](https://github.com/lasercata/KRIS) with `home` mode, or different versions of Cracker or KRIS (you won't have to copy the keys).
+
+The `home` mode can be activated in the settings part.
+
+
 ## Authors
 
 * **Lasercata** - [Lasercata](https://github.com/lasercata)
